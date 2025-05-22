@@ -2,10 +2,10 @@ package lsprotocol
 
 
 import (
-   "encoding/json"
-   "fmt"
+	"encoding/json"
+	"fmt"
+	"bytes"
 )
-
 type DocumentUri string
 
 type URI string
@@ -186,7 +186,7 @@ func (t Tuple[T1, T2]) UnmarshalJSON(data []byte) error {
    return nil
 }
 type ResponseError struct {
-	Code int `json:"code"`
+	Code int32 `json:"code"`
 	Message string `json:"message"`
 	Data any `json:"data,omitempty"`
 }
@@ -217,7 +217,7 @@ type ApplyWorkspaceEditParams struct {
 	// 
 	// @since 3.18.0
 	// @proposed
-	Metadata WorkspaceEditMetadata `json:"metadata,omitzero"`
+	Metadata *WorkspaceEditMetadata `json:"metadata,omitempty"`
 }
 // The result returned from the apply workspace edit request.
 // 
@@ -228,7 +228,7 @@ type ApplyWorkspaceEditResult struct {
 	// Depending on the client's failure handling strategy `failedChange` might
 	// contain the index of the change that failed. This property is only available
 	// if the client signals a `failureHandlingStrategy` in its client capabilities.
-	FailedChange uint `json:"failedChange,omitempty"`
+	FailedChange uint32 `json:"failedChange,omitempty"`
 	// An optional textual description for why the edit was not applied.
 	// This may be used by the server for diagnostic logging or to provide
 	// a suitable error for a request that triggered the edit.
@@ -275,9 +275,9 @@ type CallHierarchyIncomingCallsParams struct {
 	Item CallHierarchyItem `json:"item"`
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Represents programming constructs like functions or constructors in the context
 // of call hierarchy.
@@ -329,9 +329,9 @@ type CallHierarchyOutgoingCallsParams struct {
 	Item CallHierarchyItem `json:"item"`
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // The parameter of a `textDocument/prepareCallHierarchy` request.
 // 
@@ -342,7 +342,7 @@ type CallHierarchyPrepareParams struct {
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Call hierarchy options used during static or dynamic registration.
 // 
@@ -390,17 +390,17 @@ type ClientCapabilities struct {
 	// General client capabilities.
 	// 
 	// @since 3.16.0
-	General GeneralClientCapabilities `json:"general,omitzero"`
+	General *GeneralClientCapabilities `json:"general,omitempty"`
 	// Capabilities specific to the notebook document support.
 	// 
 	// @since 3.17.0
-	NotebookDocument NotebookDocumentClientCapabilities `json:"notebookDocument,omitzero"`
+	NotebookDocument *NotebookDocumentClientCapabilities `json:"notebookDocument,omitempty"`
 	// Text document specific client capabilities.
-	TextDocument TextDocumentClientCapabilities `json:"textDocument,omitzero"`
+	TextDocument *TextDocumentClientCapabilities `json:"textDocument,omitempty"`
 	// Window specific client capabilities.
-	Window WindowClientCapabilities `json:"window,omitzero"`
+	Window *WindowClientCapabilities `json:"window,omitempty"`
 	// Workspace specific client capabilities.
-	Workspace WorkspaceClientCapabilities `json:"workspace,omitzero"`
+	Workspace *WorkspaceClientCapabilities `json:"workspace,omitempty"`
 }
 // @since 3.18.0
 type ClientCodeActionKindOptions struct {
@@ -450,7 +450,7 @@ type ClientCompletionItemOptions struct {
 	// as defined by the client (see `insertTextMode`).
 	// 
 	// @since 3.16.0
-	InsertTextModeSupport ClientCompletionItemInsertTextModeOptions `json:"insertTextModeSupport,omitzero"`
+	InsertTextModeSupport *ClientCompletionItemInsertTextModeOptions `json:"insertTextModeSupport,omitempty"`
 	// The client has support for completion item label
 	// details (see also `CompletionItemLabelDetails`).
 	// 
@@ -463,7 +463,7 @@ type ClientCompletionItemOptions struct {
 	// and `details` could be resolved lazily.
 	// 
 	// @since 3.16.0
-	ResolveSupport ClientCompletionItemResolveOptions `json:"resolveSupport,omitzero"`
+	ResolveSupport *ClientCompletionItemResolveOptions `json:"resolveSupport,omitempty"`
 	// Client supports snippets as insert text.
 	// 
 	// A snippet can define tab stops and placeholders with `$1`, `$2`
@@ -477,7 +477,7 @@ type ClientCompletionItemOptions struct {
 	// a resolve call.
 	// 
 	// @since 3.15.0
-	TagSupport CompletionItemTagOptions `json:"tagSupport,omitzero"`
+	TagSupport *CompletionItemTagOptions `json:"tagSupport,omitempty"`
 }
 // @since 3.18.0
 type ClientCompletionItemOptionsKind struct {
@@ -542,10 +542,10 @@ type ClientSemanticTokensRequestFullDelta struct {
 type ClientSemanticTokensRequestOptions struct {
 	// The client will send the `textDocument/semanticTokens/full` request if
 	// the server provides a corresponding handler.
-	Full Or_ClientSemanticTokensRequestOptions_Full `json:"full,omitzero"`
+	Full *Or_ClientSemanticTokensRequestOptions_Full `json:"full,omitempty"`
 	// The client will send the `textDocument/semanticTokens/range` request if
 	// the server provides a corresponding handler.
-	Range Or_ClientSemanticTokensRequestOptions_Range `json:"range,omitzero"`
+	Range *Or_ClientSemanticTokensRequestOptions_Range `json:"range,omitempty"`
 }
 // @since 3.18.0
 type ClientShowMessageActionItemOptions struct {
@@ -572,7 +572,7 @@ type ClientSignatureInformationOptions struct {
 	// @proposed
 	NoActiveParameterSupport bool `json:"noActiveParameterSupport,omitempty"`
 	// Client capabilities specific to parameter information.
-	ParameterInformation ClientSignatureParameterInformationOptions `json:"parameterInformation,omitzero"`
+	ParameterInformation *ClientSignatureParameterInformationOptions `json:"parameterInformation,omitempty"`
 }
 // @since 3.18.0
 type ClientSignatureParameterInformationOptions struct {
@@ -613,7 +613,7 @@ type CodeAction struct {
 	// A command this code action executes. If a code action
 	// provides an edit and a command, first the edit is
 	// executed and then the command.
-	Command Command `json:"command,omitzero"`
+	Command *Command `json:"command,omitempty"`
 	// A data entry field that is preserved on a code action between
 	// a `textDocument/codeAction` and a `codeAction/resolve` request.
 	// 
@@ -636,9 +636,9 @@ type CodeAction struct {
 	//     error message with `reason` in the editor.
 	// 
 	// @since 3.16.0
-	Disabled CodeActionDisabled `json:"disabled,omitzero"`
+	Disabled *CodeActionDisabled `json:"disabled,omitempty"`
 	// The workspace edit this code action performs.
-	Edit WorkspaceEdit `json:"edit,omitzero"`
+	Edit *WorkspaceEdit `json:"edit,omitempty"`
 	// Marks this as a preferred action. Preferred actions are used by the `auto fix` command and can be targeted
 	// by keybindings.
 	// 
@@ -650,7 +650,7 @@ type CodeAction struct {
 	// The kind of the code action.
 	// 
 	// Used to filter code actions.
-	Kind CodeActionKind `json:"kind,omitzero"`
+	Kind *CodeActionKind `json:"kind,omitempty"`
 	// Tags for this code action.
 	// 
 	// @since 3.18.0 - proposed
@@ -665,7 +665,7 @@ type CodeActionClientCapabilities struct {
 	// set the request can only return `Command` literals.
 	// 
 	// @since 3.8.0
-	CodeActionLiteralSupport ClientCodeActionLiteralOptions `json:"codeActionLiteralSupport,omitzero"`
+	CodeActionLiteralSupport *ClientCodeActionLiteralOptions `json:"codeActionLiteralSupport,omitempty"`
 	// Whether code action supports the `data` property which is
 	// preserved between a `textDocument/codeAction` and a
 	// `codeAction/resolve` request.
@@ -700,12 +700,12 @@ type CodeActionClientCapabilities struct {
 	// properties via a separate `codeAction/resolve` request.
 	// 
 	// @since 3.16.0
-	ResolveSupport ClientCodeActionResolveOptions `json:"resolveSupport,omitzero"`
+	ResolveSupport *ClientCodeActionResolveOptions `json:"resolveSupport,omitempty"`
 	// Client supports the tag property on a code action. Clients
 	// supporting tags have to handle unknown tags gracefully.
 	// 
 	// @since 3.18.0 - proposed
-	TagSupport CodeActionTagOptions `json:"tagSupport,omitzero"`
+	TagSupport *CodeActionTagOptions `json:"tagSupport,omitempty"`
 }
 // Contains additional diagnostic information about the context in which
 // a {@link CodeActionProvider.provideCodeActions code action} is run.
@@ -724,7 +724,7 @@ type CodeActionContext struct {
 	// The reason why code actions were requested.
 	// 
 	// @since 3.17.0
-	TriggerKind CodeActionTriggerKind `json:"triggerKind,omitzero"`
+	TriggerKind *CodeActionTriggerKind `json:"triggerKind,omitempty"`
 }
 // Captures why the code action is currently disabled.
 // 
@@ -788,13 +788,13 @@ type CodeActionParams struct {
 	Context CodeActionContext `json:"context"`
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The range for which the command was invoked.
 	Range Range `json:"range"`
 	// The document in which the command was invoked.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Registration options for a {@link CodeActionRequest}.
 type CodeActionRegistrationOptions struct {
@@ -849,7 +849,7 @@ type CodeDescription struct {
 // reasons the creation of a code lens and resolving should be done in two stages.
 type CodeLens struct {
 	// The command this code lens represents.
-	Command Command `json:"command,omitzero"`
+	Command *Command `json:"command,omitempty"`
 	// A data entry field that is preserved on a code lens item between
 	// a {@link CodeLensRequest} and a {@link CodeLensResolveRequest}
 	Data any `json:"data,omitempty"`
@@ -864,7 +864,7 @@ type CodeLensClientCapabilities struct {
 	// properties via a separate `codeLens/resolve` request.
 	// 
 	// @since 3.18.0
-	ResolveSupport ClientCodeLensResolveOptions `json:"resolveSupport,omitzero"`
+	ResolveSupport *ClientCodeLensResolveOptions `json:"resolveSupport,omitempty"`
 }
 // Code Lens provider options of a {@link CodeLensRequest}.
 type CodeLensOptions struct {
@@ -877,11 +877,11 @@ type CodeLensOptions struct {
 type CodeLensParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The document to request code lens for.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Registration options for a {@link CodeLensRequest}.
 type CodeLensRegistrationOptions struct {
@@ -934,7 +934,7 @@ type ColorPresentation struct {
 	// An {@link TextEdit edit} which is applied to a document when selecting
 	// this presentation for the color.  When `falsy` the {@link ColorPresentation.label label}
 	// is used.
-	TextEdit TextEdit `json:"textEdit,omitzero"`
+	TextEdit *TextEdit `json:"textEdit,omitempty"`
 }
 // Parameters for a {@link ColorPresentationRequest}.
 type ColorPresentationParams struct {
@@ -942,13 +942,13 @@ type ColorPresentationParams struct {
 	Color Color `json:"color"`
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The range where the color would be inserted. Serves as a context.
 	Range Range `json:"range"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Represents a reference to a command. Provides a title which
 // will be used to represent a command in the UI and, optionally,
@@ -972,14 +972,14 @@ type Command struct {
 type CompletionClientCapabilities struct {
 	// The client supports the following `CompletionItem` specific
 	// capabilities.
-	CompletionItem ClientCompletionItemOptions `json:"completionItem,omitzero"`
+	CompletionItem *ClientCompletionItemOptions `json:"completionItem,omitempty"`
 
-	CompletionItemKind ClientCompletionItemOptionsKind `json:"completionItemKind,omitzero"`
+	CompletionItemKind *ClientCompletionItemOptionsKind `json:"completionItemKind,omitempty"`
 	// The client supports the following `CompletionList` specific
 	// capabilities.
 	// 
 	// @since 3.17.0
-	CompletionList CompletionListCapabilities `json:"completionList,omitzero"`
+	CompletionList *CompletionListCapabilities `json:"completionList,omitempty"`
 	// The client supports to send additional context information for a
 	// `textDocument/completion` request.
 	ContextSupport bool `json:"contextSupport,omitempty"`
@@ -990,7 +990,7 @@ type CompletionClientCapabilities struct {
 	// text in either `insertText` or `textEdit`.
 	// 
 	// @since 3.17.0
-	InsertTextMode InsertTextMode `json:"insertTextMode,omitzero"`
+	InsertTextMode *InsertTextMode `json:"insertTextMode,omitempty"`
 }
 // Contains additional information about the context in which a completion request is triggered.
 type CompletionContext struct {
@@ -1014,7 +1014,7 @@ type CompletionItem struct {
 	// An optional {@link Command command} that is executed *after* inserting this completion. *Note* that
 	// additional modifications to the current document should be described with the
 	// {@link CompletionItem.additionalTextEdits additionalTextEdits}-property.
-	Command Command `json:"command,omitzero"`
+	Command *Command `json:"command,omitempty"`
 	// An optional set of characters that when pressed while this completion is active will accept it first and
 	// then type that character. *Note* that all commit characters should have `length=1` and that superfluous
 	// characters will be ignored.
@@ -1029,7 +1029,7 @@ type CompletionItem struct {
 	// about this item, like type or symbol information.
 	Detail string `json:"detail,omitempty"`
 	// A human-readable string that represents a doc-comment.
-	Documentation Or_CompletionItem_Documentation `json:"documentation,omitzero"`
+	Documentation *Or_CompletionItem_Documentation `json:"documentation,omitempty"`
 	// A string that should be used when filtering a set of
 	// completion items. When `falsy` the {@link CompletionItem.label label}
 	// is used.
@@ -1052,16 +1052,16 @@ type CompletionItem struct {
 	// 
 	// Please note that the insertTextFormat doesn't apply to
 	// `additionalTextEdits`.
-	InsertTextFormat InsertTextFormat `json:"insertTextFormat,omitzero"`
+	InsertTextFormat *InsertTextFormat `json:"insertTextFormat,omitempty"`
 	// How whitespace and indentation is handled during completion
 	// item insertion. If not provided the clients default value depends on
 	// the `textDocument.completion.insertTextMode` client capability.
 	// 
 	// @since 3.16.0
-	InsertTextMode InsertTextMode `json:"insertTextMode,omitzero"`
+	InsertTextMode *InsertTextMode `json:"insertTextMode,omitempty"`
 	// The kind of this completion item. Based of the kind
 	// an icon is chosen by the editor.
-	Kind CompletionItemKind `json:"kind,omitzero"`
+	Kind *CompletionItemKind `json:"kind,omitempty"`
 	// The label of this completion item.
 	// 
 	// The label property is also by default the text that
@@ -1073,7 +1073,7 @@ type CompletionItem struct {
 	// Additional details for the label
 	// 
 	// @since 3.17.0
-	LabelDetails CompletionItemLabelDetails `json:"labelDetails,omitzero"`
+	LabelDetails *CompletionItemLabelDetails `json:"labelDetails,omitempty"`
 	// Select this item when showing.
 	// 
 	// *Note* that only one completion item can be selected and that the
@@ -1108,7 +1108,7 @@ type CompletionItem struct {
 	// contained and starting at the same position.
 	// 
 	// @since 3.16.0 additional type `InsertReplaceEdit`
-	TextEdit Or_CompletionItem_TextEdit `json:"textEdit,omitzero"`
+	TextEdit *Or_CompletionItem_TextEdit `json:"textEdit,omitempty"`
 	// The edit text used if the completion item is part of a CompletionList and
 	// CompletionList defines an item default for the text edit range.
 	// 
@@ -1154,7 +1154,7 @@ type CompletionItemApplyKinds struct {
 	// and the completion's own `commitCharacters`.
 	// 
 	// @since 3.18.0
-	CommitCharacters ApplyKind `json:"commitCharacters,omitzero"`
+	CommitCharacters *ApplyKind `json:"commitCharacters,omitempty"`
 	// Specifies whether the `data` field on a completion will replace or
 	// be merged with data from `completionList.itemDefaults.data`.
 	// 
@@ -1177,7 +1177,7 @@ type CompletionItemApplyKinds struct {
 	//   within that value will occur.
 	// 
 	// @since 3.18.0
-	Data ApplyKind `json:"data,omitzero"`
+	Data *ApplyKind `json:"data,omitempty"`
 }
 // In many cases the items of an actual completion result share the same
 // value for properties like `commitCharacters` or the range of a text
@@ -1206,15 +1206,15 @@ type CompletionItemDefaults struct {
 	// A default edit range.
 	// 
 	// @since 3.17.0
-	EditRange Or_CompletionItemDefaults_EditRange `json:"editRange,omitzero"`
+	EditRange *Or_CompletionItemDefaults_EditRange `json:"editRange,omitempty"`
 	// A default insert text format.
 	// 
 	// @since 3.17.0
-	InsertTextFormat InsertTextFormat `json:"insertTextFormat,omitzero"`
+	InsertTextFormat *InsertTextFormat `json:"insertTextFormat,omitempty"`
 	// A default insert text mode.
 	// 
 	// @since 3.17.0
-	InsertTextMode InsertTextMode `json:"insertTextMode,omitzero"`
+	InsertTextMode *InsertTextMode `json:"insertTextMode,omitempty"`
 }
 // Additional details for a completion item label.
 // 
@@ -1252,7 +1252,7 @@ type CompletionList struct {
 	// capability.
 	// 
 	// @since 3.18.0
-	ApplyKind CompletionItemApplyKinds `json:"applyKind,omitzero"`
+	ApplyKind *CompletionItemApplyKinds `json:"applyKind,omitempty"`
 	// This list it not complete. Further typing results in recomputing this list.
 	// 
 	// Recomputed lists have all their items replaced (not appended) in the
@@ -1273,7 +1273,7 @@ type CompletionList struct {
 	// capability.
 	// 
 	// @since 3.17.0
-	ItemDefaults CompletionItemDefaults `json:"itemDefaults,omitzero"`
+	ItemDefaults *CompletionItemDefaults `json:"itemDefaults,omitempty"`
 	// The completion items.
 	Items []CompletionItem `json:"items"`
 }
@@ -1319,7 +1319,7 @@ type CompletionOptions struct {
 	// capabilities.
 	// 
 	// @since 3.17.0
-	CompletionItem ServerCompletionItemOptions `json:"completionItem,omitzero"`
+	CompletionItem *ServerCompletionItemOptions `json:"completionItem,omitempty"`
 	// The server provides support to resolve additional
 	// information for a completion item.
 	ResolveProvider bool `json:"resolveProvider,omitempty"`
@@ -1339,16 +1339,16 @@ type CompletionOptions struct {
 type CompletionParams struct {
 	// The completion context. This is only available it the client specifies
 	// to send this using the client capability `textDocument.completion.contextSupport === true`
-	Context CompletionContext `json:"context,omitzero"`
+	Context *CompletionContext `json:"context,omitempty"`
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The position inside the text document.
 	Position Position `json:"position"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Registration options for a {@link CompletionRequest}.
 type CompletionRegistrationOptions struct {
@@ -1365,7 +1365,7 @@ type CompletionRegistrationOptions struct {
 	// capabilities.
 	// 
 	// @since 3.17.0
-	CompletionItem ServerCompletionItemOptions `json:"completionItem,omitzero"`
+	CompletionItem *ServerCompletionItemOptions `json:"completionItem,omitempty"`
 	// A document selector to identify the scope of the registration. If set to null
 	// the document selector provided on the client side will be used.
 	DocumentSelector *DocumentSelector `json:"documentSelector"`
@@ -1387,7 +1387,7 @@ type CompletionRegistrationOptions struct {
 
 type ConfigurationItem struct {
 	// The scope to get the configuration section for.
-	ScopeUri URI `json:"scopeUri,omitzero"`
+	ScopeUri *URI `json:"scopeUri,omitempty"`
 	// The configuration section asked for.
 	Section string `json:"section,omitempty"`
 }
@@ -1401,11 +1401,11 @@ type CreateFile struct {
 	// An optional annotation identifier describing the operation.
 	// 
 	// @since 3.16.0
-	AnnotationId ChangeAnnotationIdentifier `json:"annotationId,omitzero"`
+	AnnotationId *ChangeAnnotationIdentifier `json:"annotationId,omitempty"`
 	// A create
 	Kind string `json:"kind"`
 	// Additional options
-	Options CreateFileOptions `json:"options,omitzero"`
+	Options *CreateFileOptions `json:"options,omitempty"`
 	// The resource to create.
 	Uri DocumentUri `json:"uri"`
 }
@@ -1442,13 +1442,13 @@ type DeclarationOptions struct {
 type DeclarationParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The position inside the text document.
 	Position Position `json:"position"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 
 type DeclarationRegistrationOptions struct {
@@ -1479,13 +1479,13 @@ type DefinitionOptions struct {
 type DefinitionParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The position inside the text document.
 	Position Position `json:"position"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Registration options for a {@link DefinitionRequest}.
 type DefinitionRegistrationOptions struct {
@@ -1500,11 +1500,11 @@ type DeleteFile struct {
 	// An optional annotation identifier describing the operation.
 	// 
 	// @since 3.16.0
-	AnnotationId ChangeAnnotationIdentifier `json:"annotationId,omitzero"`
+	AnnotationId *ChangeAnnotationIdentifier `json:"annotationId,omitempty"`
 	// A delete
 	Kind string `json:"kind"`
 	// Delete options.
-	Options DeleteFileOptions `json:"options,omitzero"`
+	Options *DeleteFileOptions `json:"options,omitempty"`
 	// The file to delete.
 	Uri DocumentUri `json:"uri"`
 }
@@ -1527,12 +1527,12 @@ type DeleteFilesParams struct {
 // are only valid in the scope of a resource.
 type Diagnostic struct {
 	// The diagnostic's code, which usually appear in the user interface.
-	Code Or_Diagnostic_Code `json:"code,omitzero"`
+	Code *Or_Diagnostic_Code `json:"code,omitempty"`
 	// An optional property to describe the error code.
 	// Requires the code field (above) to be present/not null.
 	// 
 	// @since 3.16.0
-	CodeDescription CodeDescription `json:"codeDescription,omitzero"`
+	CodeDescription *CodeDescription `json:"codeDescription,omitempty"`
 	// A data entry field that is preserved between a `textDocument/publishDiagnostics`
 	// notification and `textDocument/codeAction` request.
 	// 
@@ -1548,7 +1548,7 @@ type Diagnostic struct {
 	// The diagnostic's severity. To avoid interpretation mismatches when a
 	// server is used with different clients it is highly recommended that servers
 	// always provide a severity value.
-	Severity DiagnosticSeverity `json:"severity,omitzero"`
+	Severity *DiagnosticSeverity `json:"severity,omitempty"`
 	// A human-readable string describing the source of this
 	// diagnostic, e.g. 'typescript' or 'super lint'. It usually
 	// appears in the user interface.
@@ -1584,7 +1584,7 @@ type DiagnosticClientCapabilities struct {
 	// Clients supporting tags have to handle unknown tags gracefully.
 	// 
 	// @since 3.15.0
-	TagSupport ClientDiagnosticsTagOptions `json:"tagSupport,omitzero"`
+	TagSupport *ClientDiagnosticsTagOptions `json:"tagSupport,omitempty"`
 }
 // Diagnostic options.
 // 
@@ -1673,7 +1673,7 @@ type DiagnosticsCapabilities struct {
 	// Clients supporting tags have to handle unknown tags gracefully.
 	// 
 	// @since 3.15.0
-	TagSupport ClientDiagnosticsTagOptions `json:"tagSupport,omitzero"`
+	TagSupport *ClientDiagnosticsTagOptions `json:"tagSupport,omitempty"`
 }
 
 type DidChangeConfigurationClientCapabilities struct {
@@ -1688,7 +1688,7 @@ type DidChangeConfigurationParams struct {
 
 type DidChangeConfigurationRegistrationOptions struct {
 
-	Section Or_DidChangeConfigurationRegistrationOptions_Section `json:"section,omitzero"`
+	Section *Or_DidChangeConfigurationRegistrationOptions_Section `json:"section,omitempty"`
 }
 // The params sent in a change notebook document notification.
 // 
@@ -1821,11 +1821,11 @@ type DocumentColorOptions struct {
 type DocumentColorParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 
 type DocumentColorRegistrationOptions struct {
@@ -1846,13 +1846,13 @@ type DocumentDiagnosticParams struct {
 	Identifier string `json:"identifier,omitempty"`
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The result id of a previous response if provided.
 	PreviousResultId string `json:"previousResultId,omitempty"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // A partial result for a document diagnostic report.
 // 
@@ -1878,7 +1878,7 @@ type DocumentFormattingParams struct {
 	// The document to format.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Registration options for a {@link DocumentFormattingRequest}.
 type DocumentFormattingRegistrationOptions struct {
@@ -1893,7 +1893,7 @@ type DocumentFormattingRegistrationOptions struct {
 // the background color of its range.
 type DocumentHighlight struct {
 	// The highlight kind, default is {@link DocumentHighlightKind.Text text}.
-	Kind DocumentHighlightKind `json:"kind,omitzero"`
+	Kind *DocumentHighlightKind `json:"kind,omitempty"`
 	// The range this highlight applies to.
 	Range Range `json:"range"`
 }
@@ -1911,13 +1911,13 @@ type DocumentHighlightOptions struct {
 type DocumentHighlightParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The position inside the text document.
 	Position Position `json:"position"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Registration options for a {@link DocumentHighlightRequest}.
 type DocumentHighlightRegistrationOptions struct {
@@ -1936,7 +1936,7 @@ type DocumentLink struct {
 	// The range this link applies to.
 	Range Range `json:"range"`
 	// The uri this link points to. If missing a resolve request is sent later.
-	Target URI `json:"target,omitzero"`
+	Target *URI `json:"target,omitempty"`
 	// The tooltip text when you hover over this link.
 	// 
 	// If a tooltip is provided, is will be displayed in a string that includes instructions on how to
@@ -1966,11 +1966,11 @@ type DocumentLinkOptions struct {
 type DocumentLinkParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The document to provide document links for.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Registration options for a {@link DocumentLinkRequest}.
 type DocumentLinkRegistrationOptions struct {
@@ -2049,7 +2049,7 @@ type DocumentRangeFormattingParams struct {
 	// The document to format.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Registration options for a {@link DocumentRangeFormattingRequest}.
 type DocumentRangeFormattingRegistrationOptions struct {
@@ -2076,7 +2076,7 @@ type DocumentRangesFormattingParams struct {
 	// The document to format.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Represents programming constructs like variables, classes, interfaces etc.
 // that appear in a document. Document symbols can be hierarchical and they
@@ -2121,13 +2121,13 @@ type DocumentSymbolClientCapabilities struct {
 	LabelSupport bool `json:"labelSupport,omitempty"`
 	// Specific capabilities for the `SymbolKind` in the
 	// `textDocument/documentSymbol` request.
-	SymbolKind ClientSymbolKindOptions `json:"symbolKind,omitzero"`
+	SymbolKind *ClientSymbolKindOptions `json:"symbolKind,omitempty"`
 	// The client supports tags on `SymbolInformation`. Tags are supported on
 	// `DocumentSymbol` if `hierarchicalDocumentSymbolSupport` is set to true.
 	// Clients supporting tags have to handle unknown tags gracefully.
 	// 
 	// @since 3.16.0
-	TagSupport ClientSymbolTagOptions `json:"tagSupport,omitzero"`
+	TagSupport *ClientSymbolTagOptions `json:"tagSupport,omitempty"`
 }
 // Provider options for a {@link DocumentSymbolRequest}.
 type DocumentSymbolOptions struct {
@@ -2143,11 +2143,11 @@ type DocumentSymbolOptions struct {
 type DocumentSymbolParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Registration options for a {@link DocumentSymbolRequest}.
 type DocumentSymbolRegistrationOptions struct {
@@ -2190,7 +2190,7 @@ type ExecuteCommandParams struct {
 	// The identifier of the actual command handler.
 	Command string `json:"command"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Registration options for a {@link ExecuteCommandRequest}.
 type ExecuteCommandRegistrationOptions struct {
@@ -2204,7 +2204,7 @@ type ExecutionSummary struct {
 	// A strict monotonically increasing value
 	// indicating the execution order of a cell
 	// inside a notebook.
-	ExecutionOrder uint `json:"executionOrder"`
+	ExecutionOrder uint32 `json:"executionOrder"`
 	// Whether the execution was successful or
 	// not if known by the client.
 	Success bool `json:"success,omitempty"`
@@ -2267,17 +2267,17 @@ type FileOperationFilter struct {
 // @since 3.16.0
 type FileOperationOptions struct {
 	// The server is interested in receiving didCreateFiles notifications.
-	DidCreate FileOperationRegistrationOptions `json:"didCreate,omitzero"`
+	DidCreate *FileOperationRegistrationOptions `json:"didCreate,omitempty"`
 	// The server is interested in receiving didDeleteFiles file notifications.
-	DidDelete FileOperationRegistrationOptions `json:"didDelete,omitzero"`
+	DidDelete *FileOperationRegistrationOptions `json:"didDelete,omitempty"`
 	// The server is interested in receiving didRenameFiles notifications.
-	DidRename FileOperationRegistrationOptions `json:"didRename,omitzero"`
+	DidRename *FileOperationRegistrationOptions `json:"didRename,omitempty"`
 	// The server is interested in receiving willCreateFiles requests.
-	WillCreate FileOperationRegistrationOptions `json:"willCreate,omitzero"`
+	WillCreate *FileOperationRegistrationOptions `json:"willCreate,omitempty"`
 	// The server is interested in receiving willDeleteFiles file requests.
-	WillDelete FileOperationRegistrationOptions `json:"willDelete,omitzero"`
+	WillDelete *FileOperationRegistrationOptions `json:"willDelete,omitempty"`
 	// The server is interested in receiving willRenameFiles requests.
-	WillRename FileOperationRegistrationOptions `json:"willRename,omitzero"`
+	WillRename *FileOperationRegistrationOptions `json:"willRename,omitempty"`
 }
 // A pattern to describe in which file operation requests or notifications
 // the server is interested in receiving.
@@ -2295,9 +2295,9 @@ type FileOperationPattern struct {
 	// Whether to match files or folders with this pattern.
 	// 
 	// Matches both if undefined.
-	Matches FileOperationPatternKind `json:"matches,omitzero"`
+	Matches *FileOperationPatternKind `json:"matches,omitempty"`
 	// Additional options used during matching.
-	Options FileOperationPatternOptions `json:"options,omitzero"`
+	Options *FileOperationPatternOptions `json:"options,omitempty"`
 }
 // Matching options for the file operation pattern.
 // 
@@ -2331,7 +2331,7 @@ type FileSystemWatcher struct {
 	// The kind of events of interest. If omitted it defaults
 	// to WatchKind.Create | WatchKind.Change | WatchKind.Delete
 	// which is 7.
-	Kind WatchKind `json:"kind,omitzero"`
+	Kind *WatchKind `json:"kind,omitempty"`
 }
 // Represents a folding range. To be valid, start and end line must be bigger than zero and smaller
 // than the number of lines in the document. Clients are free to ignore invalid ranges.
@@ -2343,19 +2343,19 @@ type FoldingRange struct {
 	// @since 3.17.0
 	CollapsedText string `json:"collapsedText,omitempty"`
 	// The zero-based character offset before the folded range ends. If not defined, defaults to the length of the end line.
-	EndCharacter uint `json:"endCharacter,omitempty"`
+	EndCharacter uint32 `json:"endCharacter,omitempty"`
 	// The zero-based end line of the range to fold. The folded area ends with the line's last character.
 	// To be valid, the end must be zero or larger and smaller than the number of lines in the document.
-	EndLine uint `json:"endLine"`
+	EndLine uint32 `json:"endLine"`
 	// Describes the kind of the folding range such as 'comment' or 'region'. The kind
 	// is used to categorize folding ranges and used by commands like 'Fold all comments'.
 	// See {@link FoldingRangeKind} for an enumeration of standardized kinds.
-	Kind FoldingRangeKind `json:"kind,omitzero"`
+	Kind *FoldingRangeKind `json:"kind,omitempty"`
 	// The zero-based character offset from where the folded range starts. If not defined, defaults to the length of the start line.
-	StartCharacter uint `json:"startCharacter,omitempty"`
+	StartCharacter uint32 `json:"startCharacter,omitempty"`
 	// The zero-based start line of the range to fold. The folded area starts after the line's last character.
 	// To be valid, the end must be zero or larger and smaller than the number of lines in the document.
-	StartLine uint `json:"startLine"`
+	StartLine uint32 `json:"startLine"`
 }
 
 type FoldingRangeClientCapabilities struct {
@@ -2367,11 +2367,11 @@ type FoldingRangeClientCapabilities struct {
 	// Specific options for the folding range.
 	// 
 	// @since 3.17.0
-	FoldingRange ClientFoldingRangeOptions `json:"foldingRange,omitzero"`
+	FoldingRange *ClientFoldingRangeOptions `json:"foldingRange,omitempty"`
 	// Specific options for the folding range kind.
 	// 
 	// @since 3.17.0
-	FoldingRangeKind ClientFoldingRangeKindOptions `json:"foldingRangeKind,omitzero"`
+	FoldingRangeKind *ClientFoldingRangeKindOptions `json:"foldingRangeKind,omitempty"`
 	// If set, the client signals that it only supports folding complete lines.
 	// If set, client will ignore specified `startCharacter` and `endCharacter`
 	// properties in a FoldingRange.
@@ -2379,7 +2379,7 @@ type FoldingRangeClientCapabilities struct {
 	// The maximum number of folding ranges that the client prefers to receive
 	// per document. The value serves as a hint, servers are free to follow the
 	// limit.
-	RangeLimit uint `json:"rangeLimit,omitempty"`
+	RangeLimit uint32 `json:"rangeLimit,omitempty"`
 }
 
 type FoldingRangeOptions struct {
@@ -2390,11 +2390,11 @@ type FoldingRangeOptions struct {
 type FoldingRangeParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 
 type FoldingRangeRegistrationOptions struct {
@@ -2433,7 +2433,7 @@ type FormattingOptions struct {
 	// Prefer spaces over tabs.
 	InsertSpaces bool `json:"insertSpaces"`
 	// Size of a tab in spaces.
-	TabSize uint `json:"tabSize"`
+	TabSize uint32 `json:"tabSize"`
 	// Trim all newlines after the final newline at the end of the file.
 	// 
 	// @since 3.15.0
@@ -2463,7 +2463,7 @@ type GeneralClientCapabilities struct {
 	// Client capabilities specific to the client's markdown parser.
 	// 
 	// @since 3.16.0
-	Markdown MarkdownClientCapabilities `json:"markdown,omitzero"`
+	Markdown *MarkdownClientCapabilities `json:"markdown,omitempty"`
 	// The position encodings supported by the client. Client and server
 	// have to agree on the same position encoding to ensure that offsets
 	// (e.g. character position in a line) are interpreted the same on both
@@ -2486,14 +2486,14 @@ type GeneralClientCapabilities struct {
 	// Client capabilities specific to regular expressions.
 	// 
 	// @since 3.16.0
-	RegularExpressions RegularExpressionsClientCapabilities `json:"regularExpressions,omitzero"`
+	RegularExpressions *RegularExpressionsClientCapabilities `json:"regularExpressions,omitempty"`
 	// Client capability that signals how the client
 	// handles stale requests (e.g. a request
 	// for which the client will not process the response
 	// anymore since the information is outdated).
 	// 
 	// @since 3.17.0
-	StaleRequestSupport StaleRequestSupportOptions `json:"staleRequestSupport,omitzero"`
+	StaleRequestSupport *StaleRequestSupportOptions `json:"staleRequestSupport,omitempty"`
 }
 // The result of a hover request.
 type Hover struct {
@@ -2501,7 +2501,7 @@ type Hover struct {
 	Contents Or_Hover_Contents `json:"contents"`
 	// An optional range inside the text document that is used to
 	// visualize the hover, e.g. by changing the background color.
-	Range Range `json:"range,omitzero"`
+	Range *Range `json:"range,omitempty"`
 }
 
 type HoverClientCapabilities struct {
@@ -2523,7 +2523,7 @@ type HoverParams struct {
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Registration options for a {@link HoverRequest}.
 type HoverRegistrationOptions struct {
@@ -2553,13 +2553,13 @@ type ImplementationOptions struct {
 type ImplementationParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The position inside the text document.
 	Position Position `json:"position"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 
 type ImplementationRegistrationOptions struct {
@@ -2588,7 +2588,7 @@ type InitializeParams struct {
 	// Information about the client
 	// 
 	// @since 3.15.0
-	ClientInfo ClientInfo `json:"clientInfo,omitzero"`
+	ClientInfo *ClientInfo `json:"clientInfo,omitempty"`
 	// User provided initialization options.
 	InitializationOptions any `json:"initializationOptions,omitempty"`
 	// The locale the client is currently showing the user interface
@@ -2605,12 +2605,12 @@ type InitializeParams struct {
 	// 
 	// Is `null` if the process has not been started by another process.
 	// If the parent process is not alive then the server should exit.
-	ProcessId *int `json:"processId"`
+	ProcessId *int32 `json:"processId"`
 	// The rootPath of the workspace. Is null
 	// if no folder is open.
 	// 
 	// @deprecated in favour of rootUri.
-	RootPath *string `json:"rootPath,omitempty"`
+	RootPath **string `json:"rootPath,omitempty"`
 	// The rootUri of the workspace. Is null if no
 	// folder is open. If both `rootPath` and `rootUri` are set
 	// `rootUri` wins.
@@ -2618,9 +2618,9 @@ type InitializeParams struct {
 	// @deprecated in favour of workspaceFolders.
 	RootUri *DocumentUri `json:"rootUri"`
 	// The initial trace setting. If omitted trace is disabled ('off').
-	Trace TraceValue `json:"trace,omitzero"`
+	Trace *TraceValue `json:"trace,omitempty"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 	// The workspace folders configured in the client when the server starts.
 	// 
 	// This property is only available if the client supports workspace folders.
@@ -2628,7 +2628,7 @@ type InitializeParams struct {
 	// configured.
 	// 
 	// @since 3.6.0
-	WorkspaceFolders Or_InitializeParams_WorkspaceFolders `json:"workspaceFolders,omitzero"`
+	WorkspaceFolders *Or_InitializeParams_WorkspaceFolders `json:"workspaceFolders,omitempty"`
 }
 // The result returned from an initialize request.
 type InitializeResult struct {
@@ -2637,7 +2637,7 @@ type InitializeResult struct {
 	// Information about the server.
 	// 
 	// @since 3.15.0
-	ServerInfo ServerInfo `json:"serverInfo,omitzero"`
+	ServerInfo *ServerInfo `json:"serverInfo,omitempty"`
 }
 
 type InitializedParams struct {
@@ -2651,7 +2651,7 @@ type InlayHint struct {
 	Data any `json:"data,omitempty"`
 	// The kind of this hint. Can be omitted in which case the client
 	// should fall back to a reasonable default.
-	Kind InlayHintKind `json:"kind,omitzero"`
+	Kind *InlayHintKind `json:"kind,omitempty"`
 	// The label of this hint. A human readable string or an array of
 	// InlayHintLabelPart label parts.
 	// 
@@ -2681,7 +2681,7 @@ type InlayHint struct {
 	// hint itself is now obsolete.
 	TextEdits []TextEdit `json:"textEdits,omitempty"`
 	// The tooltip text when you hover over this item.
-	Tooltip Or_InlayHint_Tooltip `json:"tooltip,omitzero"`
+	Tooltip *Or_InlayHint_Tooltip `json:"tooltip,omitempty"`
 }
 // Inlay hint client capabilities.
 // 
@@ -2691,7 +2691,7 @@ type InlayHintClientCapabilities struct {
 	DynamicRegistration bool `json:"dynamicRegistration,omitempty"`
 	// Indicates which properties a client can resolve lazily on an inlay
 	// hint.
-	ResolveSupport ClientInlayHintResolveOptions `json:"resolveSupport,omitzero"`
+	ResolveSupport *ClientInlayHintResolveOptions `json:"resolveSupport,omitempty"`
 }
 // An inlay hint label part allows for interactive and composite labels
 // of inlay hints.
@@ -2702,7 +2702,7 @@ type InlayHintLabelPart struct {
 	// 
 	// Depending on the client capability `inlayHint.resolveSupport` clients
 	// might resolve this property late using the resolve request.
-	Command Command `json:"command,omitzero"`
+	Command *Command `json:"command,omitempty"`
 	// An optional source code location that represents this
 	// label part.
 	// 
@@ -2714,11 +2714,11 @@ type InlayHintLabelPart struct {
 	// 
 	// Depending on the client capability `inlayHint.resolveSupport` clients
 	// might resolve this property late using the resolve request.
-	Location Location `json:"location,omitzero"`
+	Location *Location `json:"location,omitempty"`
 	// The tooltip text when you hover over this label part. Depending on
 	// the client capability `inlayHint.resolveSupport` clients might resolve
 	// this property late using the resolve request.
-	Tooltip Or_InlayHintLabelPart_Tooltip `json:"tooltip,omitzero"`
+	Tooltip *Or_InlayHintLabelPart_Tooltip `json:"tooltip,omitempty"`
 	// The value of this label part.
 	Value string `json:"value"`
 }
@@ -2741,7 +2741,7 @@ type InlayHintParams struct {
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Inlay hint options used during static or dynamic registration.
 // 
@@ -2786,7 +2786,7 @@ type InlineCompletionClientCapabilities struct {
 // @proposed
 type InlineCompletionContext struct {
 	// Provides information about the currently selected item in the autocomplete widget if it is visible.
-	SelectedCompletionInfo SelectedCompletionInfo `json:"selectedCompletionInfo,omitzero"`
+	SelectedCompletionInfo *SelectedCompletionInfo `json:"selectedCompletionInfo,omitempty"`
 	// Describes how the inline completion was triggered.
 	TriggerKind InlineCompletionTriggerKind `json:"triggerKind"`
 }
@@ -2796,13 +2796,13 @@ type InlineCompletionContext struct {
 // @proposed
 type InlineCompletionItem struct {
 	// An optional {@link Command} that is executed *after* inserting this completion.
-	Command Command `json:"command,omitzero"`
+	Command *Command `json:"command,omitempty"`
 	// A text that is used to decide if this inline completion should be shown. When `falsy` the {@link InlineCompletionItem.insertText} is used.
 	FilterText string `json:"filterText,omitempty"`
 	// The text to replace the range with. Must be set.
 	InsertText Or_InlineCompletionItem_InsertText `json:"insertText"`
 	// The range to replace. Must begin and end on the same line.
-	Range Range `json:"range,omitzero"`
+	Range *Range `json:"range,omitempty"`
 }
 // Represents a collection of {@link InlineCompletionItem inline completion items} to be presented in the editor.
 // 
@@ -2833,7 +2833,7 @@ type InlineCompletionParams struct {
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Inline completion options used during static or dynamic registration.
 // 
@@ -2859,7 +2859,7 @@ type InlineValueClientCapabilities struct {
 // @since 3.17.0
 type InlineValueContext struct {
 	// The stack frame (as a DAP Id) where the execution has stopped.
-	FrameId int `json:"frameId"`
+	FrameId int32 `json:"frameId"`
 	// The document range where execution has stopped.
 	// Typically the end position of the range denotes the line where the inline values are shown.
 	StoppedLocation Range `json:"stoppedLocation"`
@@ -2895,7 +2895,7 @@ type InlineValueParams struct {
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Inline value options used during static or dynamic registration.
 // 
@@ -2978,7 +2978,7 @@ type LinkedEditingRangeParams struct {
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 
 type LinkedEditingRangeRegistrationOptions struct {
@@ -3018,7 +3018,7 @@ type LocationLink struct {
 	// 
 	// Used as the underlined span for mouse interaction. Defaults to the word range at
 	// the definition position.
-	OriginSelectionRange Range `json:"originSelectionRange,omitzero"`
+	OriginSelectionRange *Range `json:"originSelectionRange,omitempty"`
 	// The full target range of this link. If the target for example is a symbol then target range is the
 	// range enclosing this symbol not including leading/trailing whitespace but everything else
 	// like comments. This information is typically used to highlight the range in the editor.
@@ -3113,7 +3113,7 @@ type Moniker struct {
 	// schema owners are allowed to define the structure if they want.
 	Identifier string `json:"identifier"`
 	// The moniker kind if known.
-	Kind MonikerKind `json:"kind,omitzero"`
+	Kind *MonikerKind `json:"kind,omitempty"`
 	// The scheme of the moniker. For example tsc or .Net
 	Scheme string `json:"scheme"`
 	// The scope in which the moniker is unique
@@ -3137,13 +3137,13 @@ type MonikerOptions struct {
 type MonikerParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The position inside the text document.
 	Position Position `json:"position"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 
 type MonikerRegistrationOptions struct {
@@ -3166,13 +3166,13 @@ type NotebookCell struct {
 	Document DocumentUri `json:"document"`
 	// Additional execution summary information
 	// if supported by the client.
-	ExecutionSummary ExecutionSummary `json:"executionSummary,omitzero"`
+	ExecutionSummary *ExecutionSummary `json:"executionSummary,omitempty"`
 	// The cell's kind
 	Kind NotebookCellKind `json:"kind"`
 	// Additional metadata stored with the cell.
 	// 
 	// Note: should always be an object literal (e.g. LSPObject)
-	Metadata LSPObject `json:"metadata,omitzero"`
+	Metadata *LSPObject `json:"metadata,omitempty"`
 }
 // A change describing how to move a `NotebookCell`
 // array from state S to S'.
@@ -3182,9 +3182,9 @@ type NotebookCellArrayChange struct {
 	// The new cells, if any
 	Cells []NotebookCell `json:"cells,omitempty"`
 	// The deleted cells
-	DeleteCount uint `json:"deleteCount"`
+	DeleteCount uint32 `json:"deleteCount"`
 	// The start oftest of the cell that changed.
-	Start uint `json:"start"`
+	Start uint32 `json:"start"`
 }
 // @since 3.18.0
 type NotebookCellLanguage struct {
@@ -3217,14 +3217,14 @@ type NotebookDocument struct {
 	// document.
 	// 
 	// Note: should always be an object literal (e.g. LSPObject)
-	Metadata LSPObject `json:"metadata,omitzero"`
+	Metadata *LSPObject `json:"metadata,omitempty"`
 	// The type of the notebook.
 	NotebookType string `json:"notebookType"`
 	// The notebook document's uri.
 	Uri URI `json:"uri"`
 	// The version number of this document (it will increase after each
 	// change, including undo/redo).
-	Version int `json:"version"`
+	Version int32 `json:"version"`
 }
 // Structural changes to cells in a notebook document.
 // 
@@ -3246,7 +3246,7 @@ type NotebookDocumentCellChanges struct {
 	Data []NotebookCell `json:"data,omitempty"`
 	// Changes to the cell structure to add or
 	// remove cells.
-	Structure NotebookDocumentCellChangeStructure `json:"structure,omitzero"`
+	Structure *NotebookDocumentCellChangeStructure `json:"structure,omitempty"`
 	// Changes to the text content of notebook cells.
 	TextContent []NotebookDocumentCellContentChanges `json:"textContent,omitempty"`
 }
@@ -3264,11 +3264,11 @@ type NotebookDocumentCellContentChanges struct {
 // @since 3.17.0
 type NotebookDocumentChangeEvent struct {
 	// Changes to cells
-	Cells NotebookDocumentCellChanges `json:"cells,omitzero"`
+	Cells *NotebookDocumentCellChanges `json:"cells,omitempty"`
 	// The changed meta data if any.
 	// 
 	// Note: should always be an object literal (e.g. LSPObject)
-	Metadata LSPObject `json:"metadata,omitzero"`
+	Metadata *LSPObject `json:"metadata,omitempty"`
 }
 // Capabilities specific to the notebook document support.
 // 
@@ -3286,7 +3286,7 @@ type NotebookDocumentFilterNotebookType struct {
 	// The type of the enclosing notebook.
 	NotebookType string `json:"notebookType"`
 	// A glob pattern.
-	Pattern GlobPattern `json:"pattern,omitzero"`
+	Pattern *GlobPattern `json:"pattern,omitempty"`
 	// A Uri {@link Uri.scheme scheme}, like `file` or `untitled`.
 	Scheme string `json:"scheme,omitempty"`
 }
@@ -3308,7 +3308,7 @@ type NotebookDocumentFilterScheme struct {
 	// The type of the enclosing notebook.
 	NotebookType string `json:"notebookType,omitempty"`
 	// A glob pattern.
-	Pattern GlobPattern `json:"pattern,omitzero"`
+	Pattern *GlobPattern `json:"pattern,omitempty"`
 	// A Uri {@link Uri.scheme scheme}, like `file` or `untitled`.
 	Scheme string `json:"scheme"`
 }
@@ -3319,7 +3319,7 @@ type NotebookDocumentFilterWithCells struct {
 	// The notebook to be synced If a string
 	// value is provided it matches against the
 	// notebook type. '*' matches every notebook.
-	Notebook Or_NotebookDocumentFilterWithCells_Notebook `json:"notebook,omitzero"`
+	Notebook *Or_NotebookDocumentFilterWithCells_Notebook `json:"notebook,omitempty"`
 }
 // @since 3.18.0
 type NotebookDocumentFilterWithNotebook struct {
@@ -3391,14 +3391,14 @@ type OptionalVersionedTextDocumentIdentifier struct {
 	// (the server has not received an open notification before) the server can send
 	// `null` to indicate that the version is unknown and the content on disk is the
 	// truth (as specified with document content ownership).
-	Version *int `json:"version"`
+	Version *int32 `json:"version"`
 }
 // Represents a parameter of a callable-signature. A parameter can
 // have a label and a doc-comment.
 type ParameterInformation struct {
 	// The human-readable doc-comment of this parameter. Will be shown
 	// in the UI but can be omitted.
-	Documentation Or_ParameterInformation_Documentation `json:"documentation,omitzero"`
+	Documentation *Or_ParameterInformation_Documentation `json:"documentation,omitempty"`
 	// The label of this parameter information.
 	// 
 	// Either a string or an inclusive start and exclusive end offsets within its containing
@@ -3417,7 +3417,7 @@ type ParameterInformation struct {
 type PartialResultParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 }
 // Position in a text document expressed as zero-based line and character
 // offset. Prior to 3.17 the offsets were always based on a UTF-16 string
@@ -3451,9 +3451,9 @@ type Position struct {
 	// 
 	// The meaning of this offset is determined by the negotiated
 	// `PositionEncodingKind`.
-	Character uint `json:"character"`
+	Character uint32 `json:"character"`
 	// Line position in a document (zero-based).
-	Line uint `json:"line"`
+	Line uint32 `json:"line"`
 }
 // @since 3.18.0
 type PrepareRenameDefaultBehavior struct {
@@ -3467,7 +3467,7 @@ type PrepareRenameParams struct {
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // @since 3.18.0
 type PrepareRenamePlaceholder struct {
@@ -3511,7 +3511,7 @@ type PublishDiagnosticsClientCapabilities struct {
 	// Clients supporting tags have to handle unknown tags gracefully.
 	// 
 	// @since 3.15.0
-	TagSupport ClientDiagnosticsTagOptions `json:"tagSupport,omitzero"`
+	TagSupport *ClientDiagnosticsTagOptions `json:"tagSupport,omitempty"`
 	// Whether the client interprets the version property of the
 	// `textDocument/publishDiagnostics` notification's parameter.
 	// 
@@ -3527,7 +3527,7 @@ type PublishDiagnosticsParams struct {
 	// Optional the version number of the document the diagnostics are published for.
 	// 
 	// @since 3.15.0
-	Version int `json:"version,omitempty"`
+	Version int32 `json:"version,omitempty"`
 }
 // A range in a text document expressed as (zero-based) start and end positions.
 // 
@@ -3568,13 +3568,13 @@ type ReferenceParams struct {
 	Context ReferenceContext `json:"context"`
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The position inside the text document.
 	Position Position `json:"position"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Registration options for a {@link ReferencesRequest}.
 type ReferenceRegistrationOptions struct {
@@ -3685,14 +3685,14 @@ type RenameClientCapabilities struct {
 	// client.
 	// 
 	// @since 3.16.0
-	PrepareSupportDefaultBehavior PrepareSupportDefaultBehavior `json:"prepareSupportDefaultBehavior,omitzero"`
+	PrepareSupportDefaultBehavior *PrepareSupportDefaultBehavior `json:"prepareSupportDefaultBehavior,omitempty"`
 }
 // Rename file operation
 type RenameFile struct {
 	// An optional annotation identifier describing the operation.
 	// 
 	// @since 3.16.0
-	AnnotationId ChangeAnnotationIdentifier `json:"annotationId,omitzero"`
+	AnnotationId *ChangeAnnotationIdentifier `json:"annotationId,omitempty"`
 	// A rename
 	Kind string `json:"kind"`
 	// The new location.
@@ -3700,7 +3700,7 @@ type RenameFile struct {
 	// The old (existing) location.
 	OldUri DocumentUri `json:"oldUri"`
 	// Rename options.
-	Options RenameFileOptions `json:"options,omitzero"`
+	Options *RenameFileOptions `json:"options,omitempty"`
 }
 // Rename file options
 type RenameFileOptions struct {
@@ -3738,7 +3738,7 @@ type RenameParams struct {
 	// The document to rename.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Registration options for a {@link RenameRequest}.
 type RenameRegistrationOptions struct {
@@ -3757,7 +3757,7 @@ type ResourceOperation struct {
 	// An optional annotation identifier describing the operation.
 	// 
 	// @since 3.16.0
-	AnnotationId ChangeAnnotationIdentifier `json:"annotationId,omitzero"`
+	AnnotationId *ChangeAnnotationIdentifier `json:"annotationId,omitempty"`
 	// The resource operation kind.
 	Kind string `json:"kind"`
 }
@@ -3800,13 +3800,13 @@ type SelectionRangeOptions struct {
 type SelectionRangeParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The positions inside the text document.
 	Positions []Position `json:"positions"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 
 type SelectionRangeRegistrationOptions struct {
@@ -3822,7 +3822,7 @@ type SelectionRangeRegistrationOptions struct {
 // @since 3.16.0
 type SemanticTokens struct {
 	// The actual tokens.
-	Data []uint `json:"data"`
+	Data []uint32 `json:"data"`
 	// An optional result id. If provided and clients support delta updating
 	// the client will include the result id in the next semantic token request.
 	// A server can then instead of computing all semantic tokens again simply
@@ -3884,14 +3884,14 @@ type SemanticTokensDelta struct {
 type SemanticTokensDeltaParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The result id of a previous response. The result Id can either point to a full response
 	// or a delta response depending on what was received last.
 	PreviousResultId string `json:"previousResultId"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // @since 3.16.0
 type SemanticTokensDeltaPartialResult struct {
@@ -3901,11 +3901,11 @@ type SemanticTokensDeltaPartialResult struct {
 // @since 3.16.0
 type SemanticTokensEdit struct {
 	// The elements to insert.
-	Data []uint `json:"data,omitempty"`
+	Data []uint32 `json:"data,omitempty"`
 	// The count of elements to remove.
-	DeleteCount uint `json:"deleteCount"`
+	DeleteCount uint32 `json:"deleteCount"`
 	// The start offset of the edit.
-	Start uint `json:"start"`
+	Start uint32 `json:"start"`
 }
 // Semantic tokens options to support deltas for full documents
 // 
@@ -3924,12 +3924,12 @@ type SemanticTokensLegend struct {
 // @since 3.16.0
 type SemanticTokensOptions struct {
 	// Server supports providing semantic tokens for a full document.
-	Full Or_SemanticTokensOptions_Full `json:"full,omitzero"`
+	Full *Or_SemanticTokensOptions_Full `json:"full,omitempty"`
 	// The legend used by the server
 	Legend SemanticTokensLegend `json:"legend"`
 	// Server supports providing semantic tokens for a specific range
 	// of a document.
-	Range Or_SemanticTokensOptions_Range `json:"range,omitzero"`
+	Range *Or_SemanticTokensOptions_Range `json:"range,omitempty"`
 
 	WorkDoneProgress bool `json:"workDoneProgress,omitempty"`
 }
@@ -3937,28 +3937,28 @@ type SemanticTokensOptions struct {
 type SemanticTokensParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // @since 3.16.0
 type SemanticTokensPartialResult struct {
 
-	Data []uint `json:"data"`
+	Data []uint32 `json:"data"`
 }
 // @since 3.16.0
 type SemanticTokensRangeParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The range the semantic tokens are requested for.
 	Range Range `json:"range"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // @since 3.16.0
 type SemanticTokensRegistrationOptions struct {
@@ -3966,7 +3966,7 @@ type SemanticTokensRegistrationOptions struct {
 	// the document selector provided on the client side will be used.
 	DocumentSelector *DocumentSelector `json:"documentSelector"`
 	// Server supports providing semantic tokens for a full document.
-	Full Or_SemanticTokensRegistrationOptions_Full `json:"full,omitzero"`
+	Full *Or_SemanticTokensRegistrationOptions_Full `json:"full,omitempty"`
 	// The id used to register the request. The id can be used to deregister
 	// the request again. See also Registration#id.
 	Id string `json:"id,omitempty"`
@@ -3974,7 +3974,7 @@ type SemanticTokensRegistrationOptions struct {
 	Legend SemanticTokensLegend `json:"legend"`
 	// Server supports providing semantic tokens for a specific range
 	// of a document.
-	Range Or_SemanticTokensRegistrationOptions_Range `json:"range,omitzero"`
+	Range *Or_SemanticTokensRegistrationOptions_Range `json:"range,omitempty"`
 
 	WorkDoneProgress bool `json:"workDoneProgress,omitempty"`
 }
@@ -3995,72 +3995,72 @@ type ServerCapabilities struct {
 	// The server provides call hierarchy support.
 	// 
 	// @since 3.16.0
-	CallHierarchyProvider Or_ServerCapabilities_CallHierarchyProvider `json:"callHierarchyProvider,omitzero"`
+	CallHierarchyProvider *Or_ServerCapabilities_CallHierarchyProvider `json:"callHierarchyProvider,omitempty"`
 	// The server provides code actions. CodeActionOptions may only be
 	// specified if the client states that it supports
 	// `codeActionLiteralSupport` in its initial `initialize` request.
-	CodeActionProvider Or_ServerCapabilities_CodeActionProvider `json:"codeActionProvider,omitzero"`
+	CodeActionProvider *Or_ServerCapabilities_CodeActionProvider `json:"codeActionProvider,omitempty"`
 	// The server provides code lens.
-	CodeLensProvider CodeLensOptions `json:"codeLensProvider,omitzero"`
+	CodeLensProvider *CodeLensOptions `json:"codeLensProvider,omitempty"`
 	// The server provides color provider support.
-	ColorProvider Or_ServerCapabilities_ColorProvider `json:"colorProvider,omitzero"`
+	ColorProvider *Or_ServerCapabilities_ColorProvider `json:"colorProvider,omitempty"`
 	// The server provides completion support.
-	CompletionProvider CompletionOptions `json:"completionProvider,omitzero"`
+	CompletionProvider *CompletionOptions `json:"completionProvider,omitempty"`
 	// The server provides Goto Declaration support.
-	DeclarationProvider Or_ServerCapabilities_DeclarationProvider `json:"declarationProvider,omitzero"`
+	DeclarationProvider *Or_ServerCapabilities_DeclarationProvider `json:"declarationProvider,omitempty"`
 	// The server provides goto definition support.
-	DefinitionProvider Or_ServerCapabilities_DefinitionProvider `json:"definitionProvider,omitzero"`
+	DefinitionProvider *Or_ServerCapabilities_DefinitionProvider `json:"definitionProvider,omitempty"`
 	// The server has support for pull model diagnostics.
 	// 
 	// @since 3.17.0
-	DiagnosticProvider Or_ServerCapabilities_DiagnosticProvider `json:"diagnosticProvider,omitzero"`
+	DiagnosticProvider *Or_ServerCapabilities_DiagnosticProvider `json:"diagnosticProvider,omitempty"`
 	// The server provides document formatting.
-	DocumentFormattingProvider Or_ServerCapabilities_DocumentFormattingProvider `json:"documentFormattingProvider,omitzero"`
+	DocumentFormattingProvider *Or_ServerCapabilities_DocumentFormattingProvider `json:"documentFormattingProvider,omitempty"`
 	// The server provides document highlight support.
-	DocumentHighlightProvider Or_ServerCapabilities_DocumentHighlightProvider `json:"documentHighlightProvider,omitzero"`
+	DocumentHighlightProvider *Or_ServerCapabilities_DocumentHighlightProvider `json:"documentHighlightProvider,omitempty"`
 	// The server provides document link support.
-	DocumentLinkProvider DocumentLinkOptions `json:"documentLinkProvider,omitzero"`
+	DocumentLinkProvider *DocumentLinkOptions `json:"documentLinkProvider,omitempty"`
 	// The server provides document formatting on typing.
-	DocumentOnTypeFormattingProvider DocumentOnTypeFormattingOptions `json:"documentOnTypeFormattingProvider,omitzero"`
+	DocumentOnTypeFormattingProvider *DocumentOnTypeFormattingOptions `json:"documentOnTypeFormattingProvider,omitempty"`
 	// The server provides document range formatting.
-	DocumentRangeFormattingProvider Or_ServerCapabilities_DocumentRangeFormattingProvider `json:"documentRangeFormattingProvider,omitzero"`
+	DocumentRangeFormattingProvider *Or_ServerCapabilities_DocumentRangeFormattingProvider `json:"documentRangeFormattingProvider,omitempty"`
 	// The server provides document symbol support.
-	DocumentSymbolProvider Or_ServerCapabilities_DocumentSymbolProvider `json:"documentSymbolProvider,omitzero"`
+	DocumentSymbolProvider *Or_ServerCapabilities_DocumentSymbolProvider `json:"documentSymbolProvider,omitempty"`
 	// The server provides execute command support.
-	ExecuteCommandProvider ExecuteCommandOptions `json:"executeCommandProvider,omitzero"`
+	ExecuteCommandProvider *ExecuteCommandOptions `json:"executeCommandProvider,omitempty"`
 	// Experimental server capabilities.
 	Experimental any `json:"experimental,omitempty"`
 	// The server provides folding provider support.
-	FoldingRangeProvider Or_ServerCapabilities_FoldingRangeProvider `json:"foldingRangeProvider,omitzero"`
+	FoldingRangeProvider *Or_ServerCapabilities_FoldingRangeProvider `json:"foldingRangeProvider,omitempty"`
 	// The server provides hover support.
-	HoverProvider Or_ServerCapabilities_HoverProvider `json:"hoverProvider,omitzero"`
+	HoverProvider *Or_ServerCapabilities_HoverProvider `json:"hoverProvider,omitempty"`
 	// The server provides Goto Implementation support.
-	ImplementationProvider Or_ServerCapabilities_ImplementationProvider `json:"implementationProvider,omitzero"`
+	ImplementationProvider *Or_ServerCapabilities_ImplementationProvider `json:"implementationProvider,omitempty"`
 	// The server provides inlay hints.
 	// 
 	// @since 3.17.0
-	InlayHintProvider Or_ServerCapabilities_InlayHintProvider `json:"inlayHintProvider,omitzero"`
+	InlayHintProvider *Or_ServerCapabilities_InlayHintProvider `json:"inlayHintProvider,omitempty"`
 	// Inline completion options used during static registration.
 	// 
 	// @since 3.18.0
 	// @proposed
-	InlineCompletionProvider Or_ServerCapabilities_InlineCompletionProvider `json:"inlineCompletionProvider,omitzero"`
+	InlineCompletionProvider *Or_ServerCapabilities_InlineCompletionProvider `json:"inlineCompletionProvider,omitempty"`
 	// The server provides inline values.
 	// 
 	// @since 3.17.0
-	InlineValueProvider Or_ServerCapabilities_InlineValueProvider `json:"inlineValueProvider,omitzero"`
+	InlineValueProvider *Or_ServerCapabilities_InlineValueProvider `json:"inlineValueProvider,omitempty"`
 	// The server provides linked editing range support.
 	// 
 	// @since 3.16.0
-	LinkedEditingRangeProvider Or_ServerCapabilities_LinkedEditingRangeProvider `json:"linkedEditingRangeProvider,omitzero"`
+	LinkedEditingRangeProvider *Or_ServerCapabilities_LinkedEditingRangeProvider `json:"linkedEditingRangeProvider,omitempty"`
 	// The server provides moniker support.
 	// 
 	// @since 3.16.0
-	MonikerProvider Or_ServerCapabilities_MonikerProvider `json:"monikerProvider,omitzero"`
+	MonikerProvider *Or_ServerCapabilities_MonikerProvider `json:"monikerProvider,omitempty"`
 	// Defines how notebook documents are synced.
 	// 
 	// @since 3.17.0
-	NotebookDocumentSync Or_ServerCapabilities_NotebookDocumentSync `json:"notebookDocumentSync,omitzero"`
+	NotebookDocumentSync *Or_ServerCapabilities_NotebookDocumentSync `json:"notebookDocumentSync,omitempty"`
 	// The position encoding the server picked from the encodings offered
 	// by the client via the client capability `general.positionEncodings`.
 	// 
@@ -4070,35 +4070,35 @@ type ServerCapabilities struct {
 	// If omitted it defaults to 'utf-16'.
 	// 
 	// @since 3.17.0
-	PositionEncoding PositionEncodingKind `json:"positionEncoding,omitzero"`
+	PositionEncoding *PositionEncodingKind `json:"positionEncoding,omitempty"`
 	// The server provides find references support.
-	ReferencesProvider Or_ServerCapabilities_ReferencesProvider `json:"referencesProvider,omitzero"`
+	ReferencesProvider *Or_ServerCapabilities_ReferencesProvider `json:"referencesProvider,omitempty"`
 	// The server provides rename support. RenameOptions may only be
 	// specified if the client states that it supports
 	// `prepareSupport` in its initial `initialize` request.
-	RenameProvider Or_ServerCapabilities_RenameProvider `json:"renameProvider,omitzero"`
+	RenameProvider *Or_ServerCapabilities_RenameProvider `json:"renameProvider,omitempty"`
 	// The server provides selection range support.
-	SelectionRangeProvider Or_ServerCapabilities_SelectionRangeProvider `json:"selectionRangeProvider,omitzero"`
+	SelectionRangeProvider *Or_ServerCapabilities_SelectionRangeProvider `json:"selectionRangeProvider,omitempty"`
 	// The server provides semantic tokens support.
 	// 
 	// @since 3.16.0
-	SemanticTokensProvider Or_ServerCapabilities_SemanticTokensProvider `json:"semanticTokensProvider,omitzero"`
+	SemanticTokensProvider *Or_ServerCapabilities_SemanticTokensProvider `json:"semanticTokensProvider,omitempty"`
 	// The server provides signature help support.
-	SignatureHelpProvider SignatureHelpOptions `json:"signatureHelpProvider,omitzero"`
+	SignatureHelpProvider *SignatureHelpOptions `json:"signatureHelpProvider,omitempty"`
 	// Defines how text documents are synced. Is either a detailed structure
 	// defining each notification or for backwards compatibility the
 	// TextDocumentSyncKind number.
-	TextDocumentSync Or_ServerCapabilities_TextDocumentSync `json:"textDocumentSync,omitzero"`
+	TextDocumentSync *Or_ServerCapabilities_TextDocumentSync `json:"textDocumentSync,omitempty"`
 	// The server provides Goto Type Definition support.
-	TypeDefinitionProvider Or_ServerCapabilities_TypeDefinitionProvider `json:"typeDefinitionProvider,omitzero"`
+	TypeDefinitionProvider *Or_ServerCapabilities_TypeDefinitionProvider `json:"typeDefinitionProvider,omitempty"`
 	// The server provides type hierarchy support.
 	// 
 	// @since 3.17.0
-	TypeHierarchyProvider Or_ServerCapabilities_TypeHierarchyProvider `json:"typeHierarchyProvider,omitzero"`
+	TypeHierarchyProvider *Or_ServerCapabilities_TypeHierarchyProvider `json:"typeHierarchyProvider,omitempty"`
 	// Workspace specific server capabilities.
-	Workspace WorkspaceOptions `json:"workspace,omitzero"`
+	Workspace *WorkspaceOptions `json:"workspace,omitempty"`
 	// The server provides workspace symbol support.
-	WorkspaceSymbolProvider Or_ServerCapabilities_WorkspaceSymbolProvider `json:"workspaceSymbolProvider,omitzero"`
+	WorkspaceSymbolProvider *Or_ServerCapabilities_WorkspaceSymbolProvider `json:"workspaceSymbolProvider,omitempty"`
 }
 // @since 3.18.0
 type ServerCompletionItemOptions struct {
@@ -4144,7 +4144,7 @@ type ShowDocumentParams struct {
 	// document. Clients might ignore the property if an
 	// external program is started or the file is not a text
 	// file.
-	Selection Range `json:"selection,omitzero"`
+	Selection *Range `json:"selection,omitempty"`
 	// An optional property to indicate whether the editor
 	// showing the document should take focus or not.
 	// Clients might ignore this property if an external
@@ -4170,7 +4170,7 @@ type ShowMessageParams struct {
 // Show message request client capabilities
 type ShowMessageRequestClientCapabilities struct {
 	// Capabilities specific to the `MessageActionItem` type.
-	MessageActionItem ClientShowMessageActionItemOptions `json:"messageActionItem,omitzero"`
+	MessageActionItem *ClientShowMessageActionItemOptions `json:"messageActionItem,omitempty"`
 }
 
 type ShowMessageRequestParams struct {
@@ -4201,7 +4201,7 @@ type SignatureHelp struct {
 	// In future version of the protocol this property might become
 	// mandatory (but still nullable) to better express the active parameter if
 	// the active signature does have any.
-	ActiveParameter *uint `json:"activeParameter,omitempty"`
+	ActiveParameter **uint32 `json:"activeParameter,omitempty"`
 	// The active signature. If omitted or the value lies outside the
 	// range of `signatures` the value defaults to zero or is ignored if
 	// the `SignatureHelp` has no signatures.
@@ -4211,7 +4211,7 @@ type SignatureHelp struct {
 	// 
 	// In future version of the protocol this property might become
 	// mandatory to better express this.
-	ActiveSignature uint `json:"activeSignature,omitempty"`
+	ActiveSignature uint32 `json:"activeSignature,omitempty"`
 	// One or more signatures.
 	Signatures []SignatureInformation `json:"signatures"`
 }
@@ -4228,7 +4228,7 @@ type SignatureHelpClientCapabilities struct {
 	DynamicRegistration bool `json:"dynamicRegistration,omitempty"`
 	// The client supports the following `SignatureInformation`
 	// specific properties.
-	SignatureInformation ClientSignatureInformationOptions `json:"signatureInformation,omitzero"`
+	SignatureInformation *ClientSignatureInformationOptions `json:"signatureInformation,omitempty"`
 }
 // Additional information about the context in which a signature help request was triggered.
 // 
@@ -4238,7 +4238,7 @@ type SignatureHelpContext struct {
 	// 
 	// The `activeSignatureHelp` has its `SignatureHelp.activeSignature` field updated based on
 	// the user navigating through available signatures.
-	ActiveSignatureHelp SignatureHelp `json:"activeSignatureHelp,omitzero"`
+	ActiveSignatureHelp *SignatureHelp `json:"activeSignatureHelp,omitempty"`
 	// `true` if signature help was already showing when it was triggered.
 	// 
 	// Retriggers occurs when the signature help is already active and can be caused by actions such as
@@ -4271,13 +4271,13 @@ type SignatureHelpParams struct {
 	// to send this using the client capability `textDocument.signatureHelp.contextSupport === true`
 	// 
 	// @since 3.15.0
-	Context SignatureHelpContext `json:"context,omitzero"`
+	Context *SignatureHelpContext `json:"context,omitempty"`
 	// The position inside the text document.
 	Position Position `json:"position"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Registration options for a {@link SignatureHelpRequest}.
 type SignatureHelpRegistrationOptions struct {
@@ -4311,10 +4311,10 @@ type SignatureInformation struct {
 	// `SignatureHelp.activeParameter`.
 	// 
 	// @since 3.16.0
-	ActiveParameter *uint `json:"activeParameter,omitempty"`
+	ActiveParameter **uint32 `json:"activeParameter,omitempty"`
 	// The human-readable doc-comment of this signature. Will be shown
 	// in the UI but can be omitted.
-	Documentation Or_SignatureInformation_Documentation `json:"documentation,omitzero"`
+	Documentation *Or_SignatureInformation_Documentation `json:"documentation,omitempty"`
 	// The label of this signature. Will be shown in
 	// the UI.
 	Label string `json:"label"`
@@ -4327,7 +4327,7 @@ type SignatureInformation struct {
 // @proposed
 type SnippetTextEdit struct {
 	// The actual identifier of the snippet edit.
-	AnnotationId ChangeAnnotationIdentifier `json:"annotationId,omitzero"`
+	AnnotationId *ChangeAnnotationIdentifier `json:"annotationId,omitempty"`
 	// The range of the text document to be manipulated.
 	Range Range `json:"range"`
 	// The snippet to be inserted.
@@ -4409,101 +4409,101 @@ type TextDocumentClientCapabilities struct {
 	// Capabilities specific to the various call hierarchy requests.
 	// 
 	// @since 3.16.0
-	CallHierarchy CallHierarchyClientCapabilities `json:"callHierarchy,omitzero"`
+	CallHierarchy *CallHierarchyClientCapabilities `json:"callHierarchy,omitempty"`
 	// Capabilities specific to the `textDocument/codeAction` request.
-	CodeAction CodeActionClientCapabilities `json:"codeAction,omitzero"`
+	CodeAction *CodeActionClientCapabilities `json:"codeAction,omitempty"`
 	// Capabilities specific to the `textDocument/codeLens` request.
-	CodeLens CodeLensClientCapabilities `json:"codeLens,omitzero"`
+	CodeLens *CodeLensClientCapabilities `json:"codeLens,omitempty"`
 	// Capabilities specific to the `textDocument/documentColor` and the
 	// `textDocument/colorPresentation` request.
 	// 
 	// @since 3.6.0
-	ColorProvider DocumentColorClientCapabilities `json:"colorProvider,omitzero"`
+	ColorProvider *DocumentColorClientCapabilities `json:"colorProvider,omitempty"`
 	// Capabilities specific to the `textDocument/completion` request.
-	Completion CompletionClientCapabilities `json:"completion,omitzero"`
+	Completion *CompletionClientCapabilities `json:"completion,omitempty"`
 	// Capabilities specific to the `textDocument/declaration` request.
 	// 
 	// @since 3.14.0
-	Declaration DeclarationClientCapabilities `json:"declaration,omitzero"`
+	Declaration *DeclarationClientCapabilities `json:"declaration,omitempty"`
 	// Capabilities specific to the `textDocument/definition` request.
-	Definition DefinitionClientCapabilities `json:"definition,omitzero"`
+	Definition *DefinitionClientCapabilities `json:"definition,omitempty"`
 	// Capabilities specific to the diagnostic pull model.
 	// 
 	// @since 3.17.0
-	Diagnostic DiagnosticClientCapabilities `json:"diagnostic,omitzero"`
+	Diagnostic *DiagnosticClientCapabilities `json:"diagnostic,omitempty"`
 	// Capabilities specific to the `textDocument/documentHighlight` request.
-	DocumentHighlight DocumentHighlightClientCapabilities `json:"documentHighlight,omitzero"`
+	DocumentHighlight *DocumentHighlightClientCapabilities `json:"documentHighlight,omitempty"`
 	// Capabilities specific to the `textDocument/documentLink` request.
-	DocumentLink DocumentLinkClientCapabilities `json:"documentLink,omitzero"`
+	DocumentLink *DocumentLinkClientCapabilities `json:"documentLink,omitempty"`
 	// Capabilities specific to the `textDocument/documentSymbol` request.
-	DocumentSymbol DocumentSymbolClientCapabilities `json:"documentSymbol,omitzero"`
+	DocumentSymbol *DocumentSymbolClientCapabilities `json:"documentSymbol,omitempty"`
 	// Defines which filters the client supports.
 	// 
 	// @since 3.18.0
-	Filters TextDocumentFilterClientCapabilities `json:"filters,omitzero"`
+	Filters *TextDocumentFilterClientCapabilities `json:"filters,omitempty"`
 	// Capabilities specific to the `textDocument/foldingRange` request.
 	// 
 	// @since 3.10.0
-	FoldingRange FoldingRangeClientCapabilities `json:"foldingRange,omitzero"`
+	FoldingRange *FoldingRangeClientCapabilities `json:"foldingRange,omitempty"`
 	// Capabilities specific to the `textDocument/formatting` request.
-	Formatting DocumentFormattingClientCapabilities `json:"formatting,omitzero"`
+	Formatting *DocumentFormattingClientCapabilities `json:"formatting,omitempty"`
 	// Capabilities specific to the `textDocument/hover` request.
-	Hover HoverClientCapabilities `json:"hover,omitzero"`
+	Hover *HoverClientCapabilities `json:"hover,omitempty"`
 	// Capabilities specific to the `textDocument/implementation` request.
 	// 
 	// @since 3.6.0
-	Implementation ImplementationClientCapabilities `json:"implementation,omitzero"`
+	Implementation *ImplementationClientCapabilities `json:"implementation,omitempty"`
 	// Capabilities specific to the `textDocument/inlayHint` request.
 	// 
 	// @since 3.17.0
-	InlayHint InlayHintClientCapabilities `json:"inlayHint,omitzero"`
+	InlayHint *InlayHintClientCapabilities `json:"inlayHint,omitempty"`
 	// Client capabilities specific to inline completions.
 	// 
 	// @since 3.18.0
 	// @proposed
-	InlineCompletion InlineCompletionClientCapabilities `json:"inlineCompletion,omitzero"`
+	InlineCompletion *InlineCompletionClientCapabilities `json:"inlineCompletion,omitempty"`
 	// Capabilities specific to the `textDocument/inlineValue` request.
 	// 
 	// @since 3.17.0
-	InlineValue InlineValueClientCapabilities `json:"inlineValue,omitzero"`
+	InlineValue *InlineValueClientCapabilities `json:"inlineValue,omitempty"`
 	// Capabilities specific to the `textDocument/linkedEditingRange` request.
 	// 
 	// @since 3.16.0
-	LinkedEditingRange LinkedEditingRangeClientCapabilities `json:"linkedEditingRange,omitzero"`
+	LinkedEditingRange *LinkedEditingRangeClientCapabilities `json:"linkedEditingRange,omitempty"`
 	// Client capabilities specific to the `textDocument/moniker` request.
 	// 
 	// @since 3.16.0
-	Moniker MonikerClientCapabilities `json:"moniker,omitzero"`
+	Moniker *MonikerClientCapabilities `json:"moniker,omitempty"`
 	// Capabilities specific to the `textDocument/onTypeFormatting` request.
-	OnTypeFormatting DocumentOnTypeFormattingClientCapabilities `json:"onTypeFormatting,omitzero"`
+	OnTypeFormatting *DocumentOnTypeFormattingClientCapabilities `json:"onTypeFormatting,omitempty"`
 	// Capabilities specific to the `textDocument/publishDiagnostics` notification.
-	PublishDiagnostics PublishDiagnosticsClientCapabilities `json:"publishDiagnostics,omitzero"`
+	PublishDiagnostics *PublishDiagnosticsClientCapabilities `json:"publishDiagnostics,omitempty"`
 	// Capabilities specific to the `textDocument/rangeFormatting` request.
-	RangeFormatting DocumentRangeFormattingClientCapabilities `json:"rangeFormatting,omitzero"`
+	RangeFormatting *DocumentRangeFormattingClientCapabilities `json:"rangeFormatting,omitempty"`
 	// Capabilities specific to the `textDocument/references` request.
-	References ReferenceClientCapabilities `json:"references,omitzero"`
+	References *ReferenceClientCapabilities `json:"references,omitempty"`
 	// Capabilities specific to the `textDocument/rename` request.
-	Rename RenameClientCapabilities `json:"rename,omitzero"`
+	Rename *RenameClientCapabilities `json:"rename,omitempty"`
 	// Capabilities specific to the `textDocument/selectionRange` request.
 	// 
 	// @since 3.15.0
-	SelectionRange SelectionRangeClientCapabilities `json:"selectionRange,omitzero"`
+	SelectionRange *SelectionRangeClientCapabilities `json:"selectionRange,omitempty"`
 	// Capabilities specific to the various semantic token request.
 	// 
 	// @since 3.16.0
-	SemanticTokens SemanticTokensClientCapabilities `json:"semanticTokens,omitzero"`
+	SemanticTokens *SemanticTokensClientCapabilities `json:"semanticTokens,omitempty"`
 	// Capabilities specific to the `textDocument/signatureHelp` request.
-	SignatureHelp SignatureHelpClientCapabilities `json:"signatureHelp,omitzero"`
+	SignatureHelp *SignatureHelpClientCapabilities `json:"signatureHelp,omitempty"`
 	// Defines which synchronization capabilities the client supports.
-	Synchronization TextDocumentSyncClientCapabilities `json:"synchronization,omitzero"`
+	Synchronization *TextDocumentSyncClientCapabilities `json:"synchronization,omitempty"`
 	// Capabilities specific to the `textDocument/typeDefinition` request.
 	// 
 	// @since 3.6.0
-	TypeDefinition TypeDefinitionClientCapabilities `json:"typeDefinition,omitzero"`
+	TypeDefinition *TypeDefinitionClientCapabilities `json:"typeDefinition,omitempty"`
 	// Capabilities specific to the various type hierarchy requests.
 	// 
 	// @since 3.17.0
-	TypeHierarchy TypeHierarchyClientCapabilities `json:"typeHierarchy,omitzero"`
+	TypeHierarchy *TypeHierarchyClientCapabilities `json:"typeHierarchy,omitempty"`
 }
 // @since 3.18.0
 type TextDocumentContentChangePartial struct {
@@ -4512,7 +4512,7 @@ type TextDocumentContentChangePartial struct {
 	// The optional length of the range that got replaced.
 	// 
 	// @deprecated use range instead.
-	RangeLength uint `json:"rangeLength,omitempty"`
+	RangeLength uint32 `json:"rangeLength,omitempty"`
 	// The new text for the provided range.
 	Text string `json:"text"`
 }
@@ -4609,7 +4609,7 @@ type TextDocumentFilterLanguage struct {
 	// @since 3.18.0 - support for relative patterns. Whether clients support
 	// relative patterns depends on the client capability
 	// `textDocuments.filters.relativePatternSupport`.
-	Pattern GlobPattern `json:"pattern,omitzero"`
+	Pattern *GlobPattern `json:"pattern,omitempty"`
 	// A Uri {@link Uri.scheme scheme}, like `file` or `untitled`.
 	Scheme string `json:"scheme,omitempty"`
 }
@@ -4639,7 +4639,7 @@ type TextDocumentFilterScheme struct {
 	// @since 3.18.0 - support for relative patterns. Whether clients support
 	// relative patterns depends on the client capability
 	// `textDocuments.filters.relativePatternSupport`.
-	Pattern GlobPattern `json:"pattern,omitzero"`
+	Pattern *GlobPattern `json:"pattern,omitempty"`
 	// A Uri {@link Uri.scheme scheme}, like `file` or `untitled`.
 	Scheme string `json:"scheme"`
 }
@@ -4659,7 +4659,7 @@ type TextDocumentItem struct {
 	Uri DocumentUri `json:"uri"`
 	// The version number of this document (it will increase after each
 	// change, including undo/redo).
-	Version int `json:"version"`
+	Version int32 `json:"version"`
 }
 // A parameter literal used in requests to pass a text document and a position inside that
 // document.
@@ -4700,13 +4700,13 @@ type TextDocumentSyncClientCapabilities struct {
 type TextDocumentSyncOptions struct {
 	// Change notifications are sent to the server. See TextDocumentSyncKind.None, TextDocumentSyncKind.Full
 	// and TextDocumentSyncKind.Incremental. If omitted it defaults to TextDocumentSyncKind.None.
-	Change TextDocumentSyncKind `json:"change,omitzero"`
+	Change *TextDocumentSyncKind `json:"change,omitempty"`
 	// Open and close notifications are sent to the server. If omitted open close notification should not
 	// be sent.
 	OpenClose bool `json:"openClose,omitempty"`
 	// If present save notifications are sent to the server. If omitted the notification should not be
 	// sent.
-	Save Or_TextDocumentSyncOptions_Save `json:"save,omitzero"`
+	Save *Or_TextDocumentSyncOptions_Save `json:"save,omitempty"`
 	// If present will save notifications are sent to the server. If omitted the notification should not be
 	// sent.
 	WillSave bool `json:"willSave,omitempty"`
@@ -4743,13 +4743,13 @@ type TypeDefinitionOptions struct {
 type TypeDefinitionParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The position inside the text document.
 	Position Position `json:"position"`
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 
 type TypeDefinitionRegistrationOptions struct {
@@ -4810,7 +4810,7 @@ type TypeHierarchyPrepareParams struct {
 	// The text document.
 	TextDocument TextDocumentIdentifier `json:"textDocument"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Type hierarchy options used during static or dynamic registration.
 // 
@@ -4833,9 +4833,9 @@ type TypeHierarchySubtypesParams struct {
 	Item TypeHierarchyItem `json:"item"`
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // The parameter of a `typeHierarchy/supertypes` request.
 // 
@@ -4845,9 +4845,9 @@ type TypeHierarchySupertypesParams struct {
 	Item TypeHierarchyItem `json:"item"`
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // A diagnostic report indicating that the last returned
 // report is still accurate.
@@ -4883,14 +4883,14 @@ type VersionedNotebookDocumentIdentifier struct {
 	// The notebook document's uri.
 	Uri URI `json:"uri"`
 	// The version number of this notebook document.
-	Version int `json:"version"`
+	Version int32 `json:"version"`
 }
 // A text document identifier to denote a specific version of a text document.
 type VersionedTextDocumentIdentifier struct {
 	// The text document's uri.
 	Uri DocumentUri `json:"uri"`
 	// The version number of this document.
-	Version int `json:"version"`
+	Version int32 `json:"version"`
 }
 // The parameters sent in a will save text document notification.
 type WillSaveTextDocumentParams struct {
@@ -4904,11 +4904,11 @@ type WindowClientCapabilities struct {
 	// Capabilities specific to the showDocument request.
 	// 
 	// @since 3.16.0
-	ShowDocument ShowDocumentClientCapabilities `json:"showDocument,omitzero"`
+	ShowDocument *ShowDocumentClientCapabilities `json:"showDocument,omitempty"`
 	// Capabilities specific to the showMessage request.
 	// 
 	// @since 3.16.0
-	ShowMessage ShowMessageRequestClientCapabilities `json:"showMessage,omitzero"`
+	ShowMessage *ShowMessageRequestClientCapabilities `json:"showMessage,omitempty"`
 	// It indicates whether the client supports server initiated
 	// progress using the `window/workDoneProgress/create` request.
 	// 
@@ -4940,7 +4940,7 @@ type WorkDoneProgressBegin struct {
 	// 
 	// The value should be steadily rising. Clients are free to ignore values
 	// that are not following this rule. The value range is [0, 100].
-	Percentage uint `json:"percentage,omitempty"`
+	Percentage uint32 `json:"percentage,omitempty"`
 	// Mandatory title of the progress operation. Used to briefly inform about
 	// the kind of operation being performed.
 	// 
@@ -4973,7 +4973,7 @@ type WorkDoneProgressOptions struct {
 
 type WorkDoneProgressParams struct {
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 
 type WorkDoneProgressReport struct {
@@ -4996,7 +4996,7 @@ type WorkDoneProgressReport struct {
 	// 
 	// The value should be steadily rising. Clients are free to ignore values
 	// that are not following this rule. The value range is [0, 100]
-	Percentage uint `json:"percentage,omitempty"`
+	Percentage uint32 `json:"percentage,omitempty"`
 }
 // Workspace specific client capabilities.
 type WorkspaceClientCapabilities struct {
@@ -5008,7 +5008,7 @@ type WorkspaceClientCapabilities struct {
 	// workspace.
 	// 
 	// @since 3.16.0.
-	CodeLens CodeLensWorkspaceClientCapabilities `json:"codeLens,omitzero"`
+	CodeLens *CodeLensWorkspaceClientCapabilities `json:"codeLens,omitempty"`
 	// The client supports `workspace/configuration` requests.
 	// 
 	// @since 3.6.0
@@ -5017,46 +5017,46 @@ type WorkspaceClientCapabilities struct {
 	// workspace.
 	// 
 	// @since 3.17.0.
-	Diagnostics DiagnosticWorkspaceClientCapabilities `json:"diagnostics,omitzero"`
+	Diagnostics *DiagnosticWorkspaceClientCapabilities `json:"diagnostics,omitempty"`
 	// Capabilities specific to the `workspace/didChangeConfiguration` notification.
-	DidChangeConfiguration DidChangeConfigurationClientCapabilities `json:"didChangeConfiguration,omitzero"`
+	DidChangeConfiguration *DidChangeConfigurationClientCapabilities `json:"didChangeConfiguration,omitempty"`
 	// Capabilities specific to the `workspace/didChangeWatchedFiles` notification.
-	DidChangeWatchedFiles DidChangeWatchedFilesClientCapabilities `json:"didChangeWatchedFiles,omitzero"`
+	DidChangeWatchedFiles *DidChangeWatchedFilesClientCapabilities `json:"didChangeWatchedFiles,omitempty"`
 	// Capabilities specific to the `workspace/executeCommand` request.
-	ExecuteCommand ExecuteCommandClientCapabilities `json:"executeCommand,omitzero"`
+	ExecuteCommand *ExecuteCommandClientCapabilities `json:"executeCommand,omitempty"`
 	// The client has support for file notifications/requests for user operations on files.
 	// 
 	// Since 3.16.0
-	FileOperations FileOperationClientCapabilities `json:"fileOperations,omitzero"`
+	FileOperations *FileOperationClientCapabilities `json:"fileOperations,omitempty"`
 	// Capabilities specific to the folding range requests scoped to the workspace.
 	// 
 	// @since 3.18.0
 	// @proposed
-	FoldingRange FoldingRangeWorkspaceClientCapabilities `json:"foldingRange,omitzero"`
+	FoldingRange *FoldingRangeWorkspaceClientCapabilities `json:"foldingRange,omitempty"`
 	// Capabilities specific to the inlay hint requests scoped to the
 	// workspace.
 	// 
 	// @since 3.17.0.
-	InlayHint InlayHintWorkspaceClientCapabilities `json:"inlayHint,omitzero"`
+	InlayHint *InlayHintWorkspaceClientCapabilities `json:"inlayHint,omitempty"`
 	// Capabilities specific to the inline values requests scoped to the
 	// workspace.
 	// 
 	// @since 3.17.0.
-	InlineValue InlineValueWorkspaceClientCapabilities `json:"inlineValue,omitzero"`
+	InlineValue *InlineValueWorkspaceClientCapabilities `json:"inlineValue,omitempty"`
 	// Capabilities specific to the semantic token requests scoped to the
 	// workspace.
 	// 
 	// @since 3.16.0.
-	SemanticTokens SemanticTokensWorkspaceClientCapabilities `json:"semanticTokens,omitzero"`
+	SemanticTokens *SemanticTokensWorkspaceClientCapabilities `json:"semanticTokens,omitempty"`
 	// Capabilities specific to the `workspace/symbol` request.
-	Symbol WorkspaceSymbolClientCapabilities `json:"symbol,omitzero"`
+	Symbol *WorkspaceSymbolClientCapabilities `json:"symbol,omitempty"`
 	// Capabilities specific to the `workspace/textDocumentContent` request.
 	// 
 	// @since 3.18.0
 	// @proposed
-	TextDocumentContent TextDocumentContentClientCapabilities `json:"textDocumentContent,omitzero"`
+	TextDocumentContent *TextDocumentContentClientCapabilities `json:"textDocumentContent,omitempty"`
 	// Capabilities specific to `WorkspaceEdit`s.
-	WorkspaceEdit WorkspaceEditClientCapabilities `json:"workspaceEdit,omitzero"`
+	WorkspaceEdit *WorkspaceEditClientCapabilities `json:"workspaceEdit,omitempty"`
 	// The client has support for workspace folders.
 	// 
 	// @since 3.6.0
@@ -5070,12 +5070,12 @@ type WorkspaceDiagnosticParams struct {
 	Identifier string `json:"identifier,omitempty"`
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// The currently known diagnostic reports with their
 	// previous result ids.
 	PreviousResultIds []PreviousResultId `json:"previousResultIds"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // A workspace diagnostic report.
 // 
@@ -5131,14 +5131,14 @@ type WorkspaceEditClientCapabilities struct {
 	// create file, rename file and delete file changes.
 	// 
 	// @since 3.16.0
-	ChangeAnnotationSupport ChangeAnnotationsSupportOptions `json:"changeAnnotationSupport,omitzero"`
+	ChangeAnnotationSupport *ChangeAnnotationsSupportOptions `json:"changeAnnotationSupport,omitempty"`
 	// The client supports versioned document changes in `WorkspaceEdit`s
 	DocumentChanges bool `json:"documentChanges,omitempty"`
 	// The failure handling strategy of a client if applying the workspace edit
 	// fails.
 	// 
 	// @since 3.13.0
-	FailureHandling FailureHandlingKind `json:"failureHandling,omitzero"`
+	FailureHandling *FailureHandlingKind `json:"failureHandling,omitempty"`
 	// Whether the client supports `WorkspaceEditMetadata` in `WorkspaceEdit`s.
 	// 
 	// @since 3.18.0
@@ -5195,7 +5195,7 @@ type WorkspaceFoldersInitializeParams struct {
 	// configured.
 	// 
 	// @since 3.6.0
-	WorkspaceFolders Or_WorkspaceFoldersInitializeParams_WorkspaceFolders `json:"workspaceFolders,omitzero"`
+	WorkspaceFolders *Or_WorkspaceFoldersInitializeParams_WorkspaceFolders `json:"workspaceFolders,omitempty"`
 }
 
 type WorkspaceFoldersServerCapabilities struct {
@@ -5206,7 +5206,7 @@ type WorkspaceFoldersServerCapabilities struct {
 	// under which the notification is registered on the client
 	// side. The ID can be used to unregister for these events
 	// using the `client/unregisterCapability` request.
-	ChangeNotifications Or_WorkspaceFoldersServerCapabilities_ChangeNotifications `json:"changeNotifications,omitzero"`
+	ChangeNotifications *Or_WorkspaceFoldersServerCapabilities_ChangeNotifications `json:"changeNotifications,omitempty"`
 	// The server has support for workspace folders
 	Supported bool `json:"supported,omitempty"`
 }
@@ -5226,7 +5226,7 @@ type WorkspaceFullDocumentDiagnosticReport struct {
 	Uri DocumentUri `json:"uri"`
 	// The version number for which the diagnostics are reported.
 	// If the document is not marked as open `null` can be provided.
-	Version *int `json:"version"`
+	Version *int32 `json:"version"`
 }
 // Defines workspace specific capabilities of the server.
 // 
@@ -5235,16 +5235,16 @@ type WorkspaceOptions struct {
 	// The server is interested in notifications/requests for operations on files.
 	// 
 	// @since 3.16.0
-	FileOperations FileOperationOptions `json:"fileOperations,omitzero"`
+	FileOperations *FileOperationOptions `json:"fileOperations,omitempty"`
 	// The server supports the `workspace/textDocumentContent` request.
 	// 
 	// @since 3.18.0
 	// @proposed
-	TextDocumentContent Or_WorkspaceOptions_TextDocumentContent `json:"textDocumentContent,omitzero"`
+	TextDocumentContent *Or_WorkspaceOptions_TextDocumentContent `json:"textDocumentContent,omitempty"`
 	// The server supports workspace folder.
 	// 
 	// @since 3.6.0
-	WorkspaceFolders WorkspaceFoldersServerCapabilities `json:"workspaceFolders,omitzero"`
+	WorkspaceFolders *WorkspaceFoldersServerCapabilities `json:"workspaceFolders,omitempty"`
 }
 // A special workspace symbol that supports locations without a range.
 // 
@@ -5284,14 +5284,14 @@ type WorkspaceSymbolClientCapabilities struct {
 	// properties.
 	// 
 	// @since 3.17.0
-	ResolveSupport ClientSymbolResolveOptions `json:"resolveSupport,omitzero"`
+	ResolveSupport *ClientSymbolResolveOptions `json:"resolveSupport,omitempty"`
 	// Specific capabilities for the `SymbolKind` in the `workspace/symbol` request.
-	SymbolKind ClientSymbolKindOptions `json:"symbolKind,omitzero"`
+	SymbolKind *ClientSymbolKindOptions `json:"symbolKind,omitempty"`
 	// The client supports tags on `SymbolInformation`.
 	// Clients supporting tags have to handle unknown tags gracefully.
 	// 
 	// @since 3.16.0
-	TagSupport ClientSymbolTagOptions `json:"tagSupport,omitzero"`
+	TagSupport *ClientSymbolTagOptions `json:"tagSupport,omitempty"`
 }
 // Server capabilities for a {@link WorkspaceSymbolRequest}.
 type WorkspaceSymbolOptions struct {
@@ -5307,7 +5307,7 @@ type WorkspaceSymbolOptions struct {
 type WorkspaceSymbolParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
-	PartialResultToken ProgressToken `json:"partialResultToken,omitzero"`
+	PartialResultToken *ProgressToken `json:"partialResultToken,omitempty"`
 	// A query string to filter symbols by. Clients may send an empty
 	// string here to request all symbols.
 	// 
@@ -5318,7 +5318,7 @@ type WorkspaceSymbolParams struct {
 	// Servers shouldn't use prefix, substring, or similar strict matching.
 	Query string `json:"query"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Registration options for a {@link WorkspaceSymbolRequest}.
 type WorkspaceSymbolRegistrationOptions struct {
@@ -5346,7 +5346,7 @@ type WorkspaceUnchangedDocumentDiagnosticReport struct {
 	Uri DocumentUri `json:"uri"`
 	// The version number for which the diagnostics are reported.
 	// If the document is not marked as open `null` can be provided.
-	Version *int `json:"version"`
+	Version *int32 `json:"version"`
 }
 // The initialize parameters
 type _InitializeParams struct {
@@ -5355,7 +5355,7 @@ type _InitializeParams struct {
 	// Information about the client
 	// 
 	// @since 3.15.0
-	ClientInfo ClientInfo `json:"clientInfo,omitzero"`
+	ClientInfo *ClientInfo `json:"clientInfo,omitempty"`
 	// User provided initialization options.
 	InitializationOptions any `json:"initializationOptions,omitempty"`
 	// The locale the client is currently showing the user interface
@@ -5372,12 +5372,12 @@ type _InitializeParams struct {
 	// 
 	// Is `null` if the process has not been started by another process.
 	// If the parent process is not alive then the server should exit.
-	ProcessId *int `json:"processId"`
+	ProcessId *int32 `json:"processId"`
 	// The rootPath of the workspace. Is null
 	// if no folder is open.
 	// 
 	// @deprecated in favour of rootUri.
-	RootPath *string `json:"rootPath,omitempty"`
+	RootPath **string `json:"rootPath,omitempty"`
 	// The rootUri of the workspace. Is null if no
 	// folder is open. If both `rootPath` and `rootUri` are set
 	// `rootUri` wins.
@@ -5385,9 +5385,9 @@ type _InitializeParams struct {
 	// @deprecated in favour of workspaceFolders.
 	RootUri *DocumentUri `json:"rootUri"`
 	// The initial trace setting. If omitted trace is disabled ('off').
-	Trace TraceValue `json:"trace,omitzero"`
+	Trace *TraceValue `json:"trace,omitempty"`
 	// An optional token that a server can use to report work done progress.
-	WorkDoneToken ProgressToken `json:"workDoneToken,omitzero"`
+	WorkDoneToken *ProgressToken `json:"workDoneToken,omitempty"`
 }
 // Defines how values from a set of defaults and an individual item will be
 // merged.
@@ -5398,7 +5398,7 @@ type _InitializeParams struct {
 // 
 // @since 3.18.0
 //go:generate stringer -type=ApplyKind
-type ApplyKind uint
+type ApplyKind uint32
 const (
 	Merge ApplyKind = 2
 	Replace ApplyKind = 1
@@ -5428,7 +5428,7 @@ const (
 // 
 // @since 3.18.0 - proposed
 //go:generate stringer -type=CodeActionTag
-type CodeActionTag uint
+type CodeActionTag uint32
 const (
 	LLMGenerated CodeActionTag = 1
 )
@@ -5440,7 +5440,7 @@ const (
 // 
 // @since 3.17.0
 //go:generate stringer -type=CodeActionTriggerKind
-type CodeActionTriggerKind uint
+type CodeActionTriggerKind uint32
 const (
 	Automatic CodeActionTriggerKind = 2
 	Invoked CodeActionTriggerKind = 1
@@ -5449,7 +5449,7 @@ const (
 // The kind of a completion entry.
 // The kind of a completion entry.
 //go:generate stringer -type=CompletionItemKind
-type CompletionItemKind uint
+type CompletionItemKind uint32
 const (
 	CompletionItemKind_Class CompletionItemKind = 7
 	CompletionItemKind_Color CompletionItemKind = 16
@@ -5487,7 +5487,7 @@ const (
 // 
 // @since 3.15.0
 //go:generate stringer -type=CompletionItemTag
-type CompletionItemTag uint
+type CompletionItemTag uint32
 const (
 	Deprecated CompletionItemTag = 1
 )
@@ -5495,7 +5495,7 @@ const (
 // How a completion was triggered
 // How a completion was triggered
 //go:generate stringer -type=CompletionTriggerKind
-type CompletionTriggerKind uint
+type CompletionTriggerKind uint32
 const (
 	CompletionTriggerKind_Invoked CompletionTriggerKind = 1
 	CompletionTriggerKind_TriggerCharacter CompletionTriggerKind = 2
@@ -5505,7 +5505,7 @@ const (
 // The diagnostic's severity.
 // The diagnostic's severity.
 //go:generate stringer -type=DiagnosticSeverity
-type DiagnosticSeverity uint
+type DiagnosticSeverity uint32
 const (
 	Error DiagnosticSeverity = 1
 	Hint DiagnosticSeverity = 4
@@ -5520,7 +5520,7 @@ const (
 // 
 // @since 3.15.0
 //go:generate stringer -type=DiagnosticTag
-type DiagnosticTag uint
+type DiagnosticTag uint32
 const (
 	DiagnosticTag_Deprecated DiagnosticTag = 2
 	DiagnosticTag_Unnecessary DiagnosticTag = 1
@@ -5541,7 +5541,7 @@ const (
 // A document highlight kind.
 // A document highlight kind.
 //go:generate stringer -type=DocumentHighlightKind
-type DocumentHighlightKind uint
+type DocumentHighlightKind uint32
 const (
 	DocumentHighlightKind_Read DocumentHighlightKind = 2
 	DocumentHighlightKind_Text DocumentHighlightKind = 1
@@ -5551,7 +5551,7 @@ const (
 // Predefined error codes.
 // Predefined error codes.
 //go:generate stringer -type=ErrorCodes
-type ErrorCodes int
+type ErrorCodes int32
 const (
 	InternalError ErrorCodes = -32603
 	InvalidParams ErrorCodes = -32602
@@ -5573,7 +5573,7 @@ const (
 // The file event type
 // The file event type
 //go:generate stringer -type=FileChangeType
-type FileChangeType uint
+type FileChangeType uint32
 const (
 	Changed FileChangeType = 2
 	Created FileChangeType = 1
@@ -5610,7 +5610,7 @@ const (
 // 
 // @since 3.17.0
 //go:generate stringer -type=InlayHintKind
-type InlayHintKind uint
+type InlayHintKind uint32
 const (
 	Parameter InlayHintKind = 2
 	Type InlayHintKind = 1
@@ -5625,7 +5625,7 @@ const (
 // @since 3.18.0
 // @proposed
 //go:generate stringer -type=InlineCompletionTriggerKind
-type InlineCompletionTriggerKind uint
+type InlineCompletionTriggerKind uint32
 const (
 	InlineCompletionTriggerKind_Automatic InlineCompletionTriggerKind = 2
 	InlineCompletionTriggerKind_Invoked InlineCompletionTriggerKind = 1
@@ -5636,7 +5636,7 @@ const (
 // Defines whether the insert text in a completion item should be interpreted as
 // plain text or a snippet.
 //go:generate stringer -type=InsertTextFormat
-type InsertTextFormat uint
+type InsertTextFormat uint32
 const (
 	InsertTextFormat_PlainText InsertTextFormat = 1
 	InsertTextFormat_Snippet InsertTextFormat = 2
@@ -5651,14 +5651,14 @@ const (
 // 
 // @since 3.16.0
 //go:generate stringer -type=InsertTextMode
-type InsertTextMode uint
+type InsertTextMode uint32
 const (
 	AdjustIndentation InsertTextMode = 2
 	AsIs InsertTextMode = 1
 )
 
 //go:generate stringer -type=LSPErrorCodes
-type LSPErrorCodes int
+type LSPErrorCodes int32
 const (
 	ContentModified LSPErrorCodes = -32801
 	RequestCancelled LSPErrorCodes = -32800
@@ -5754,7 +5754,7 @@ const (
 // The message type
 // The message type
 //go:generate stringer -type=MessageType
-type MessageType uint
+type MessageType uint32
 const (
 	MessageType_Debug MessageType = 5
 	MessageType_Error MessageType = 1
@@ -5783,7 +5783,7 @@ const (
 // 
 // @since 3.17.0
 //go:generate stringer -type=NotebookCellKind
-type NotebookCellKind uint
+type NotebookCellKind uint32
 const (
 	Code NotebookCellKind = 2
 	Markup NotebookCellKind = 1
@@ -5803,7 +5803,7 @@ const (
 )
 
 //go:generate stringer -type=PrepareSupportDefaultBehavior
-type PrepareSupportDefaultBehavior uint
+type PrepareSupportDefaultBehavior uint32
 const (
 	Identifier PrepareSupportDefaultBehavior = 1
 )
@@ -5884,7 +5884,7 @@ const (
 // 
 // @since 3.15.0
 //go:generate stringer -type=SignatureHelpTriggerKind
-type SignatureHelpTriggerKind uint
+type SignatureHelpTriggerKind uint32
 const (
 	SignatureHelpTriggerKind_ContentChange SignatureHelpTriggerKind = 3
 	SignatureHelpTriggerKind_Invoked SignatureHelpTriggerKind = 1
@@ -5894,7 +5894,7 @@ const (
 // A symbol kind.
 // A symbol kind.
 //go:generate stringer -type=SymbolKind
-type SymbolKind uint
+type SymbolKind uint32
 const (
 	SymbolKind_Array SymbolKind = 18
 	SymbolKind_Boolean SymbolKind = 17
@@ -5931,7 +5931,7 @@ const (
 // 
 // @since 3.16
 //go:generate stringer -type=SymbolTag
-type SymbolTag uint
+type SymbolTag uint32
 const (
 	SymbolTag_Deprecated SymbolTag = 1
 )
@@ -5939,7 +5939,7 @@ const (
 // Represents reasons why a text document is saved.
 // Represents reasons why a text document is saved.
 //go:generate stringer -type=TextDocumentSaveReason
-type TextDocumentSaveReason uint
+type TextDocumentSaveReason uint32
 const (
 	AfterDelay TextDocumentSaveReason = 2
 	FocusOut TextDocumentSaveReason = 3
@@ -5951,7 +5951,7 @@ const (
 // Defines how the host (editor) should sync
 // document changes to the language server.
 //go:generate stringer -type=TextDocumentSyncKind
-type TextDocumentSyncKind uint
+type TextDocumentSyncKind uint32
 const (
 	TextDocumentSyncKind_Full TextDocumentSyncKind = 1
 	TextDocumentSyncKind_Incremental TextDocumentSyncKind = 2
@@ -5986,7 +5986,7 @@ const (
 )
 
 //go:generate stringer -type=WatchKind
-type WatchKind uint
+type WatchKind uint32
 const (
 	WatchKind_Change WatchKind = 2
 	WatchKind_Create WatchKind = 1
@@ -6149,6 +6149,28 @@ type CallHierarchyIncomingCallsRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CallHierarchyIncomingCallsParams `json:"params"`
 }
+func (t *CallHierarchyIncomingCallsRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias CallHierarchyIncomingCallsRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = CallHierarchyIncomingCallsRequest(result)
+   return nil
+}
 // A request to resolve the outgoing calls for a given `CallHierarchyItem`.
 // 
 // @since 3.16.0
@@ -6158,6 +6180,28 @@ type CallHierarchyOutgoingCallsRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CallHierarchyOutgoingCallsParams `json:"params"`
 }
+func (t *CallHierarchyOutgoingCallsRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias CallHierarchyOutgoingCallsRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = CallHierarchyOutgoingCallsRequest(result)
+   return nil
+}
 // The `client/registerCapability` request is sent from the server to the client to register a new capability
 // handler on the client side.
 type RegistrationRequest struct {
@@ -6166,6 +6210,28 @@ type RegistrationRequest struct {
 	Method RequestMethod `json:"method"`
 	Params RegistrationParams `json:"params"`
 }
+func (t *RegistrationRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias RegistrationRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = RegistrationRequest(result)
+   return nil
+}
 // The `client/unregisterCapability` request is sent from the server to the client to unregister a previously registered capability
 // handler on the client side.
 type UnregistrationRequest struct {
@@ -6173,6 +6239,28 @@ type UnregistrationRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params UnregistrationParams `json:"params"`
+}
+func (t *UnregistrationRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias UnregistrationRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = UnregistrationRequest(result)
+   return nil
 }
 // Request to resolve additional information for a given code action.The request's
 // parameter is of type {@link CodeAction} the response
@@ -6183,12 +6271,56 @@ type CodeActionResolveRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CodeAction `json:"params"`
 }
+func (t *CodeActionResolveRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias CodeActionResolveRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = CodeActionResolveRequest(result)
+   return nil
+}
 // A request to resolve a command for a given code lens.
 type CodeLensResolveRequest struct {
 	JsonRPC string `json:"jsonrpc"`
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params CodeLens `json:"params"`
+}
+func (t *CodeLensResolveRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias CodeLensResolveRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = CodeLensResolveRequest(result)
+   return nil
 }
 // Request to resolve additional information for a given completion item.The request's
 // parameter is of type {@link CompletionItem} the response
@@ -6199,6 +6331,28 @@ type CompletionResolveRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CompletionItem `json:"params"`
 }
+func (t *CompletionResolveRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias CompletionResolveRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = CompletionResolveRequest(result)
+   return nil
+}
 // Request to resolve additional information for a given document link. The request's
 // parameter is of type {@link DocumentLink} the response
 // is of type {@link DocumentLink} or a Thenable that resolves to such.
@@ -6207,6 +6361,28 @@ type DocumentLinkResolveRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params DocumentLink `json:"params"`
+}
+func (t *DocumentLinkResolveRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias DocumentLinkResolveRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = DocumentLinkResolveRequest(result)
+   return nil
 }
 // The initialize request is sent from the client to the server.
 // It is sent once as the request after starting up the server.
@@ -6219,6 +6395,28 @@ type InitializeRequest struct {
 	Method RequestMethod `json:"method"`
 	Params InitializeParams `json:"params"`
 }
+func (t *InitializeRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias InitializeRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = InitializeRequest(result)
+   return nil
+}
 // A request to resolve additional properties for an inlay hint.
 // The request's parameter is of type {@link InlayHint}, the response is
 // of type {@link InlayHint} or a Thenable that resolves to such.
@@ -6230,6 +6428,28 @@ type InlayHintResolveRequest struct {
 	Method RequestMethod `json:"method"`
 	Params InlayHint `json:"params"`
 }
+func (t *InlayHintResolveRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias InlayHintResolveRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = InlayHintResolveRequest(result)
+   return nil
+}
 // A shutdown request is sent from the client to the server.
 // It is sent once when the client decides to shutdown the
 // server. The only notification that is sent after a shutdown request
@@ -6239,6 +6459,28 @@ type ShutdownRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 }
+func (t *ShutdownRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias ShutdownRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = ShutdownRequest(result)
+   return nil
+}
 // A request to provide commands for the given text document and range.
 type CodeActionRequest struct {
 	JsonRPC string `json:"jsonrpc"`
@@ -6246,12 +6488,56 @@ type CodeActionRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CodeActionParams `json:"params"`
 }
+func (t *CodeActionRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias CodeActionRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = CodeActionRequest(result)
+   return nil
+}
 // A request to provide code lens for the given text document.
 type CodeLensRequest struct {
 	JsonRPC string `json:"jsonrpc"`
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params CodeLensParams `json:"params"`
+}
+func (t *CodeLensRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias CodeLensRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = CodeLensRequest(result)
+   return nil
 }
 // A request to list all presentation for a color. The request's
 // parameter is of type {@link ColorPresentationParams} the
@@ -6262,6 +6548,28 @@ type ColorPresentationRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params ColorPresentationParams `json:"params"`
+}
+func (t *ColorPresentationRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias ColorPresentationRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = ColorPresentationRequest(result)
+   return nil
 }
 // Request to request completion at a given text document position. The request's
 // parameter is of type {@link TextDocumentPosition} the response
@@ -6278,6 +6586,28 @@ type CompletionRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CompletionParams `json:"params"`
 }
+func (t *CompletionRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias CompletionRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = CompletionRequest(result)
+   return nil
+}
 // A request to resolve the type definition locations of a symbol at a given text
 // document position. The request's parameter is of type {@link TextDocumentPositionParams}
 // the response is of type {@link Declaration} or a typed array of {@link DeclarationLink}
@@ -6287,6 +6617,28 @@ type DeclarationRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params DeclarationParams `json:"params"`
+}
+func (t *DeclarationRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias DeclarationRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = DeclarationRequest(result)
+   return nil
 }
 // A request to resolve the definition location of a symbol at a given text
 // document position. The request's parameter is of type {@link TextDocumentPosition}
@@ -6298,6 +6650,28 @@ type DefinitionRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DefinitionParams `json:"params"`
 }
+func (t *DefinitionRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias DefinitionRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = DefinitionRequest(result)
+   return nil
+}
 // The document diagnostic request definition.
 // 
 // @since 3.17.0
@@ -6306,6 +6680,28 @@ type DocumentDiagnosticRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params DocumentDiagnosticParams `json:"params"`
+}
+func (t *DocumentDiagnosticRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias DocumentDiagnosticRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = DocumentDiagnosticRequest(result)
+   return nil
 }
 // A request to list all color symbols found in a given text document. The request's
 // parameter is of type {@link DocumentColorParams} the
@@ -6317,6 +6713,28 @@ type DocumentColorRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DocumentColorParams `json:"params"`
 }
+func (t *DocumentColorRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias DocumentColorRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = DocumentColorRequest(result)
+   return nil
+}
 // Request to resolve a {@link DocumentHighlight} for a given
 // text document position. The request's parameter is of type {@link TextDocumentPosition}
 // the request response is an array of type {@link DocumentHighlight}
@@ -6327,12 +6745,56 @@ type DocumentHighlightRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DocumentHighlightParams `json:"params"`
 }
+func (t *DocumentHighlightRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias DocumentHighlightRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = DocumentHighlightRequest(result)
+   return nil
+}
 // A request to provide document links
 type DocumentLinkRequest struct {
 	JsonRPC string `json:"jsonrpc"`
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params DocumentLinkParams `json:"params"`
+}
+func (t *DocumentLinkRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias DocumentLinkRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = DocumentLinkRequest(result)
+   return nil
 }
 // A request to list all symbols found in a given text document. The request's
 // parameter is of type {@link TextDocumentIdentifier} the
@@ -6344,6 +6806,28 @@ type DocumentSymbolRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DocumentSymbolParams `json:"params"`
 }
+func (t *DocumentSymbolRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias DocumentSymbolRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = DocumentSymbolRequest(result)
+   return nil
+}
 // A request to provide folding ranges in a document. The request's
 // parameter is of type {@link FoldingRangeParams}, the
 // response is of type {@link FoldingRangeList} or a Thenable
@@ -6354,12 +6838,56 @@ type FoldingRangeRequest struct {
 	Method RequestMethod `json:"method"`
 	Params FoldingRangeParams `json:"params"`
 }
+func (t *FoldingRangeRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias FoldingRangeRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = FoldingRangeRequest(result)
+   return nil
+}
 // A request to format a whole document.
 type DocumentFormattingRequest struct {
 	JsonRPC string `json:"jsonrpc"`
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params DocumentFormattingParams `json:"params"`
+}
+func (t *DocumentFormattingRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias DocumentFormattingRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = DocumentFormattingRequest(result)
+   return nil
 }
 // Request to request hover information at a given text document position. The request's
 // parameter is of type {@link TextDocumentPosition} the response is of
@@ -6370,6 +6898,28 @@ type HoverRequest struct {
 	Method RequestMethod `json:"method"`
 	Params HoverParams `json:"params"`
 }
+func (t *HoverRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias HoverRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = HoverRequest(result)
+   return nil
+}
 // A request to resolve the implementation locations of a symbol at a given text
 // document position. The request's parameter is of type {@link TextDocumentPositionParams}
 // the response is of type {@link Definition} or a Thenable that resolves to such.
@@ -6378,6 +6928,28 @@ type ImplementationRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params ImplementationParams `json:"params"`
+}
+func (t *ImplementationRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias ImplementationRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = ImplementationRequest(result)
+   return nil
 }
 // A request to provide inlay hints in a document. The request's parameter is of
 // type {@link InlayHintsParams}, the response is of type
@@ -6389,6 +6961,28 @@ type InlayHintRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params InlayHintParams `json:"params"`
+}
+func (t *InlayHintRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias InlayHintRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = InlayHintRequest(result)
+   return nil
 }
 // A request to provide inline completions in a document. The request's parameter is of
 // type {@link InlineCompletionParams}, the response is of type
@@ -6402,6 +6996,28 @@ type InlineCompletionRequest struct {
 	Method RequestMethod `json:"method"`
 	Params InlineCompletionParams `json:"params"`
 }
+func (t *InlineCompletionRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias InlineCompletionRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = InlineCompletionRequest(result)
+   return nil
+}
 // A request to provide inline values in a document. The request's parameter is of
 // type {@link InlineValueParams}, the response is of type
 // {@link InlineValue InlineValue[]} or a Thenable that resolves to such.
@@ -6413,6 +7029,28 @@ type InlineValueRequest struct {
 	Method RequestMethod `json:"method"`
 	Params InlineValueParams `json:"params"`
 }
+func (t *InlineValueRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias InlineValueRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = InlineValueRequest(result)
+   return nil
+}
 // A request to provide ranges that can be edited together.
 // 
 // @since 3.16.0
@@ -6421,6 +7059,28 @@ type LinkedEditingRangeRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params LinkedEditingRangeParams `json:"params"`
+}
+func (t *LinkedEditingRangeRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias LinkedEditingRangeRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = LinkedEditingRangeRequest(result)
+   return nil
 }
 // A request to get the moniker of a symbol at a given text document position.
 // The request parameter is of type {@link TextDocumentPositionParams}.
@@ -6431,12 +7091,56 @@ type MonikerRequest struct {
 	Method RequestMethod `json:"method"`
 	Params MonikerParams `json:"params"`
 }
+func (t *MonikerRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias MonikerRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = MonikerRequest(result)
+   return nil
+}
 // A request to format a document on type.
 type DocumentOnTypeFormattingRequest struct {
 	JsonRPC string `json:"jsonrpc"`
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params DocumentOnTypeFormattingParams `json:"params"`
+}
+func (t *DocumentOnTypeFormattingRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias DocumentOnTypeFormattingRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = DocumentOnTypeFormattingRequest(result)
+   return nil
 }
 // A request to result a `CallHierarchyItem` in a document at a given position.
 // Can be used as an input to an incoming or outgoing call hierarchy.
@@ -6448,6 +7152,28 @@ type CallHierarchyPrepareRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CallHierarchyPrepareParams `json:"params"`
 }
+func (t *CallHierarchyPrepareRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias CallHierarchyPrepareRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = CallHierarchyPrepareRequest(result)
+   return nil
+}
 // A request to test and perform the setup necessary for a rename.
 // 
 // @since 3.16 - support for default behavior
@@ -6456,6 +7182,28 @@ type PrepareRenameRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params PrepareRenameParams `json:"params"`
+}
+func (t *PrepareRenameRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias PrepareRenameRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = PrepareRenameRequest(result)
+   return nil
 }
 // A request to result a `TypeHierarchyItem` in a document at a given position.
 // Can be used as an input to a subtypes or supertypes type hierarchy.
@@ -6467,12 +7215,56 @@ type TypeHierarchyPrepareRequest struct {
 	Method RequestMethod `json:"method"`
 	Params TypeHierarchyPrepareParams `json:"params"`
 }
+func (t *TypeHierarchyPrepareRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias TypeHierarchyPrepareRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = TypeHierarchyPrepareRequest(result)
+   return nil
+}
 // A request to format a range in a document.
 type DocumentRangeFormattingRequest struct {
 	JsonRPC string `json:"jsonrpc"`
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params DocumentRangeFormattingParams `json:"params"`
+}
+func (t *DocumentRangeFormattingRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias DocumentRangeFormattingRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = DocumentRangeFormattingRequest(result)
+   return nil
 }
 // A request to format ranges in a document.
 // 
@@ -6484,6 +7276,28 @@ type DocumentRangesFormattingRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DocumentRangesFormattingParams `json:"params"`
 }
+func (t *DocumentRangesFormattingRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias DocumentRangesFormattingRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = DocumentRangesFormattingRequest(result)
+   return nil
+}
 // A request to resolve project-wide references for the symbol denoted
 // by the given text document position. The request's parameter is of
 // type {@link ReferenceParams} the response is of type
@@ -6494,12 +7308,56 @@ type ReferencesRequest struct {
 	Method RequestMethod `json:"method"`
 	Params ReferenceParams `json:"params"`
 }
+func (t *ReferencesRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias ReferencesRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = ReferencesRequest(result)
+   return nil
+}
 // A request to rename a symbol.
 type RenameRequest struct {
 	JsonRPC string `json:"jsonrpc"`
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params RenameParams `json:"params"`
+}
+func (t *RenameRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias RenameRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = RenameRequest(result)
+   return nil
 }
 // A request to provide selection ranges in a document. The request's
 // parameter is of type {@link SelectionRangeParams}, the
@@ -6511,12 +7369,56 @@ type SelectionRangeRequest struct {
 	Method RequestMethod `json:"method"`
 	Params SelectionRangeParams `json:"params"`
 }
+func (t *SelectionRangeRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias SelectionRangeRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = SelectionRangeRequest(result)
+   return nil
+}
 // @since 3.16.0
 type SemanticTokensRequest struct {
 	JsonRPC string `json:"jsonrpc"`
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params SemanticTokensParams `json:"params"`
+}
+func (t *SemanticTokensRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias SemanticTokensRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = SemanticTokensRequest(result)
+   return nil
 }
 // @since 3.16.0
 type SemanticTokensDeltaRequest struct {
@@ -6525,6 +7427,28 @@ type SemanticTokensDeltaRequest struct {
 	Method RequestMethod `json:"method"`
 	Params SemanticTokensDeltaParams `json:"params"`
 }
+func (t *SemanticTokensDeltaRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias SemanticTokensDeltaRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = SemanticTokensDeltaRequest(result)
+   return nil
+}
 // @since 3.16.0
 type SemanticTokensRangeRequest struct {
 	JsonRPC string `json:"jsonrpc"`
@@ -6532,12 +7456,56 @@ type SemanticTokensRangeRequest struct {
 	Method RequestMethod `json:"method"`
 	Params SemanticTokensRangeParams `json:"params"`
 }
+func (t *SemanticTokensRangeRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias SemanticTokensRangeRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = SemanticTokensRangeRequest(result)
+   return nil
+}
 
 type SignatureHelpRequest struct {
 	JsonRPC string `json:"jsonrpc"`
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params SignatureHelpParams `json:"params"`
+}
+func (t *SignatureHelpRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias SignatureHelpRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = SignatureHelpRequest(result)
+   return nil
 }
 // A request to resolve the type definition locations of a symbol at a given text
 // document position. The request's parameter is of type {@link TextDocumentPositionParams}
@@ -6547,6 +7515,28 @@ type TypeDefinitionRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params TypeDefinitionParams `json:"params"`
+}
+func (t *TypeDefinitionRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias TypeDefinitionRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = TypeDefinitionRequest(result)
+   return nil
 }
 // A document will save request is sent from the client to the server before
 // the document is actually saved. The request can return an array of TextEdits
@@ -6560,6 +7550,28 @@ type WillSaveTextDocumentWaitUntilRequest struct {
 	Method RequestMethod `json:"method"`
 	Params WillSaveTextDocumentParams `json:"params"`
 }
+func (t *WillSaveTextDocumentWaitUntilRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias WillSaveTextDocumentWaitUntilRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = WillSaveTextDocumentWaitUntilRequest(result)
+   return nil
+}
 // A request to resolve the subtypes for a given `TypeHierarchyItem`.
 // 
 // @since 3.17.0
@@ -6569,6 +7581,28 @@ type TypeHierarchySubtypesRequest struct {
 	Method RequestMethod `json:"method"`
 	Params TypeHierarchySubtypesParams `json:"params"`
 }
+func (t *TypeHierarchySubtypesRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias TypeHierarchySubtypesRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = TypeHierarchySubtypesRequest(result)
+   return nil
+}
 // A request to resolve the supertypes for a given `TypeHierarchyItem`.
 // 
 // @since 3.17.0
@@ -6577,6 +7611,28 @@ type TypeHierarchySupertypesRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params TypeHierarchySupertypesParams `json:"params"`
+}
+func (t *TypeHierarchySupertypesRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias TypeHierarchySupertypesRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = TypeHierarchySupertypesRequest(result)
+   return nil
 }
 // A request to show a document. This request might open an
 // external program depending on the value of the URI to open.
@@ -6590,6 +7646,28 @@ type ShowDocumentRequest struct {
 	Method RequestMethod `json:"method"`
 	Params ShowDocumentParams `json:"params"`
 }
+func (t *ShowDocumentRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias ShowDocumentRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = ShowDocumentRequest(result)
+   return nil
+}
 // The show message request is sent from the server to the client to show a message
 // and a set of options actions to the user.
 type ShowMessageRequest struct {
@@ -6597,6 +7675,28 @@ type ShowMessageRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params ShowMessageRequestParams `json:"params"`
+}
+func (t *ShowMessageRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias ShowMessageRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = ShowMessageRequest(result)
+   return nil
 }
 // The `window/workDoneProgress/create` request is sent from the server to the client to initiate progress
 // reporting from the server.
@@ -6606,12 +7706,56 @@ type WorkDoneProgressCreateRequest struct {
 	Method RequestMethod `json:"method"`
 	Params WorkDoneProgressCreateParams `json:"params"`
 }
+func (t *WorkDoneProgressCreateRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias WorkDoneProgressCreateRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = WorkDoneProgressCreateRequest(result)
+   return nil
+}
 // A request sent from the server to the client to modified certain resources.
 type ApplyWorkspaceEditRequest struct {
 	JsonRPC string `json:"jsonrpc"`
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params ApplyWorkspaceEditParams `json:"params"`
+}
+func (t *ApplyWorkspaceEditRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias ApplyWorkspaceEditRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = ApplyWorkspaceEditRequest(result)
+   return nil
 }
 // A request to refresh all code actions
 // 
@@ -6620,6 +7764,28 @@ type CodeLensRefreshRequest struct {
 	JsonRPC string `json:"jsonrpc"`
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
+}
+func (t *CodeLensRefreshRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias CodeLensRefreshRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = CodeLensRefreshRequest(result)
+   return nil
 }
 // The 'workspace/configuration' request is sent from the server to the client to fetch a certain
 // configuration setting.
@@ -6634,6 +7800,28 @@ type ConfigurationRequest struct {
 	Method RequestMethod `json:"method"`
 	Params ConfigurationParams `json:"params"`
 }
+func (t *ConfigurationRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias ConfigurationRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = ConfigurationRequest(result)
+   return nil
+}
 // The workspace diagnostic request definition.
 // 
 // @since 3.17.0
@@ -6643,6 +7831,28 @@ type WorkspaceDiagnosticRequest struct {
 	Method RequestMethod `json:"method"`
 	Params WorkspaceDiagnosticParams `json:"params"`
 }
+func (t *WorkspaceDiagnosticRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias WorkspaceDiagnosticRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = WorkspaceDiagnosticRequest(result)
+   return nil
+}
 // The diagnostic refresh request definition.
 // 
 // @since 3.17.0
@@ -6650,6 +7860,28 @@ type DiagnosticRefreshRequest struct {
 	JsonRPC string `json:"jsonrpc"`
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
+}
+func (t *DiagnosticRefreshRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias DiagnosticRefreshRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = DiagnosticRefreshRequest(result)
+   return nil
 }
 // A request send from the client to the server to execute a command. The request might return
 // a workspace edit which the client will apply to the workspace.
@@ -6659,6 +7891,28 @@ type ExecuteCommandRequest struct {
 	Method RequestMethod `json:"method"`
 	Params ExecuteCommandParams `json:"params"`
 }
+func (t *ExecuteCommandRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias ExecuteCommandRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = ExecuteCommandRequest(result)
+   return nil
+}
 // @since 3.18.0
 // @proposed
 type FoldingRangeRefreshRequest struct {
@@ -6666,11 +7920,55 @@ type FoldingRangeRefreshRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 }
+func (t *FoldingRangeRefreshRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias FoldingRangeRefreshRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = FoldingRangeRefreshRequest(result)
+   return nil
+}
 // @since 3.17.0
 type InlayHintRefreshRequest struct {
 	JsonRPC string `json:"jsonrpc"`
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
+}
+func (t *InlayHintRefreshRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias InlayHintRefreshRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = InlayHintRefreshRequest(result)
+   return nil
 }
 // @since 3.17.0
 type InlineValueRefreshRequest struct {
@@ -6678,11 +7976,55 @@ type InlineValueRefreshRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 }
+func (t *InlineValueRefreshRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias InlineValueRefreshRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = InlineValueRefreshRequest(result)
+   return nil
+}
 // @since 3.16.0
 type SemanticTokensRefreshRequest struct {
 	JsonRPC string `json:"jsonrpc"`
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
+}
+func (t *SemanticTokensRefreshRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias SemanticTokensRefreshRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = SemanticTokensRefreshRequest(result)
+   return nil
 }
 // A request to list project-wide symbols matching the query string given
 // by the {@link WorkspaceSymbolParams}. The response is
@@ -6698,6 +8040,28 @@ type WorkspaceSymbolRequest struct {
 	Method RequestMethod `json:"method"`
 	Params WorkspaceSymbolParams `json:"params"`
 }
+func (t *WorkspaceSymbolRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias WorkspaceSymbolRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = WorkspaceSymbolRequest(result)
+   return nil
+}
 // The `workspace/textDocumentContent` request is sent from the client to the
 // server to request the content of a text document.
 // 
@@ -6709,6 +8073,28 @@ type TextDocumentContentRequest struct {
 	Method RequestMethod `json:"method"`
 	Params TextDocumentContentParams `json:"params"`
 }
+func (t *TextDocumentContentRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias TextDocumentContentRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = TextDocumentContentRequest(result)
+   return nil
+}
 // The `workspace/textDocumentContent` request is sent from the server to the client to refresh
 // the content of a specific text document.
 // 
@@ -6719,6 +8105,28 @@ type TextDocumentContentRefreshRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params TextDocumentContentRefreshParams `json:"params"`
+}
+func (t *TextDocumentContentRefreshRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias TextDocumentContentRefreshRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = TextDocumentContentRefreshRequest(result)
+   return nil
 }
 // The will create files request is sent from the client to the server before files are actually
 // created as long as the creation is triggered from within the client.
@@ -6734,6 +8142,28 @@ type WillCreateFilesRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CreateFilesParams `json:"params"`
 }
+func (t *WillCreateFilesRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias WillCreateFilesRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = WillCreateFilesRequest(result)
+   return nil
+}
 // The did delete files notification is sent from the client to the server when
 // files were deleted from within the client.
 // 
@@ -6743,6 +8173,28 @@ type WillDeleteFilesRequest struct {
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
 	Params DeleteFilesParams `json:"params"`
+}
+func (t *WillDeleteFilesRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias WillDeleteFilesRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = WillDeleteFilesRequest(result)
+   return nil
 }
 // The will rename files request is sent from the client to the server before files are actually
 // renamed as long as the rename is triggered from within the client.
@@ -6754,11 +8206,55 @@ type WillRenameFilesRequest struct {
 	Method RequestMethod `json:"method"`
 	Params RenameFilesParams `json:"params"`
 }
+func (t *WillRenameFilesRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias WillRenameFilesRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = WillRenameFilesRequest(result)
+   return nil
+}
 // The `workspace/workspaceFolders` is sent from the server to the client to fetch the open workspace folders.
 type WorkspaceFoldersRequest struct {
 	JsonRPC string `json:"jsonrpc"`
 	ID Or_Request_id `json:"id"`
 	Method RequestMethod `json:"method"`
+}
+func (t *WorkspaceFoldersRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias WorkspaceFoldersRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = WorkspaceFoldersRequest(result)
+   return nil
 }
 // A request to resolve the range inside the workspace
 // symbol's location.
@@ -6770,350 +8266,1614 @@ type WorkspaceSymbolResolveRequest struct {
 	Method RequestMethod `json:"method"`
 	Params WorkspaceSymbol `json:"params"`
 }
+func (t *WorkspaceSymbolResolveRequest) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   if _, exists := m["method"]; !exists {
+       return fmt.Errorf("Missing required request field: method")
+   }
+   if _, exists := m["id"]; !exists {
+       return fmt.Errorf("Missing required request field: id")
+   }
+   if _, exists := m["jsonrpc"]; !exists {
+       return fmt.Errorf("Missing required request field: jsonrpc")
+   }
+  type Alias WorkspaceSymbolResolveRequest
+   var result Alias
+   if err := json.Unmarshal(x, &result); err != nil {
+       return err
+   }
+   *t = WorkspaceSymbolResolveRequest(result)
+   return nil
+}
 type CallHierarchyIncomingCallsResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_CallHierarchyIncomingCallsResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_CallHierarchyIncomingCallsResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *CallHierarchyIncomingCallsResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias CallHierarchyIncomingCallsResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = CallHierarchyIncomingCallsResponse(temp)
+   return nil
 }
 type CallHierarchyOutgoingCallsResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_CallHierarchyOutgoingCallsResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_CallHierarchyOutgoingCallsResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *CallHierarchyOutgoingCallsResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias CallHierarchyOutgoingCallsResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = CallHierarchyOutgoingCallsResponse(temp)
+   return nil
 }
 type RegistrationResponse struct {
-	Id *Or_Request_id `json:"id"`
+   Id Or_Request_id `json:"id"`
 
-	Error ResponseError `json:"error,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *RegistrationResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias RegistrationResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = RegistrationResponse(temp)
+   return nil
 }
 type UnregistrationResponse struct {
-	Id *Or_Request_id `json:"id"`
+   Id Or_Request_id `json:"id"`
 
-	Error ResponseError `json:"error,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *UnregistrationResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias UnregistrationResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = UnregistrationResponse(temp)
+   return nil
 }
 type CodeActionResolveResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result CodeAction `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result *CodeAction `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *CodeActionResolveResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias CodeActionResolveResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = CodeActionResolveResponse(temp)
+   return nil
 }
 type CodeLensResolveResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result CodeLens `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result *CodeLens `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *CodeLensResolveResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias CodeLensResolveResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = CodeLensResolveResponse(temp)
+   return nil
 }
 type CompletionResolveResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result CompletionItem `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result *CompletionItem `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *CompletionResolveResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias CompletionResolveResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = CompletionResolveResponse(temp)
+   return nil
 }
 type DocumentLinkResolveResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result DocumentLink `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result *DocumentLink `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *DocumentLinkResolveResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias DocumentLinkResolveResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = DocumentLinkResolveResponse(temp)
+   return nil
 }
 type InitializeResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result InitializeResult `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result *InitializeResult `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *InitializeResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias InitializeResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = InitializeResponse(temp)
+   return nil
 }
 type InlayHintResolveResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result InlayHint `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result *InlayHint `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *InlayHintResolveResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias InlayHintResolveResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = InlayHintResolveResponse(temp)
+   return nil
 }
 type ShutdownResponse struct {
-	Id *Or_Request_id `json:"id"`
+   Id Or_Request_id `json:"id"`
 
-	Error ResponseError `json:"error,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *ShutdownResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias ShutdownResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = ShutdownResponse(temp)
+   return nil
 }
 type CodeActionResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_CodeActionResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_CodeActionResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *CodeActionResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias CodeActionResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = CodeActionResponse(temp)
+   return nil
 }
 type CodeLensResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_CodeLensResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_CodeLensResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *CodeLensResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias CodeLensResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = CodeLensResponse(temp)
+   return nil
 }
 type ColorPresentationResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result []ColorPresentation `json:"result,omitempty"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result *[]ColorPresentation `json:"result,omitempty"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *ColorPresentationResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias ColorPresentationResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = ColorPresentationResponse(temp)
+   return nil
 }
 type CompletionResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_CompletionResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_CompletionResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *CompletionResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias CompletionResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = CompletionResponse(temp)
+   return nil
 }
 type DeclarationResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_DeclarationResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_DeclarationResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *DeclarationResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias DeclarationResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = DeclarationResponse(temp)
+   return nil
 }
 type DefinitionResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_DefinitionResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_DefinitionResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *DefinitionResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias DefinitionResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = DefinitionResponse(temp)
+   return nil
 }
 type DocumentDiagnosticResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result DocumentDiagnosticReport `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result *DocumentDiagnosticReport `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *DocumentDiagnosticResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias DocumentDiagnosticResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = DocumentDiagnosticResponse(temp)
+   return nil
 }
 type DocumentColorResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result []ColorInformation `json:"result,omitempty"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result *[]ColorInformation `json:"result,omitempty"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *DocumentColorResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias DocumentColorResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = DocumentColorResponse(temp)
+   return nil
 }
 type DocumentHighlightResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_DocumentHighlightResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_DocumentHighlightResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *DocumentHighlightResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias DocumentHighlightResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = DocumentHighlightResponse(temp)
+   return nil
 }
 type DocumentLinkResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_DocumentLinkResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_DocumentLinkResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *DocumentLinkResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias DocumentLinkResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = DocumentLinkResponse(temp)
+   return nil
 }
 type DocumentSymbolResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_DocumentSymbolResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_DocumentSymbolResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *DocumentSymbolResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias DocumentSymbolResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = DocumentSymbolResponse(temp)
+   return nil
 }
 type FoldingRangeResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_FoldingRangeResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_FoldingRangeResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *FoldingRangeResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias FoldingRangeResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = FoldingRangeResponse(temp)
+   return nil
 }
 type DocumentFormattingResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_DocumentFormattingResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_DocumentFormattingResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *DocumentFormattingResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias DocumentFormattingResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = DocumentFormattingResponse(temp)
+   return nil
 }
 type HoverResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Hover `json:"result,omitempty"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Hover `json:"result,omitempty"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *HoverResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias HoverResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = HoverResponse(temp)
+   return nil
 }
 type ImplementationResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_ImplementationResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_ImplementationResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *ImplementationResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias ImplementationResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = ImplementationResponse(temp)
+   return nil
 }
 type InlayHintResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_InlayHintResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_InlayHintResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *InlayHintResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias InlayHintResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = InlayHintResponse(temp)
+   return nil
 }
 type InlineCompletionResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_InlineCompletionResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_InlineCompletionResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *InlineCompletionResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias InlineCompletionResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = InlineCompletionResponse(temp)
+   return nil
 }
 type InlineValueResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_InlineValueResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_InlineValueResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *InlineValueResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias InlineValueResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = InlineValueResponse(temp)
+   return nil
 }
 type LinkedEditingRangeResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *LinkedEditingRanges `json:"result,omitempty"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **LinkedEditingRanges `json:"result,omitempty"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *LinkedEditingRangeResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias LinkedEditingRangeResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = LinkedEditingRangeResponse(temp)
+   return nil
 }
 type MonikerResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_MonikerResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_MonikerResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *MonikerResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias MonikerResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = MonikerResponse(temp)
+   return nil
 }
 type DocumentOnTypeFormattingResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_DocumentOnTypeFormattingResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_DocumentOnTypeFormattingResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *DocumentOnTypeFormattingResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias DocumentOnTypeFormattingResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = DocumentOnTypeFormattingResponse(temp)
+   return nil
 }
 type CallHierarchyPrepareResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_CallHierarchyPrepareResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_CallHierarchyPrepareResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *CallHierarchyPrepareResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias CallHierarchyPrepareResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = CallHierarchyPrepareResponse(temp)
+   return nil
 }
 type PrepareRenameResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *PrepareRenameResult `json:"result,omitempty"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **PrepareRenameResult `json:"result,omitempty"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *PrepareRenameResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias PrepareRenameResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = PrepareRenameResponse(temp)
+   return nil
 }
 type TypeHierarchyPrepareResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_TypeHierarchyPrepareResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_TypeHierarchyPrepareResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *TypeHierarchyPrepareResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias TypeHierarchyPrepareResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = TypeHierarchyPrepareResponse(temp)
+   return nil
 }
 type DocumentRangeFormattingResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_DocumentRangeFormattingResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_DocumentRangeFormattingResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *DocumentRangeFormattingResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias DocumentRangeFormattingResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = DocumentRangeFormattingResponse(temp)
+   return nil
 }
 type DocumentRangesFormattingResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_DocumentRangesFormattingResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_DocumentRangesFormattingResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *DocumentRangesFormattingResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias DocumentRangesFormattingResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = DocumentRangesFormattingResponse(temp)
+   return nil
 }
 type ReferencesResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_ReferencesResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_ReferencesResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *ReferencesResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias ReferencesResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = ReferencesResponse(temp)
+   return nil
 }
 type RenameResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *WorkspaceEdit `json:"result,omitempty"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **WorkspaceEdit `json:"result,omitempty"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *RenameResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias RenameResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = RenameResponse(temp)
+   return nil
 }
 type SelectionRangeResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_SelectionRangeResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_SelectionRangeResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *SelectionRangeResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias SelectionRangeResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = SelectionRangeResponse(temp)
+   return nil
 }
 type SemanticTokensResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *SemanticTokens `json:"result,omitempty"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **SemanticTokens `json:"result,omitempty"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *SemanticTokensResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias SemanticTokensResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = SemanticTokensResponse(temp)
+   return nil
 }
 type SemanticTokensDeltaResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_SemanticTokensDeltaResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_SemanticTokensDeltaResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *SemanticTokensDeltaResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias SemanticTokensDeltaResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = SemanticTokensDeltaResponse(temp)
+   return nil
 }
 type SemanticTokensRangeResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *SemanticTokens `json:"result,omitempty"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **SemanticTokens `json:"result,omitempty"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *SemanticTokensRangeResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias SemanticTokensRangeResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = SemanticTokensRangeResponse(temp)
+   return nil
 }
 type SignatureHelpResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *SignatureHelp `json:"result,omitempty"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **SignatureHelp `json:"result,omitempty"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *SignatureHelpResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias SignatureHelpResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = SignatureHelpResponse(temp)
+   return nil
 }
 type TypeDefinitionResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_TypeDefinitionResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_TypeDefinitionResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *TypeDefinitionResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias TypeDefinitionResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = TypeDefinitionResponse(temp)
+   return nil
 }
 type WillSaveTextDocumentWaitUntilResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_WillSaveTextDocumentWaitUntilResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_WillSaveTextDocumentWaitUntilResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *WillSaveTextDocumentWaitUntilResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias WillSaveTextDocumentWaitUntilResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = WillSaveTextDocumentWaitUntilResponse(temp)
+   return nil
 }
 type TypeHierarchySubtypesResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_TypeHierarchySubtypesResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_TypeHierarchySubtypesResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *TypeHierarchySubtypesResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias TypeHierarchySubtypesResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = TypeHierarchySubtypesResponse(temp)
+   return nil
 }
 type TypeHierarchySupertypesResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_TypeHierarchySupertypesResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_TypeHierarchySupertypesResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *TypeHierarchySupertypesResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias TypeHierarchySupertypesResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = TypeHierarchySupertypesResponse(temp)
+   return nil
 }
 type ShowDocumentResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result ShowDocumentResult `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result *ShowDocumentResult `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *ShowDocumentResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias ShowDocumentResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = ShowDocumentResponse(temp)
+   return nil
 }
 type ShowMessageResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *MessageActionItem `json:"result,omitempty"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **MessageActionItem `json:"result,omitempty"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *ShowMessageResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias ShowMessageResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = ShowMessageResponse(temp)
+   return nil
 }
 type WorkDoneProgressCreateResponse struct {
-	Id *Or_Request_id `json:"id"`
+   Id Or_Request_id `json:"id"`
 
-	Error ResponseError `json:"error,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *WorkDoneProgressCreateResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias WorkDoneProgressCreateResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = WorkDoneProgressCreateResponse(temp)
+   return nil
 }
 type ApplyWorkspaceEditResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result ApplyWorkspaceEditResult `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result *ApplyWorkspaceEditResult `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *ApplyWorkspaceEditResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias ApplyWorkspaceEditResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = ApplyWorkspaceEditResponse(temp)
+   return nil
 }
 type CodeLensRefreshResponse struct {
-	Id *Or_Request_id `json:"id"`
+   Id Or_Request_id `json:"id"`
 
-	Error ResponseError `json:"error,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *CodeLensRefreshResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias CodeLensRefreshResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = CodeLensRefreshResponse(temp)
+   return nil
 }
 type ConfigurationResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result []any `json:"result,omitempty"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result *[]any `json:"result,omitempty"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *ConfigurationResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias ConfigurationResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = ConfigurationResponse(temp)
+   return nil
 }
 type WorkspaceDiagnosticResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result WorkspaceDiagnosticReport `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result *WorkspaceDiagnosticReport `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *WorkspaceDiagnosticResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias WorkspaceDiagnosticResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = WorkspaceDiagnosticResponse(temp)
+   return nil
 }
 type DiagnosticRefreshResponse struct {
-	Id *Or_Request_id `json:"id"`
+   Id Or_Request_id `json:"id"`
 
-	Error ResponseError `json:"error,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *DiagnosticRefreshResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias DiagnosticRefreshResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = DiagnosticRefreshResponse(temp)
+   return nil
 }
 type ExecuteCommandResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *any `json:"result,omitempty"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **any `json:"result,omitempty"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *ExecuteCommandResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias ExecuteCommandResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = ExecuteCommandResponse(temp)
+   return nil
 }
 type FoldingRangeRefreshResponse struct {
-	Id *Or_Request_id `json:"id"`
+   Id Or_Request_id `json:"id"`
 
-	Error ResponseError `json:"error,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *FoldingRangeRefreshResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias FoldingRangeRefreshResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = FoldingRangeRefreshResponse(temp)
+   return nil
 }
 type InlayHintRefreshResponse struct {
-	Id *Or_Request_id `json:"id"`
+   Id Or_Request_id `json:"id"`
 
-	Error ResponseError `json:"error,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *InlayHintRefreshResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias InlayHintRefreshResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = InlayHintRefreshResponse(temp)
+   return nil
 }
 type InlineValueRefreshResponse struct {
-	Id *Or_Request_id `json:"id"`
+   Id Or_Request_id `json:"id"`
 
-	Error ResponseError `json:"error,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *InlineValueRefreshResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias InlineValueRefreshResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = InlineValueRefreshResponse(temp)
+   return nil
 }
 type SemanticTokensRefreshResponse struct {
-	Id *Or_Request_id `json:"id"`
+   Id Or_Request_id `json:"id"`
 
-	Error ResponseError `json:"error,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *SemanticTokensRefreshResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias SemanticTokensRefreshResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = SemanticTokensRefreshResponse(temp)
+   return nil
 }
 type WorkspaceSymbolResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_WorkspaceSymbolResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_WorkspaceSymbolResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *WorkspaceSymbolResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias WorkspaceSymbolResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = WorkspaceSymbolResponse(temp)
+   return nil
 }
 type TextDocumentContentResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result TextDocumentContentResult `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result *TextDocumentContentResult `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *TextDocumentContentResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias TextDocumentContentResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = TextDocumentContentResponse(temp)
+   return nil
 }
 type TextDocumentContentRefreshResponse struct {
-	Id *Or_Request_id `json:"id"`
+   Id Or_Request_id `json:"id"`
 
-	Error ResponseError `json:"error,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *TextDocumentContentRefreshResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias TextDocumentContentRefreshResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = TextDocumentContentRefreshResponse(temp)
+   return nil
 }
 type WillCreateFilesResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *WorkspaceEdit `json:"result,omitempty"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **WorkspaceEdit `json:"result,omitempty"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *WillCreateFilesResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias WillCreateFilesResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = WillCreateFilesResponse(temp)
+   return nil
 }
 type WillDeleteFilesResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *WorkspaceEdit `json:"result,omitempty"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **WorkspaceEdit `json:"result,omitempty"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *WillDeleteFilesResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias WillDeleteFilesResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = WillDeleteFilesResponse(temp)
+   return nil
 }
 type WillRenameFilesResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *WorkspaceEdit `json:"result,omitempty"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **WorkspaceEdit `json:"result,omitempty"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *WillRenameFilesResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias WillRenameFilesResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = WillRenameFilesResponse(temp)
+   return nil
 }
 type WorkspaceFoldersResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result *Or_WorkspaceFoldersResponse `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result **Or_WorkspaceFoldersResponse `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *WorkspaceFoldersResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias WorkspaceFoldersResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = WorkspaceFoldersResponse(temp)
+   return nil
 }
 type WorkspaceSymbolResolveResponse struct {
-	Id *Or_Request_id `json:"id"`
-	Result WorkspaceSymbol `json:"result,omitzero"`
-	Error ResponseError `json:"error,omitzero"`
+   Id Or_Request_id `json:"id"`
+  Result *WorkspaceSymbol `json:"result,omitzero"`
+   Error *ResponseError `json:"error,omitzero"`
+}
+func (t *WorkspaceSymbolResolveResponse) UnmarshalJSON(x []byte) error {
+   var m map[string]any
+   if err := json.Unmarshal(x, &m); err != nil {
+       return err
+   }
+   _, idExists := m["id"]
+   _, jsonrpcExists := m["jsonrpc"]
+   if !idExists || !jsonrpcExists {
+       return fmt.Errorf("response must have an id and jsonrpc field.")
+   }
+  type Alias WorkspaceSymbolResolveResponse
+   var temp Alias
+   if err := json.Unmarshal(x, &temp); err != nil {
+       return err
+   }
+  *t = WorkspaceSymbolResolveResponse(temp)
+   return nil
 }
 
 
@@ -7395,16 +10155,20 @@ func (t *Or_Declaration) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_Declaration) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of Location, []Location in Or_Declaration for value " + stringValue}
 	}
    var h0 Location
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 []Location
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -7427,16 +10191,20 @@ func (t *Or_Definition) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_Definition) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of Location, []Location in Or_Definition for value " + stringValue}
 	}
    var h0 Location
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 []Location
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -7459,16 +10227,20 @@ func (t *Or_DocumentDiagnosticReport) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_DocumentDiagnosticReport) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of RelatedFullDocumentDiagnosticReport, RelatedUnchangedDocumentDiagnosticReport in Or_DocumentDiagnosticReport for value " + stringValue}
 	}
    var h0 RelatedFullDocumentDiagnosticReport
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 RelatedUnchangedDocumentDiagnosticReport
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -7491,16 +10263,20 @@ func (t *Or_DocumentFilter) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_DocumentFilter) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of TextDocumentFilter, NotebookCellTextDocumentFilter in Or_DocumentFilter for value " + stringValue}
 	}
    var h0 TextDocumentFilter
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 NotebookCellTextDocumentFilter
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -7523,16 +10299,20 @@ func (t *Or_GlobPattern) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_GlobPattern) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of Pattern, RelativePattern in Or_GlobPattern for value " + stringValue}
 	}
    var h0 Pattern
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 RelativePattern
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -7557,21 +10337,27 @@ func (t *Or_InlineValue) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_InlineValue) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of InlineValueText, InlineValueVariableLookup, InlineValueEvaluatableExpression in Or_InlineValue for value " + stringValue}
 	}
    var h0 InlineValueText
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 InlineValueVariableLookup
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 InlineValueEvaluatableExpression
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -7594,16 +10380,20 @@ func (t *Or_MarkedString) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_MarkedString) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of string, MarkedStringWithLanguage in Or_MarkedString for value " + stringValue}
 	}
    var h0 string
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 MarkedStringWithLanguage
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -7628,21 +10418,27 @@ func (t *Or_NotebookDocumentFilter) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_NotebookDocumentFilter) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of NotebookDocumentFilterNotebookType, NotebookDocumentFilterScheme, NotebookDocumentFilterPattern in Or_NotebookDocumentFilter for value " + stringValue}
 	}
    var h0 NotebookDocumentFilterNotebookType
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 NotebookDocumentFilterScheme
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 NotebookDocumentFilterPattern
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -7667,27 +10463,33 @@ func (t *Or_PrepareRenameResult) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_PrepareRenameResult) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of Range, PrepareRenamePlaceholder, PrepareRenameDefaultBehavior in Or_PrepareRenameResult for value " + stringValue}
 	}
    var h0 Range
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 PrepareRenamePlaceholder
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 PrepareRenameDefaultBehavior
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
 	return &UnmarshalError{msg: "unmarshal failed to match one of Range, PrepareRenamePlaceholder, PrepareRenameDefaultBehavior in Or_PrepareRenameResult for value " + stringValue}
 }
-// Or type for [int,string]
+// Or type for [int32,string]
 type Or_ProgressToken struct {
 	Value any `json:"value"`
 }
@@ -7695,29 +10497,33 @@ func (t *Or_ProgressToken) MarshalJSON() ([]byte, error) {
    switch x := t.Value.(type) {
    case nil:
        return []byte("null"), nil
-    case int:
+    case int32:
         return json.Marshal(x)
     case string:
         return json.Marshal(x)
    }
-  return nil, fmt.Errorf("unknown type %T is not one of int, string", t)
+  return nil, fmt.Errorf("unknown type %T is not one of int32, string", t)
 }
 func (t *Or_ProgressToken) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
-		return &UnmarshalError{msg: "unmarshal failed to match one of int, string in Or_ProgressToken for value " + stringValue}
+		return &UnmarshalError{msg: "unmarshal failed to match one of int32, string in Or_ProgressToken for value " + stringValue}
 	}
-   var h0 int
-   if err := json.Unmarshal(x, &h0); err == nil {
+   var h0 int32
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 string
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
-	return &UnmarshalError{msg: "unmarshal failed to match one of int, string in Or_ProgressToken for value " + stringValue}
+	return &UnmarshalError{msg: "unmarshal failed to match one of int32, string in Or_ProgressToken for value " + stringValue}
 }
 // Or type for [TextDocumentContentChangePartial,TextDocumentContentChangeWholeDocument]
 type Or_TextDocumentContentChangeEvent struct {
@@ -7736,16 +10542,20 @@ func (t *Or_TextDocumentContentChangeEvent) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_TextDocumentContentChangeEvent) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of TextDocumentContentChangePartial, TextDocumentContentChangeWholeDocument in Or_TextDocumentContentChangeEvent for value " + stringValue}
 	}
    var h0 TextDocumentContentChangePartial
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 TextDocumentContentChangeWholeDocument
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -7770,21 +10580,27 @@ func (t *Or_TextDocumentFilter) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_TextDocumentFilter) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of TextDocumentFilterLanguage, TextDocumentFilterScheme, TextDocumentFilterPattern in Or_TextDocumentFilter for value " + stringValue}
 	}
    var h0 TextDocumentFilterLanguage
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 TextDocumentFilterScheme
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 TextDocumentFilterPattern
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -7807,22 +10623,26 @@ func (t *Or_WorkspaceDocumentDiagnosticReport) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_WorkspaceDocumentDiagnosticReport) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of WorkspaceFullDocumentDiagnosticReport, WorkspaceUnchangedDocumentDiagnosticReport in Or_WorkspaceDocumentDiagnosticReport for value " + stringValue}
 	}
    var h0 WorkspaceFullDocumentDiagnosticReport
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 WorkspaceUnchangedDocumentDiagnosticReport
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
 	return &UnmarshalError{msg: "unmarshal failed to match one of WorkspaceFullDocumentDiagnosticReport, WorkspaceUnchangedDocumentDiagnosticReport in Or_WorkspaceDocumentDiagnosticReport for value " + stringValue}
 }
-// Or type for [int,string]
+// Or type for [int32,string]
 type Or_CancelParams_Id struct {
 	Value any `json:"value"`
 }
@@ -7830,29 +10650,33 @@ func (t *Or_CancelParams_Id) MarshalJSON() ([]byte, error) {
    switch x := t.Value.(type) {
    case nil:
        return []byte("null"), nil
-    case int:
+    case int32:
         return json.Marshal(x)
     case string:
         return json.Marshal(x)
    }
-  return nil, fmt.Errorf("unknown type %T is not one of int, string", t)
+  return nil, fmt.Errorf("unknown type %T is not one of int32, string", t)
 }
 func (t *Or_CancelParams_Id) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
-		return &UnmarshalError{msg: "unmarshal failed to match one of int, string in Or_CancelParams_Id for value " + stringValue}
+		return &UnmarshalError{msg: "unmarshal failed to match one of int32, string in Or_CancelParams_Id for value " + stringValue}
 	}
-   var h0 int
-   if err := json.Unmarshal(x, &h0); err == nil {
+   var h0 int32
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 string
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
-	return &UnmarshalError{msg: "unmarshal failed to match one of int, string in Or_CancelParams_Id for value " + stringValue}
+	return &UnmarshalError{msg: "unmarshal failed to match one of int32, string in Or_CancelParams_Id for value " + stringValue}
 }
 // Or type for [bool,ClientSemanticTokensRequestFullDelta]
 type Or_ClientSemanticTokensRequestOptions_Full struct {
@@ -7871,16 +10695,20 @@ func (t *Or_ClientSemanticTokensRequestOptions_Full) MarshalJSON() ([]byte, erro
 }
 func (t *Or_ClientSemanticTokensRequestOptions_Full) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, ClientSemanticTokensRequestFullDelta in Or_ClientSemanticTokensRequestOptions_Full for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 ClientSemanticTokensRequestFullDelta
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -7903,16 +10731,20 @@ func (t *Or_ClientSemanticTokensRequestOptions_Range) MarshalJSON() ([]byte, err
 }
 func (t *Or_ClientSemanticTokensRequestOptions_Range) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, map[string]any in Or_ClientSemanticTokensRequestOptions_Range for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 map[string]any
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -7935,16 +10767,20 @@ func (t *Or_CompletionItem_Documentation) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_CompletionItem_Documentation) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of string, MarkupContent in Or_CompletionItem_Documentation for value " + stringValue}
 	}
    var h0 string
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 MarkupContent
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -7967,16 +10803,20 @@ func (t *Or_CompletionItem_TextEdit) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_CompletionItem_TextEdit) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of TextEdit, InsertReplaceEdit in Or_CompletionItem_TextEdit for value " + stringValue}
 	}
    var h0 TextEdit
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 InsertReplaceEdit
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -7999,22 +10839,26 @@ func (t *Or_CompletionItemDefaults_EditRange) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_CompletionItemDefaults_EditRange) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of Range, EditRangeWithInsertReplace in Or_CompletionItemDefaults_EditRange for value " + stringValue}
 	}
    var h0 Range
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 EditRangeWithInsertReplace
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
 	return &UnmarshalError{msg: "unmarshal failed to match one of Range, EditRangeWithInsertReplace in Or_CompletionItemDefaults_EditRange for value " + stringValue}
 }
-// Or type for [int,string]
+// Or type for [int32,string]
 type Or_Diagnostic_Code struct {
 	Value any `json:"value"`
 }
@@ -8022,29 +10866,33 @@ func (t *Or_Diagnostic_Code) MarshalJSON() ([]byte, error) {
    switch x := t.Value.(type) {
    case nil:
        return []byte("null"), nil
-    case int:
+    case int32:
         return json.Marshal(x)
     case string:
         return json.Marshal(x)
    }
-  return nil, fmt.Errorf("unknown type %T is not one of int, string", t)
+  return nil, fmt.Errorf("unknown type %T is not one of int32, string", t)
 }
 func (t *Or_Diagnostic_Code) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
-		return &UnmarshalError{msg: "unmarshal failed to match one of int, string in Or_Diagnostic_Code for value " + stringValue}
+		return &UnmarshalError{msg: "unmarshal failed to match one of int32, string in Or_Diagnostic_Code for value " + stringValue}
 	}
-   var h0 int
-   if err := json.Unmarshal(x, &h0); err == nil {
+   var h0 int32
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 string
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
-	return &UnmarshalError{msg: "unmarshal failed to match one of int, string in Or_Diagnostic_Code for value " + stringValue}
+	return &UnmarshalError{msg: "unmarshal failed to match one of int32, string in Or_Diagnostic_Code for value " + stringValue}
 }
 // Or type for [string,[]string]
 type Or_DidChangeConfigurationRegistrationOptions_Section struct {
@@ -8063,16 +10911,20 @@ func (t *Or_DidChangeConfigurationRegistrationOptions_Section) MarshalJSON() ([]
 }
 func (t *Or_DidChangeConfigurationRegistrationOptions_Section) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of string, []string in Or_DidChangeConfigurationRegistrationOptions_Section for value " + stringValue}
 	}
    var h0 string
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 []string
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8095,16 +10947,20 @@ func (t *Or_DocumentDiagnosticReportPartialResult_RelatedDocuments) MarshalJSON(
 }
 func (t *Or_DocumentDiagnosticReportPartialResult_RelatedDocuments) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport in Or_DocumentDiagnosticReportPartialResult_RelatedDocuments for value " + stringValue}
 	}
    var h0 FullDocumentDiagnosticReport
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 UnchangedDocumentDiagnosticReport
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8129,21 +10985,27 @@ func (t *Or_Hover_Contents) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_Hover_Contents) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of MarkupContent, MarkedString, []MarkedString in Or_Hover_Contents for value " + stringValue}
 	}
    var h0 MarkupContent
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 MarkedString
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 []MarkedString
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -8164,12 +11026,14 @@ func (t *Or_InitializeParams_WorkspaceFolders) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_InitializeParams_WorkspaceFolders) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []WorkspaceFolder
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -8192,16 +11056,20 @@ func (t *Or_InlayHint_Label) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_InlayHint_Label) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of string, []InlayHintLabelPart in Or_InlayHint_Label for value " + stringValue}
 	}
    var h0 string
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 []InlayHintLabelPart
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8224,16 +11092,20 @@ func (t *Or_InlayHint_Tooltip) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_InlayHint_Tooltip) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of string, MarkupContent in Or_InlayHint_Tooltip for value " + stringValue}
 	}
    var h0 string
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 MarkupContent
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8256,16 +11128,20 @@ func (t *Or_InlayHintLabelPart_Tooltip) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_InlayHintLabelPart_Tooltip) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of string, MarkupContent in Or_InlayHintLabelPart_Tooltip for value " + stringValue}
 	}
    var h0 string
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 MarkupContent
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8288,16 +11164,20 @@ func (t *Or_InlineCompletionItem_InsertText) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_InlineCompletionItem_InsertText) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of string, StringValue in Or_InlineCompletionItem_InsertText for value " + stringValue}
 	}
    var h0 string
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 StringValue
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8320,16 +11200,20 @@ func (t *Or_NotebookCellTextDocumentFilter_Notebook) MarshalJSON() ([]byte, erro
 }
 func (t *Or_NotebookCellTextDocumentFilter_Notebook) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of string, NotebookDocumentFilter in Or_NotebookCellTextDocumentFilter_Notebook for value " + stringValue}
 	}
    var h0 string
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 NotebookDocumentFilter
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8352,16 +11236,20 @@ func (t *Or_NotebookDocumentFilterWithCells_Notebook) MarshalJSON() ([]byte, err
 }
 func (t *Or_NotebookDocumentFilterWithCells_Notebook) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of string, NotebookDocumentFilter in Or_NotebookDocumentFilterWithCells_Notebook for value " + stringValue}
 	}
    var h0 string
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 NotebookDocumentFilter
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8384,16 +11272,20 @@ func (t *Or_NotebookDocumentFilterWithNotebook_Notebook) MarshalJSON() ([]byte, 
 }
 func (t *Or_NotebookDocumentFilterWithNotebook_Notebook) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of string, NotebookDocumentFilter in Or_NotebookDocumentFilterWithNotebook_Notebook for value " + stringValue}
 	}
    var h0 string
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 NotebookDocumentFilter
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8416,16 +11308,20 @@ func (t *Or_NotebookDocumentSyncOptions_NotebookSelector) MarshalJSON() ([]byte,
 }
 func (t *Or_NotebookDocumentSyncOptions_NotebookSelector) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of NotebookDocumentFilterWithNotebook, NotebookDocumentFilterWithCells in Or_NotebookDocumentSyncOptions_NotebookSelector for value " + stringValue}
 	}
    var h0 NotebookDocumentFilterWithNotebook
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 NotebookDocumentFilterWithCells
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8448,16 +11344,20 @@ func (t *Or_NotebookDocumentSyncRegistrationOptions_NotebookSelector) MarshalJSO
 }
 func (t *Or_NotebookDocumentSyncRegistrationOptions_NotebookSelector) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of NotebookDocumentFilterWithNotebook, NotebookDocumentFilterWithCells in Or_NotebookDocumentSyncRegistrationOptions_NotebookSelector for value " + stringValue}
 	}
    var h0 NotebookDocumentFilterWithNotebook
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 NotebookDocumentFilterWithCells
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8480,22 +11380,26 @@ func (t *Or_ParameterInformation_Documentation) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_ParameterInformation_Documentation) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of string, MarkupContent in Or_ParameterInformation_Documentation for value " + stringValue}
 	}
    var h0 string
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 MarkupContent
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
 	return &UnmarshalError{msg: "unmarshal failed to match one of string, MarkupContent in Or_ParameterInformation_Documentation for value " + stringValue}
 }
-// Or type for [string,Tuple[uint, uint]]
+// Or type for [string,Tuple[uint32, uint32]]
 type Or_ParameterInformation_Label struct {
 	Value any `json:"value"`
 }
@@ -8505,27 +11409,31 @@ func (t *Or_ParameterInformation_Label) MarshalJSON() ([]byte, error) {
        return []byte("null"), nil
     case string:
         return json.Marshal(x)
-    case Tuple[uint, uint]:
+    case Tuple[uint32, uint32]:
         return json.Marshal(x)
    }
-  return nil, fmt.Errorf("unknown type %T is not one of string, Tuple[uint, uint]", t)
+  return nil, fmt.Errorf("unknown type %T is not one of string, Tuple[uint32, uint32]", t)
 }
 func (t *Or_ParameterInformation_Label) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
-		return &UnmarshalError{msg: "unmarshal failed to match one of string, Tuple[uint, uint] in Or_ParameterInformation_Label for value " + stringValue}
+		return &UnmarshalError{msg: "unmarshal failed to match one of string, Tuple[uint32, uint32] in Or_ParameterInformation_Label for value " + stringValue}
 	}
    var h0 string
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
-   var h1 Tuple[uint, uint]
-   if err := json.Unmarshal(x, &h1); err == nil {
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
+   var h1 Tuple[uint32, uint32]
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
-	return &UnmarshalError{msg: "unmarshal failed to match one of string, Tuple[uint, uint] in Or_ParameterInformation_Label for value " + stringValue}
+	return &UnmarshalError{msg: "unmarshal failed to match one of string, Tuple[uint32, uint32] in Or_ParameterInformation_Label for value " + stringValue}
 }
 // Or type for [FullDocumentDiagnosticReport,UnchangedDocumentDiagnosticReport]
 type Or_RelatedFullDocumentDiagnosticReport_RelatedDocuments struct {
@@ -8544,16 +11452,20 @@ func (t *Or_RelatedFullDocumentDiagnosticReport_RelatedDocuments) MarshalJSON() 
 }
 func (t *Or_RelatedFullDocumentDiagnosticReport_RelatedDocuments) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport in Or_RelatedFullDocumentDiagnosticReport_RelatedDocuments for value " + stringValue}
 	}
    var h0 FullDocumentDiagnosticReport
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 UnchangedDocumentDiagnosticReport
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8576,16 +11488,20 @@ func (t *Or_RelatedUnchangedDocumentDiagnosticReport_RelatedDocuments) MarshalJS
 }
 func (t *Or_RelatedUnchangedDocumentDiagnosticReport_RelatedDocuments) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport in Or_RelatedUnchangedDocumentDiagnosticReport_RelatedDocuments for value " + stringValue}
 	}
    var h0 FullDocumentDiagnosticReport
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 UnchangedDocumentDiagnosticReport
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8608,16 +11524,20 @@ func (t *Or_RelativePattern_BaseUri) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_RelativePattern_BaseUri) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of WorkspaceFolder, URI in Or_RelativePattern_BaseUri for value " + stringValue}
 	}
    var h0 WorkspaceFolder
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 URI
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8640,16 +11560,20 @@ func (t *Or_SemanticTokensOptions_Full) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_SemanticTokensOptions_Full) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, SemanticTokensFullDelta in Or_SemanticTokensOptions_Full for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 SemanticTokensFullDelta
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8672,16 +11596,20 @@ func (t *Or_SemanticTokensOptions_Range) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_SemanticTokensOptions_Range) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, map[string]any in Or_SemanticTokensOptions_Range for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 map[string]any
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8704,16 +11632,20 @@ func (t *Or_SemanticTokensRegistrationOptions_Full) MarshalJSON() ([]byte, error
 }
 func (t *Or_SemanticTokensRegistrationOptions_Full) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, SemanticTokensFullDelta in Or_SemanticTokensRegistrationOptions_Full for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 SemanticTokensFullDelta
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8736,16 +11668,20 @@ func (t *Or_SemanticTokensRegistrationOptions_Range) MarshalJSON() ([]byte, erro
 }
 func (t *Or_SemanticTokensRegistrationOptions_Range) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, map[string]any in Or_SemanticTokensRegistrationOptions_Range for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 map[string]any
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8770,21 +11706,27 @@ func (t *Or_ServerCapabilities_CallHierarchyProvider) MarshalJSON() ([]byte, err
 }
 func (t *Or_ServerCapabilities_CallHierarchyProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, CallHierarchyOptions, CallHierarchyRegistrationOptions in Or_ServerCapabilities_CallHierarchyProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 CallHierarchyOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 CallHierarchyRegistrationOptions
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -8807,16 +11749,20 @@ func (t *Or_ServerCapabilities_CodeActionProvider) MarshalJSON() ([]byte, error)
 }
 func (t *Or_ServerCapabilities_CodeActionProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, CodeActionOptions in Or_ServerCapabilities_CodeActionProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 CodeActionOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8841,21 +11787,27 @@ func (t *Or_ServerCapabilities_ColorProvider) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_ServerCapabilities_ColorProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, DocumentColorOptions, DocumentColorRegistrationOptions in Or_ServerCapabilities_ColorProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 DocumentColorOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 DocumentColorRegistrationOptions
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -8880,21 +11832,27 @@ func (t *Or_ServerCapabilities_DeclarationProvider) MarshalJSON() ([]byte, error
 }
 func (t *Or_ServerCapabilities_DeclarationProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, DeclarationOptions, DeclarationRegistrationOptions in Or_ServerCapabilities_DeclarationProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 DeclarationOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 DeclarationRegistrationOptions
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -8917,16 +11875,20 @@ func (t *Or_ServerCapabilities_DefinitionProvider) MarshalJSON() ([]byte, error)
 }
 func (t *Or_ServerCapabilities_DefinitionProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, DefinitionOptions in Or_ServerCapabilities_DefinitionProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 DefinitionOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8949,16 +11911,20 @@ func (t *Or_ServerCapabilities_DiagnosticProvider) MarshalJSON() ([]byte, error)
 }
 func (t *Or_ServerCapabilities_DiagnosticProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of DiagnosticOptions, DiagnosticRegistrationOptions in Or_ServerCapabilities_DiagnosticProvider for value " + stringValue}
 	}
    var h0 DiagnosticOptions
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 DiagnosticRegistrationOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -8981,16 +11947,20 @@ func (t *Or_ServerCapabilities_DocumentFormattingProvider) MarshalJSON() ([]byte
 }
 func (t *Or_ServerCapabilities_DocumentFormattingProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, DocumentFormattingOptions in Or_ServerCapabilities_DocumentFormattingProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 DocumentFormattingOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -9013,16 +11983,20 @@ func (t *Or_ServerCapabilities_DocumentHighlightProvider) MarshalJSON() ([]byte,
 }
 func (t *Or_ServerCapabilities_DocumentHighlightProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, DocumentHighlightOptions in Or_ServerCapabilities_DocumentHighlightProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 DocumentHighlightOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -9045,16 +12019,20 @@ func (t *Or_ServerCapabilities_DocumentRangeFormattingProvider) MarshalJSON() ([
 }
 func (t *Or_ServerCapabilities_DocumentRangeFormattingProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, DocumentRangeFormattingOptions in Or_ServerCapabilities_DocumentRangeFormattingProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 DocumentRangeFormattingOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -9077,16 +12055,20 @@ func (t *Or_ServerCapabilities_DocumentSymbolProvider) MarshalJSON() ([]byte, er
 }
 func (t *Or_ServerCapabilities_DocumentSymbolProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, DocumentSymbolOptions in Or_ServerCapabilities_DocumentSymbolProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 DocumentSymbolOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -9111,21 +12093,27 @@ func (t *Or_ServerCapabilities_FoldingRangeProvider) MarshalJSON() ([]byte, erro
 }
 func (t *Or_ServerCapabilities_FoldingRangeProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, FoldingRangeOptions, FoldingRangeRegistrationOptions in Or_ServerCapabilities_FoldingRangeProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 FoldingRangeOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 FoldingRangeRegistrationOptions
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -9148,16 +12136,20 @@ func (t *Or_ServerCapabilities_HoverProvider) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_ServerCapabilities_HoverProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, HoverOptions in Or_ServerCapabilities_HoverProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 HoverOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -9182,21 +12174,27 @@ func (t *Or_ServerCapabilities_ImplementationProvider) MarshalJSON() ([]byte, er
 }
 func (t *Or_ServerCapabilities_ImplementationProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, ImplementationOptions, ImplementationRegistrationOptions in Or_ServerCapabilities_ImplementationProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 ImplementationOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 ImplementationRegistrationOptions
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -9221,21 +12219,27 @@ func (t *Or_ServerCapabilities_InlayHintProvider) MarshalJSON() ([]byte, error) 
 }
 func (t *Or_ServerCapabilities_InlayHintProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, InlayHintOptions, InlayHintRegistrationOptions in Or_ServerCapabilities_InlayHintProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 InlayHintOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 InlayHintRegistrationOptions
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -9258,16 +12262,20 @@ func (t *Or_ServerCapabilities_InlineCompletionProvider) MarshalJSON() ([]byte, 
 }
 func (t *Or_ServerCapabilities_InlineCompletionProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, InlineCompletionOptions in Or_ServerCapabilities_InlineCompletionProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 InlineCompletionOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -9292,21 +12300,27 @@ func (t *Or_ServerCapabilities_InlineValueProvider) MarshalJSON() ([]byte, error
 }
 func (t *Or_ServerCapabilities_InlineValueProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, InlineValueOptions, InlineValueRegistrationOptions in Or_ServerCapabilities_InlineValueProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 InlineValueOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 InlineValueRegistrationOptions
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -9331,21 +12345,27 @@ func (t *Or_ServerCapabilities_LinkedEditingRangeProvider) MarshalJSON() ([]byte
 }
 func (t *Or_ServerCapabilities_LinkedEditingRangeProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, LinkedEditingRangeOptions, LinkedEditingRangeRegistrationOptions in Or_ServerCapabilities_LinkedEditingRangeProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 LinkedEditingRangeOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 LinkedEditingRangeRegistrationOptions
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -9370,21 +12390,27 @@ func (t *Or_ServerCapabilities_MonikerProvider) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_ServerCapabilities_MonikerProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, MonikerOptions, MonikerRegistrationOptions in Or_ServerCapabilities_MonikerProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 MonikerOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 MonikerRegistrationOptions
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -9407,16 +12433,20 @@ func (t *Or_ServerCapabilities_NotebookDocumentSync) MarshalJSON() ([]byte, erro
 }
 func (t *Or_ServerCapabilities_NotebookDocumentSync) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of NotebookDocumentSyncOptions, NotebookDocumentSyncRegistrationOptions in Or_ServerCapabilities_NotebookDocumentSync for value " + stringValue}
 	}
    var h0 NotebookDocumentSyncOptions
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 NotebookDocumentSyncRegistrationOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -9439,16 +12469,20 @@ func (t *Or_ServerCapabilities_ReferencesProvider) MarshalJSON() ([]byte, error)
 }
 func (t *Or_ServerCapabilities_ReferencesProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, ReferenceOptions in Or_ServerCapabilities_ReferencesProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 ReferenceOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -9471,16 +12505,20 @@ func (t *Or_ServerCapabilities_RenameProvider) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_ServerCapabilities_RenameProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, RenameOptions in Or_ServerCapabilities_RenameProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 RenameOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -9505,21 +12543,27 @@ func (t *Or_ServerCapabilities_SelectionRangeProvider) MarshalJSON() ([]byte, er
 }
 func (t *Or_ServerCapabilities_SelectionRangeProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, SelectionRangeOptions, SelectionRangeRegistrationOptions in Or_ServerCapabilities_SelectionRangeProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 SelectionRangeOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 SelectionRangeRegistrationOptions
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -9542,16 +12586,20 @@ func (t *Or_ServerCapabilities_SemanticTokensProvider) MarshalJSON() ([]byte, er
 }
 func (t *Or_ServerCapabilities_SemanticTokensProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of SemanticTokensOptions, SemanticTokensRegistrationOptions in Or_ServerCapabilities_SemanticTokensProvider for value " + stringValue}
 	}
    var h0 SemanticTokensOptions
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 SemanticTokensRegistrationOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -9574,16 +12622,20 @@ func (t *Or_ServerCapabilities_TextDocumentSync) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_ServerCapabilities_TextDocumentSync) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of TextDocumentSyncOptions, TextDocumentSyncKind in Or_ServerCapabilities_TextDocumentSync for value " + stringValue}
 	}
    var h0 TextDocumentSyncOptions
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 TextDocumentSyncKind
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -9608,21 +12660,27 @@ func (t *Or_ServerCapabilities_TypeDefinitionProvider) MarshalJSON() ([]byte, er
 }
 func (t *Or_ServerCapabilities_TypeDefinitionProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, TypeDefinitionOptions, TypeDefinitionRegistrationOptions in Or_ServerCapabilities_TypeDefinitionProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 TypeDefinitionOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 TypeDefinitionRegistrationOptions
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -9647,21 +12705,27 @@ func (t *Or_ServerCapabilities_TypeHierarchyProvider) MarshalJSON() ([]byte, err
 }
 func (t *Or_ServerCapabilities_TypeHierarchyProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, TypeHierarchyOptions, TypeHierarchyRegistrationOptions in Or_ServerCapabilities_TypeHierarchyProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 TypeHierarchyOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 TypeHierarchyRegistrationOptions
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -9684,16 +12748,20 @@ func (t *Or_ServerCapabilities_WorkspaceSymbolProvider) MarshalJSON() ([]byte, e
 }
 func (t *Or_ServerCapabilities_WorkspaceSymbolProvider) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, WorkspaceSymbolOptions in Or_ServerCapabilities_WorkspaceSymbolProvider for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 WorkspaceSymbolOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -9716,16 +12784,20 @@ func (t *Or_SignatureInformation_Documentation) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_SignatureInformation_Documentation) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of string, MarkupContent in Or_SignatureInformation_Documentation for value " + stringValue}
 	}
    var h0 string
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 MarkupContent
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -9750,21 +12822,27 @@ func (t *Or_TextDocumentEdit_Edits) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_TextDocumentEdit_Edits) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of TextEdit, AnnotatedTextEdit, SnippetTextEdit in Or_TextDocumentEdit_Edits for value " + stringValue}
 	}
    var h0 TextEdit
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 AnnotatedTextEdit
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 SnippetTextEdit
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
@@ -9787,16 +12865,20 @@ func (t *Or_TextDocumentSyncOptions_Save) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_TextDocumentSyncOptions_Save) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of bool, SaveOptions in Or_TextDocumentSyncOptions_Save for value " + stringValue}
 	}
    var h0 bool
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 SaveOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -9823,26 +12905,34 @@ func (t *Or_WorkspaceEdit_DocumentChanges) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_WorkspaceEdit_DocumentChanges) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of TextDocumentEdit, CreateFile, RenameFile, DeleteFile in Or_WorkspaceEdit_DocumentChanges for value " + stringValue}
 	}
    var h0 TextDocumentEdit
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 CreateFile
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h2 RenameFile
-   if err := json.Unmarshal(x, &h2); err == nil {
+   if err := decoder.Decode(&h2); err == nil {
        t.Value = h2
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h3 DeleteFile
-   if err := json.Unmarshal(x, &h3); err == nil {
+   if err := decoder.Decode(&h3); err == nil {
        t.Value = h3
        return nil
    }
@@ -9863,12 +12953,14 @@ func (t *Or_WorkspaceFoldersInitializeParams_WorkspaceFolders) MarshalJSON() ([]
 }
 func (t *Or_WorkspaceFoldersInitializeParams_WorkspaceFolders) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []WorkspaceFolder
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -9891,16 +12983,20 @@ func (t *Or_WorkspaceFoldersServerCapabilities_ChangeNotifications) MarshalJSON(
 }
 func (t *Or_WorkspaceFoldersServerCapabilities_ChangeNotifications) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of string, bool in Or_WorkspaceFoldersServerCapabilities_ChangeNotifications for value " + stringValue}
 	}
    var h0 string
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 bool
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -9923,16 +13019,20 @@ func (t *Or_WorkspaceOptions_TextDocumentContent) MarshalJSON() ([]byte, error) 
 }
 func (t *Or_WorkspaceOptions_TextDocumentContent) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of TextDocumentContentOptions, TextDocumentContentRegistrationOptions in Or_WorkspaceOptions_TextDocumentContent for value " + stringValue}
 	}
    var h0 TextDocumentContentOptions
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 TextDocumentContentRegistrationOptions
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -9955,22 +13055,26 @@ func (t *Or_WorkspaceSymbol_Location) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_WorkspaceSymbol_Location) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
 		return &UnmarshalError{msg: "unmarshal failed to match one of Location, LocationUriOnly in Or_WorkspaceSymbol_Location for value " + stringValue}
 	}
    var h0 Location
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 LocationUriOnly
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
 	return &UnmarshalError{msg: "unmarshal failed to match one of Location, LocationUriOnly in Or_WorkspaceSymbol_Location for value " + stringValue}
 }
-// Or type for [int,string]
+// Or type for [int32,string]
 type Or_Request_id struct {
 	Value any `json:"value"`
 }
@@ -9978,31 +13082,35 @@ func (t *Or_Request_id) MarshalJSON() ([]byte, error) {
    switch x := t.Value.(type) {
    case nil:
        return []byte("null"), nil
-    case int:
+    case int32:
         return json.Marshal(x)
     case string:
         return json.Marshal(x)
    }
-  return nil, fmt.Errorf("unknown type %T is not one of int, string", t)
+  return nil, fmt.Errorf("unknown type %T is not one of int32, string", t)
 }
 func (t *Or_Request_id) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
-		return &UnmarshalError{msg: "unmarshal failed to match one of int, string in Or_Request_id for value " + stringValue}
+		return &UnmarshalError{msg: "unmarshal failed to match one of int32, string in Or_Request_id for value " + stringValue}
 	}
-   var h0 int
-   if err := json.Unmarshal(x, &h0); err == nil {
+   var h0 int32
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 string
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
-	return &UnmarshalError{msg: "unmarshal failed to match one of int, string in Or_Request_id for value " + stringValue}
+	return &UnmarshalError{msg: "unmarshal failed to match one of int32, string in Or_Request_id for value " + stringValue}
 }
-// Or type for [int,string]
+// Or type for [int32,string]
 type Or_Response_id struct {
 	Value any `json:"value"`
 }
@@ -10010,29 +13118,33 @@ func (t *Or_Response_id) MarshalJSON() ([]byte, error) {
    switch x := t.Value.(type) {
    case nil:
        return []byte("null"), nil
-    case int:
+    case int32:
         return json.Marshal(x)
     case string:
         return json.Marshal(x)
    }
-  return nil, fmt.Errorf("unknown type %T is not one of int, string", t)
+  return nil, fmt.Errorf("unknown type %T is not one of int32, string", t)
 }
 func (t *Or_Response_id) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
 	if string(x) == "null" {
-		return &UnmarshalError{msg: "unmarshal failed to match one of int, string in Or_Response_id for value " + stringValue}
+		return &UnmarshalError{msg: "unmarshal failed to match one of int32, string in Or_Response_id for value " + stringValue}
 	}
-   var h0 int
-   if err := json.Unmarshal(x, &h0); err == nil {
+   var h0 int32
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 string
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
-	return &UnmarshalError{msg: "unmarshal failed to match one of int, string in Or_Response_id for value " + stringValue}
+	return &UnmarshalError{msg: "unmarshal failed to match one of int32, string in Or_Response_id for value " + stringValue}
 }
 // Or type for [[]CallHierarchyIncomingCall,nil]
 type Or_CallHierarchyIncomingCallsResponse struct {
@@ -10049,12 +13161,14 @@ func (t *Or_CallHierarchyIncomingCallsResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_CallHierarchyIncomingCallsResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []CallHierarchyIncomingCall
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10075,12 +13189,14 @@ func (t *Or_CallHierarchyOutgoingCallsResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_CallHierarchyOutgoingCallsResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []CallHierarchyOutgoingCall
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10101,12 +13217,14 @@ func (t *Or_CodeActionResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_CodeActionResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []Or_CodeActionResponse
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10127,12 +13245,14 @@ func (t *Or_CodeLensResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_CodeLensResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []CodeLens
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10155,17 +13275,21 @@ func (t *Or_CompletionResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_CompletionResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []CompletionItem
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 CompletionList
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -10188,17 +13312,21 @@ func (t *Or_DeclarationResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_DeclarationResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 Declaration
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 []DeclarationLink
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -10221,17 +13349,21 @@ func (t *Or_DefinitionResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_DefinitionResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 Definition
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 []DefinitionLink
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -10252,12 +13384,14 @@ func (t *Or_DocumentHighlightResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_DocumentHighlightResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []DocumentHighlight
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10278,12 +13412,14 @@ func (t *Or_DocumentLinkResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_DocumentLinkResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []DocumentLink
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10306,17 +13442,21 @@ func (t *Or_DocumentSymbolResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_DocumentSymbolResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []SymbolInformation
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 []DocumentSymbol
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -10337,12 +13477,14 @@ func (t *Or_FoldingRangeResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_FoldingRangeResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []FoldingRange
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10363,12 +13505,14 @@ func (t *Or_DocumentFormattingResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_DocumentFormattingResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []TextEdit
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10391,17 +13535,21 @@ func (t *Or_ImplementationResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_ImplementationResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 Definition
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 []DefinitionLink
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -10422,12 +13570,14 @@ func (t *Or_InlayHintResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_InlayHintResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []InlayHint
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10450,17 +13600,21 @@ func (t *Or_InlineCompletionResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_InlineCompletionResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 InlineCompletionList
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 []InlineCompletionItem
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -10481,12 +13635,14 @@ func (t *Or_InlineValueResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_InlineValueResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []InlineValue
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10507,12 +13663,14 @@ func (t *Or_MonikerResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_MonikerResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []Moniker
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10533,12 +13691,14 @@ func (t *Or_DocumentOnTypeFormattingResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_DocumentOnTypeFormattingResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []TextEdit
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10559,12 +13719,14 @@ func (t *Or_CallHierarchyPrepareResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_CallHierarchyPrepareResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []CallHierarchyItem
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10585,12 +13747,14 @@ func (t *Or_TypeHierarchyPrepareResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_TypeHierarchyPrepareResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []TypeHierarchyItem
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10611,12 +13775,14 @@ func (t *Or_DocumentRangeFormattingResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_DocumentRangeFormattingResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []TextEdit
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10637,12 +13803,14 @@ func (t *Or_DocumentRangesFormattingResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_DocumentRangesFormattingResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []TextEdit
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10663,12 +13831,14 @@ func (t *Or_ReferencesResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_ReferencesResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []Location
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10689,12 +13859,14 @@ func (t *Or_SelectionRangeResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_SelectionRangeResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []SelectionRange
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10717,17 +13889,21 @@ func (t *Or_SemanticTokensDeltaResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_SemanticTokensDeltaResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 SemanticTokens
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 SemanticTokensDelta
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -10750,17 +13926,21 @@ func (t *Or_TypeDefinitionResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_TypeDefinitionResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 Definition
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 []DefinitionLink
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -10781,12 +13961,14 @@ func (t *Or_WillSaveTextDocumentWaitUntilResponse) MarshalJSON() ([]byte, error)
 }
 func (t *Or_WillSaveTextDocumentWaitUntilResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []TextEdit
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10807,12 +13989,14 @@ func (t *Or_TypeHierarchySubtypesResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_TypeHierarchySubtypesResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []TypeHierarchyItem
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10833,12 +14017,14 @@ func (t *Or_TypeHierarchySupertypesResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_TypeHierarchySupertypesResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []TypeHierarchyItem
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
@@ -10861,17 +14047,21 @@ func (t *Or_WorkspaceSymbolResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_WorkspaceSymbolResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []SymbolInformation
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }
+	decoder = json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    var h1 []WorkspaceSymbol
-   if err := json.Unmarshal(x, &h1); err == nil {
+   if err := decoder.Decode(&h1); err == nil {
        t.Value = h1
        return nil
    }
@@ -10892,12 +14082,14 @@ func (t *Or_WorkspaceFoldersResponse) MarshalJSON() ([]byte, error) {
 }
 func (t *Or_WorkspaceFoldersResponse) UnmarshalJSON(x []byte) error {
 	stringValue := string(x)
+	decoder := json.NewDecoder(bytes.NewReader(x))
+	decoder.DisallowUnknownFields()
    if string(x) == "null" {
        t.Value = nil
        return nil
    }
    var h0 []WorkspaceFolder
-   if err := json.Unmarshal(x, &h0); err == nil {
+   if err := decoder.Decode(&h0); err == nil {
        t.Value = h0
        return nil
    }

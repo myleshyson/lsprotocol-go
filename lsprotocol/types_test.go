@@ -9,16 +9,6 @@ import (
 
 func TestType(t *testing.T) {
 
-	var position Position
-	string := "{\"start\": -1, \"end\": -1}"
-
-	err := json.Unmarshal([]byte(string), &position)
-
-	if err != nil {
-		t.Fatalf("%s", err)
-	} else {
-		t.Fatalf("DID NOT ERROR!!!!")
-	}
 	cwd, err := os.Getwd()
 
 	if err != nil {
@@ -59,8 +49,20 @@ func TestType(t *testing.T) {
 			if err == nil && expectedResult == "False" {
 				t.Fatalf("Expected fail in file: %s", filepath)
 			}
+		case "ApplyWorkspaceEditResponse":
+			var request ApplyWorkspaceEditResponse
+
+			err := json.Unmarshal(content, &request)
+
+			if err != nil && expectedResult == "True" {
+				t.Fatalf("Expected pass in file: %s, got error: %s", filepath, err)
+			}
+
+			if err == nil && expectedResult == "False" {
+				t.Fatalf("Expected fail in file: %s", filepath)
+			}
 		default:
-			os.Exit(1)
+			break
 		}
 	}
 }

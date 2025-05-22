@@ -104,6 +104,15 @@ class TypeCodeGenerator:
         self.slices = set()
         self.interface_aliases = set()
         self.type_graph: dict[str, set[str]] = {}
+        self.base_types = {
+            "nil",
+            "uint32",
+            "int32",
+            "float64",
+            "string",
+            "bool",
+            "any",
+        }
 
     def generate(self) -> dict[str, str]:
         header = self.generate_header()
@@ -124,7 +133,7 @@ class TypeCodeGenerator:
             + or_types
         )
         return {
-            "types.go": "\n".join(result),
+            "lsprotocol/types.go": "\n".join(result),
         }
 
     def generate_notifications(self) -> list[str]:
@@ -192,8 +201,8 @@ class TypeCodeGenerator:
             )
         result.append("}\n")
 
-        self.interfaces["Or_Request_id"] = ["int", "string"]
-        self.interfaces["Or_Response_id"] = ["int", "string"]
+        self.interfaces["Or_Request_id"] = ["int32", "string"]
+        self.interfaces["Or_Response_id"] = ["int32", "string"]
 
         for request in requests:
             struct = [
@@ -204,10 +213,35 @@ class TypeCodeGenerator:
                 '\tMethod RequestMethod `json:"method"`',
             ]
             if request.params:
+                param_type = self._resolve_type(request.params, "Request")
                 struct.append(
-                    f'\tParams {self._resolve_type(request.params, "Request")} `json:"params"`',
+                    f'\tParams {param_type} `json:"params"`',
                 )
             struct.append("}")
+            struct += [
+                f"func (t *{request.typeName}) UnmarshalJSON(x []byte) error {{",
+                "   var m map[string]any",
+                "   if err := json.Unmarshal(x, &m); err != nil {",
+                "       return err",
+                "   }",
+                '   if _, exists := m["method"]; !exists {',
+                '       return fmt.Errorf("Missing required request field: method")',
+                "   }",
+                '   if _, exists := m["id"]; !exists {',
+                '       return fmt.Errorf("Missing required request field: id")',
+                "   }",
+                '   if _, exists := m["jsonrpc"]; !exists {',
+                '       return fmt.Errorf("Missing required request field: jsonrpc")',
+                "   }",
+                f"  type Alias {request.typeName}",
+                "   var result Alias",
+                "   if err := json.Unmarshal(x, &result); err != nil {",
+                "       return err",
+                "   }",
+                f"   *t = {request.typeName}(result)",
+                "   return nil",
+                "}",
+            ]
             result.append("\n".join(struct))
 
         for request in requests:
@@ -230,12 +264,32 @@ class TypeCodeGenerator:
                 response_type = f"*{response_type}"
 
             struct = [
-                f"type {request.typeName.replace('Request', 'Response')} struct {{",
-                '\tId *Or_Request_id `json:"id"`',
-                f'\tResult {response_type} `json:"result,{omit_type}"`'
+                f"type {response_name} struct {{",
+                '   Id Or_Request_id `json:"id"`',
+                f'  Result *{response_type} `json:"result,{omit_type}"`'
                 if "nil" not in response_type
                 else "",
-                '\tError ResponseError `json:"error,omitzero"`',
+                '   Error *ResponseError `json:"error,omitzero"`',
+                "}",
+            ]
+            struct += [
+                f"func (t *{response_name}) UnmarshalJSON(x []byte) error {{",
+                "   var m map[string]any",
+                "   if err := json.Unmarshal(x, &m); err != nil {",
+                "       return err",
+                "   }",
+                '   _, idExists := m["id"]',
+                '   _, jsonrpcExists := m["jsonrpc"]',
+                "   if !idExists || !jsonrpcExists {",
+                '       return fmt.Errorf("response must have an id and jsonrpc field.")',
+                "   }",
+                f"  type Alias {response_name}",
+                "   var temp Alias",
+                "   if err := json.Unmarshal(x, &temp); err != nil {",
+                "       return err",
+                "   }",
+                f"  *t = {response_name}(temp)",
+                "   return nil",
                 "}",
             ]
             result.append("\n".join(struct))
@@ -249,6 +303,7 @@ class TypeCodeGenerator:
             "type DocumentUri string\n",
             "type URI string\n",
         ]
+
         type_aliases = sorted(self.spec.typeAliases, key=lambda x: x.name)
 
         for alias in type_aliases:
@@ -327,7 +382,7 @@ class TypeCodeGenerator:
             "\n".join(
                 [
                     "type ResponseError struct {",
-                    '\tCode int `json:"code"`',
+                    '\tCode int32 `json:"code"`',
                     '\tMessage string `json:"message"`',
                     '\tData any `json:"data,omitempty"`',
                     "}",
@@ -341,9 +396,10 @@ class TypeCodeGenerator:
         return [
             "package lsprotocol\n\n",
             "import (",
-            '   "encoding/json"',
-            '   "fmt"',
-            ")\n",
+            '\t"encoding/json"',
+            '\t"fmt"',
+            '\t"bytes"',
+            ")",
         ]
 
     def generate_enums(self) -> list[str]:
@@ -395,15 +451,22 @@ class TypeCodeGenerator:
                 lines_to_comments(struct.documentation),
                 f"type {struct.name} struct {{",
             ]
+
             for name, property in properties.items():
                 formatted_name = capitalize(name)
+
                 property_type = self._resolve_type(
                     property.type,
                     f"{struct.name}_{formatted_name}",
                     property.optional if property.optional else False,
                 )
 
-                if property_type == struct.name:
+                if property_type == struct.name or (
+                    property_type not in self.base_types
+                    and "[]" not in property_type
+                    and "map[" not in property_type
+                    and property.optional
+                ):
                     property_type = f"*{property_type}"
 
                 omit_type = "omitempty"
@@ -413,16 +476,13 @@ class TypeCodeGenerator:
 
                 omit_empty = f",{omit_type}" if property.optional else ""
 
-                # normal value
-                if isinstance(property_type, str):
-                    result.append(lines_to_comments(property.documentation, 1))
-                    result.append(
-                        f'\t{formatted_name} {property_type} `json:"{property.name}{omit_empty}"`',
-                    )
-                    continue
+                property_string = f'\t{formatted_name} {property_type} `json:"{property.name}{omit_empty}"`'
 
-                print("what is this")
+                result.append(lines_to_comments(property.documentation, 1))
+                result.append(property_string)
+
             result.append("}")
+
             results.append("\n".join(result))
         return results
 
@@ -545,6 +605,8 @@ class TypeCodeGenerator:
         result = [
             f"func (t *{or_type}) UnmarshalJSON(x []byte) error {{",
             "\tstringValue := string(x)",
+            "\tdecoder := json.NewDecoder(bytes.NewReader(x))",
+            "\tdecoder.DisallowUnknownFields()",
         ]
 
         names = ", ".join(
@@ -577,10 +639,15 @@ class TypeCodeGenerator:
         for i, name in enumerate(types):
             if name.lower() == "nil":
                 continue
-
-            branches = [
+            branches = []
+            if i != 0:
+                branches += [
+                    "\tdecoder = json.NewDecoder(bytes.NewReader(x))",
+                    "\tdecoder.DisallowUnknownFields()",
+                ]
+            branches += [
                 f"   var h{i} {self._resolve_base_type(name)}",
-                f"   if err := json.Unmarshal(x, &h{i}); err == nil {{",
+                f"   if err := decoder.Decode(&h{i}); err == nil {{",
                 f"       t.Value = h{i}",
                 "       return nil",
                 "   }",
@@ -690,9 +757,9 @@ class TypeCodeGenerator:
             case "nil":
                 return "nil"
             case "uinteger":
-                return "uint"
+                return "uint32"
             case "integer":
-                return "int"
+                return "int32"
             case "boolean":
                 return "bool"
             case "float":
