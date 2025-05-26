@@ -1,0 +1,61 @@
+package protocol
+
+import (
+	"encoding/json"
+	"os"
+	"strings"
+	"testing"
+	"bytes"
+)
+
+func TestType(t *testing.T) {
+
+	cwd, err := os.Getwd()
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	files, err := os.ReadDir(cwd + "/testdata")
+
+	if err != nil {
+		t.Error(err)
+	}
+	for _, file := range files {
+		filepath := cwd + "/testdata/" + file.Name()
+		if !strings.Contains(file.Name(), "json") {
+			continue
+		}
+
+		parts := strings.Split(file.Name(), "-")
+
+		testType := parts[0]
+		expectedResult := parts[1]
+		content, err := os.ReadFile(filepath)
+
+		if err != nil {
+			t.Error(err)
+		}
+
+		switch testType {
+		// GENERATED_TESTS
+		}
+	}
+}
+
+func validateType[T any](t *testing.T, content []byte, expectedResult string, filepath string) {
+	// I want to use type here
+	var object T
+	decoder := json.NewDecoder(bytes.NewReader(content))
+	decoder.DisallowUnknownFields()
+
+	err := decoder.Decode(&object)
+
+	if err != nil && expectedResult == "True" {
+		t.Fatalf("Expected pass in file: %s, got error: %s", filepath, err)
+	}
+
+	if err == nil && expectedResult == "False" {
+		t.Fatalf("Expected fail in file: %s", filepath)
+	}
+}

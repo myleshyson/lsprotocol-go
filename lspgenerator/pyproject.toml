@@ -10,3 +10,12 @@ dependencies = [
 
 [tool.uv.sources]
 generator = { git = "https://github.com/microsoft/lsprotocol.git" }
+
+[tool.ruff]
+indent-width = 4
+
+[tool.ruff.lint]
+ignore = ["D", "S101", "E501", "FLY002", "W191"]
+
+[tool.ruff.format]
+indent-style = "tab"
