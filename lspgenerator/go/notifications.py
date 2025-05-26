@@ -46,6 +46,29 @@ def generate_notifications(
 			f'\tParams {param_type} `json:"params"`',
 		]
 		struct.append("}")
+		struct += [
+			f"func (t *{notification.typeName}) UnmarshalJSON(x []byte) error {{",
+			"   var m map[string]any",
+			"   if err := json.Unmarshal(x, &m); err != nil {",
+			"       return err",
+			"   }",
+			'   if _, exists := m["method"]; !exists {',
+			'       return fmt.Errorf("Missing required request field: method")',
+			"   }",
+			'   if _, exists := m["jsonrpc"]; !exists {',
+			'       return fmt.Errorf("Missing required request field: jsonrpc")',
+			"   }",
+			f"  type Alias {notification.typeName}",
+			"   var result Alias",
+			"	decoder := json.NewDecoder(bytes.NewReader(x))",
+			"	decoder.DisallowUnknownFields()",
+			"   if err := decoder.Decode(&result); err != nil {",
+			"       return err",
+			"	}",
+			f"	*t = {notification.typeName}(result)",
+			"   return nil",
+			"}",
+		]
 		result.append(join(struct))
 	result.append("\n")
 	return result

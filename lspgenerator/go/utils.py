@@ -42,7 +42,7 @@ def lines_to_comments(lines: str | None, pad: int = 0) -> str:
 	return "\n".join(f"{tabs}// {line}" for line in lines.splitlines())
 
 
-def is_first_char_uppercase(string):
+def is_first_char_uppercase(string: str) -> bool:
 	return len(string) > 0 and string[0].isupper()
 
 
@@ -50,6 +50,24 @@ def join(value: list[str], glue: str = "\n") -> str:
 	return glue.join(value)
 
 
-def split_by_uppercase(text):
-	# Method 1: Split before each uppercase letter (except the first)
+def split_by_uppercase(text: str) -> list[str]:
 	return re.sub(r"(?<!^)(?=[A-Z])", "_", text).split("_")
+
+
+def add_struct_unmarshaller(struct_type: str) -> str:
+	return join(
+		[
+			f"func (t *{struct_type}) UnmarshalJSON(x []byte) error {{",
+			f"	type Alias {struct_type}",
+			"	var test Alias",
+			"	decoder := json.NewDecoder(bytes.NewReader(x))",
+			"	decoder.DisallowUnknownFields()",
+			"	if err := decoder.decode(&test); err != nil {",
+			"		return err",
+			"	}",
+			f"	*t = {struct_type}(test)",
+			"	",
+			"	return nil",
+			"}",
+		],
+	)

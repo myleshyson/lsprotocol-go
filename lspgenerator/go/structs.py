@@ -37,8 +37,8 @@ def generate_structs(
 					[
 						lines_to_comments(struct.documentation),
 						f"type {struct.name} LSPObject",
-					]
-				)
+					],
+				),
 			)
 			continue
 		result = [
@@ -76,7 +76,44 @@ def generate_structs(
 			result.append(property_string)
 
 		result.append("}")
+		property_cases = []
 
+		for name, property in properties.items():
+			optional = property.optional or False
+			if optional:
+				continue
+			property_cases.append(
+				join(
+					[
+						f'	if _, exists := m["{property.name}"]; !exists {{',
+						f'		return fmt.Errorf("missing required field: {property.name}")',
+						"	}",
+					],
+				),
+			)
+		result.append(
+			join(
+				[
+					f"func (t *{struct.name}) UnmarshalJSON(x []byte) error {{",
+					"	var m map[string]any",
+					"	if err := json.Unmarshal(x, &m); err != nil {",
+					"		return err",
+					"	}",
+					join(property_cases),
+					f"	type Alias {struct.name}",
+					"	var test Alias",
+					"	decoder := json.NewDecoder(bytes.NewReader(x))",
+					"	decoder.DisallowUnknownFields()",
+					"	if err := decoder.Decode(&test); err != nil {",
+					"		return err",
+					"	}",
+					f"	*t = {struct.name}(test)",
+					"	",
+					"	return nil",
+					"}",
+				],
+			),
+		)
 		results.append(join(result))
 	return results
 
