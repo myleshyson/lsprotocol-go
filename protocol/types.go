@@ -17948,7 +17948,7 @@ const (
 )
 func (t ApplyKind) validate() error {
 	switch t {
-	case 1,2:
+	case 2,1:
 	return nil
 	}
 	return fmt.Errorf("invalid ApplyKind: %v", t)
@@ -18033,7 +18033,7 @@ const (
 )
 func (t CodeActionTriggerKind) validate() error {
 	switch t {
-	case 1,2:
+	case 2,1:
 	return nil
 	}
 	return fmt.Errorf("invalid CodeActionTriggerKind: %v", t)
@@ -18089,7 +18089,7 @@ const (
 )
 func (t CompletionItemKind) validate() error {
 	switch t {
-	case 19,20,7,3,18,4,8,15,17,23,24,10,6,16,13,9,22,11,14,21,25,1,12,2,5:
+	case 22,14,17,21,11,18,5,7,24,4,8,13,1,25,9,6,19,3,16,23,10,12,20,2,15:
 	return nil
 	}
 	return fmt.Errorf("invalid CompletionItemKind: %v", t)
@@ -18158,7 +18158,7 @@ const (
 )
 func (t CompletionTriggerKind) validate() error {
 	switch t {
-	case 3,1,2:
+	case 2,1,3:
 	return nil
 	}
 	return fmt.Errorf("invalid CompletionTriggerKind: %v", t)
@@ -18193,7 +18193,7 @@ const (
 )
 func (t DiagnosticSeverity) validate() error {
 	switch t {
-	case 3,1,2,4:
+	case 2,1,4,3:
 	return nil
 	}
 	return fmt.Errorf("invalid DiagnosticSeverity: %v", t)
@@ -18228,7 +18228,7 @@ const (
 )
 func (t DiagnosticTag) validate() error {
 	switch t {
-	case 1,2:
+	case 2,1:
 	return nil
 	}
 	return fmt.Errorf("invalid DiagnosticTag: %v", t)
@@ -18263,7 +18263,7 @@ const (
 )
 func (t DocumentDiagnosticReportKind) validate() error {
 	switch t {
-	case "full","unchanged":
+	case "unchanged","full":
 	return nil
 	}
 	return fmt.Errorf("invalid DocumentDiagnosticReportKind: %v", t)
@@ -18297,7 +18297,7 @@ const (
 )
 func (t DocumentHighlightKind) validate() error {
 	switch t {
-	case 3,1,2:
+	case 2,1,3:
 	return nil
 	}
 	return fmt.Errorf("invalid DocumentHighlightKind: %v", t)
@@ -18343,7 +18343,7 @@ const (
 )
 func (t FailureHandlingKind) validate() error {
 	switch t {
-	case "transactional","undo","abort","textOnlyTransactional":
+	case "abort","undo","transactional","textOnlyTransactional":
 	return nil
 	}
 	return fmt.Errorf("invalid FailureHandlingKind: %v", t)
@@ -18377,7 +18377,7 @@ const (
 )
 func (t FileChangeType) validate() error {
 	switch t {
-	case 3,1,2:
+	case 2,1,3:
 	return nil
 	}
 	return fmt.Errorf("invalid FileChangeType: %v", t)
@@ -18456,7 +18456,7 @@ const (
 )
 func (t InlayHintKind) validate() error {
 	switch t {
-	case 1,2:
+	case 2,1:
 	return nil
 	}
 	return fmt.Errorf("invalid InlayHintKind: %v", t)
@@ -18492,7 +18492,7 @@ const (
 )
 func (t InlineCompletionTriggerKind) validate() error {
 	switch t {
-	case 1,2:
+	case 2,1:
 	return nil
 	}
 	return fmt.Errorf("invalid InlineCompletionTriggerKind: %v", t)
@@ -18526,7 +18526,7 @@ const (
 )
 func (t InsertTextFormat) validate() error {
 	switch t {
-	case 1,2:
+	case 2,1:
 	return nil
 	}
 	return fmt.Errorf("invalid InsertTextFormat: %v", t)
@@ -18562,7 +18562,7 @@ const (
 )
 func (t InsertTextMode) validate() error {
 	switch t {
-	case 1,2:
+	case 2,1:
 	return nil
 	}
 	return fmt.Errorf("invalid InsertTextMode: %v", t)
@@ -18674,7 +18674,7 @@ const (
 )
 func (t MarkupKind) validate() error {
 	switch t {
-	case "markdown","plaintext":
+	case "plaintext","markdown":
 	return nil
 	}
 	return fmt.Errorf("invalid MarkupKind: %v", t)
@@ -18710,7 +18710,7 @@ const (
 )
 func (t MessageType) validate() error {
 	switch t {
-	case 1,3,4,2,5:
+	case 3,5,1,2,4:
 	return nil
 	}
 	return fmt.Errorf("invalid MessageType: %v", t)
@@ -18746,7 +18746,7 @@ const (
 )
 func (t MonikerKind) validate() error {
 	switch t {
-	case "local","export","import":
+	case "export","import","local":
 	return nil
 	}
 	return fmt.Errorf("invalid MonikerKind: %v", t)
@@ -18781,7 +18781,7 @@ const (
 )
 func (t NotebookCellKind) validate() error {
 	switch t {
-	case 1,2:
+	case 2,1:
 	return nil
 	}
 	return fmt.Errorf("invalid NotebookCellKind: %v", t)
@@ -18943,7 +18943,7 @@ const (
 )
 func (t SignatureHelpTriggerKind) validate() error {
 	switch t {
-	case 3,1,2:
+	case 2,1,3:
 	return nil
 	}
 	return fmt.Errorf("invalid SignatureHelpTriggerKind: %v", t)
@@ -19000,7 +19000,7 @@ const (
 )
 func (t SymbolKind) validate() error {
 	switch t {
-	case 19,20,7,3,18,8,4,15,26,17,23,24,10,6,16,13,9,22,11,14,21,25,1,12,2,5:
+	case 22,14,17,21,11,18,5,7,24,4,8,13,1,25,9,6,19,3,16,23,10,12,20,2,15,26:
 	return nil
 	}
 	return fmt.Errorf("invalid SymbolKind: %v", t)
@@ -19068,7 +19068,7 @@ const (
 )
 func (t TextDocumentSaveReason) validate() error {
 	switch t {
-	case 3,1,2:
+	case 2,1,3:
 	return nil
 	}
 	return fmt.Errorf("invalid TextDocumentSaveReason: %v", t)
@@ -19103,7 +19103,7 @@ const (
 )
 func (t TextDocumentSyncKind) validate() error {
 	switch t {
-	case 0,1,2:
+	case 2,0,1:
 	return nil
 	}
 	return fmt.Errorf("invalid TextDocumentSyncKind: %v", t)
@@ -19205,7 +19205,7 @@ const (
 )
 func (t UniquenessLevel) validate() error {
 	switch t {
-	case "document","global","scheme","group","project":
+	case "project","document","global","scheme","group":
 	return nil
 	}
 	return fmt.Errorf("invalid UniquenessLevel: %v", t)

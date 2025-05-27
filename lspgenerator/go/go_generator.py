@@ -30,7 +30,7 @@ def generate_from_spec(
 	notifications = generate_notifications(spec, type_resolver)
 	or_types = generate_or_types(type_resolver)
 	code = {
-		"protocol/types.go": join(
+		"types.go": join(
 			header
 			+ base_types
 			+ structs
@@ -39,7 +39,7 @@ def generate_from_spec(
 			+ enums
 			+ or_types,
 		),
-		"protocol/types_test.go": generate_tests(spec),
+		"types_test.go": generate_tests(spec),
 	}
 	output_path = pathlib.Path(output_dir)
 	test_path = pathlib.Path(test_dir)

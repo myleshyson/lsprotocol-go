@@ -67,6 +67,7 @@ func Test() error {
 	}
 
 	fmt.Println("generating test cases...")
+
 	if err := sh.RunV("uv", "run", "--directory", lspgendir, "python", "-m", "generator", "--plugin", "testdata", "--output-dir", protocol+"/testdata"); err != nil {
 		return err
 	}
