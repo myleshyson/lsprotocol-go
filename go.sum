@@ -1,0 +1,4 @@
+github.com/magefile/mage v1.15.0 h1:BvGheCMAsG3bWUDbZ8AyXXpCNwU9u5CB6sM+HNb9HYg=
+github.com/magefile/mage v1.15.0/go.mod h1:z5UZb/iS3GoOSn0JgWuiw7dxlurVYTu+/jHXqQg881A=
+github.com/stretchr/piglatin v0.0.0-20140311054444-ab61287b9936 h1:QcF4JZjvg9uNP9SdKFXspe6keOBZ1XmXkb25badRIkY=
+github.com/stretchr/piglatin v0.0.0-20140311054444-ab61287b9936/go.mod h1:fnVlYnscMLDEmGbdH+GXr7JHxZCj7pCoRap6A74K5lY=
