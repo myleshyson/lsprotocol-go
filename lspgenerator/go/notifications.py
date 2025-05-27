@@ -9,20 +9,18 @@ def generate_notifications(
 	type_resolver: TypeResolver,
 ) -> list[str]:
 	notifications = sorted(spec.notifications, key=lambda x: x.method)
-	result = [
-		"type NotificationMethod string\n",
-	]
+	result = []
 	constants = "const (\n"
-	constants += '\tUnknownNotificationMethod = ""\n'
+	constants += '\tUnknownNotificationMethod MethodKind = ""\n'
 
 	for notification in notifications:
 		method = notification.method.replace("$", "Optional")
 		camel_case_method = method_to_camel_case(method)
-		constants += f'\t{camel_case_method}Method NotificationMethod = "{notification.method}"\n'
+		constants += f'\t{camel_case_method}Method MethodKind = "{notification.method}"\n'
 	constants += ")\n"
 	result.append(constants)
 	result.append(
-		"var NotificationMethodMap = map[string]NotificationMethod{",
+		"var NotificationMethodMap = map[string]MethodKind{",
 	)
 	for notification in notifications:
 		method = notification.method.replace("$", "Optional")
@@ -42,13 +40,19 @@ def generate_notifications(
 			lines_to_comments(notification.documentation),
 			f"type {notification.typeName} struct {{",
 			'\tJsonRPC string `json:"jsonrpc"`',
-			'\tMethod string `json:"method"`',
+			'\tMethod MethodKind `json:"method"`',
 			f'\tParams {param_type} `json:"params"`',
 		]
 		struct.append("}")
 		struct.append(f"func (t {notification.typeName}) isMessage() {{}}")
 		struct.append(
 			f"func (t {notification.typeName}) isNotification() {{}}",
+		)
+		struct.append(
+			f"func (t {notification.typeName}) GetMethod() MethodKind {{ return t.Method }}",
+		)
+		struct.append(
+			f"func (t {notification.typeName}) GetParams() any {{ return t.Params }}",
 		)
 		struct += [
 			f"func (t *{notification.typeName}) UnmarshalJSON(x []byte) error {{",

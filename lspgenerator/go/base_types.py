@@ -120,11 +120,16 @@ def generate_base_types(
 			],
 		),
 	)
+	result.append("type MethodKind string")
 	result.append(
 		join(
 			[
 				"type Message interface {",
 				"	isMessage()",
+				"}",
+				"type IncomingMessage interface {",
+				"	GetMethod() MethodKind",
+				"	GetParams() any",
 				"}",
 				"type Request interface {",
 				"	isRequest()",
