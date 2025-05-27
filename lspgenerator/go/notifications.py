@@ -52,7 +52,7 @@ def generate_notifications(
 			f"func (t {notification.typeName}) GetMethod() MethodKind {{ return t.Method }}",
 		)
 		struct.append(
-			f"func (t {notification.typeName}) GetParams() {param_type} {{ return t.Params }}",
+			f"func (t {notification.typeName}) GetParams() any {{ return t.Params }}",
 		)
 		struct += [
 			f"func (t *{notification.typeName}) UnmarshalJSON(x []byte) error {{",

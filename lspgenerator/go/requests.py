@@ -54,7 +54,7 @@ def generate_requests(
 			f"func (t {request.typeName}) GetMethod() MethodKind {{ return t.Method }}",
 		)
 		struct.append(
-			f"func (t {request.typeName}) GetParams() {param_type} {{ return t.Params }}",
+			f"func (t {request.typeName}) GetParams() any {{ return t.Params }}",
 		)
 		struct += [
 			f"func (t *{request.typeName}) UnmarshalJSON(x []byte) error {{",
