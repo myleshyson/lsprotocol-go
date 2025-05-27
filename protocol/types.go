@@ -274,6 +274,18 @@ type ResponseError struct {
 	Message string `json:"message"`
 	Data any `json:"data,omitempty"`
 }
+type Message interface {
+	isMessage()
+}
+type Request interface {
+	isRequest()
+}
+type Notification interface {
+	isNotification()
+}
+type Response interface {
+	isResponse()
+}
 
 
 // A special text edit with an additional change annotation.
@@ -13188,6 +13200,8 @@ type CallHierarchyIncomingCallsRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CallHierarchyIncomingCallsParams `json:"params"`
 }
+func (t *CallHierarchyIncomingCallsRequest) isMessage() {}
+func (t *CallHierarchyIncomingCallsRequest) isRequest() {}
 func (t *CallHierarchyIncomingCallsRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13221,6 +13235,8 @@ type CallHierarchyOutgoingCallsRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CallHierarchyOutgoingCallsParams `json:"params"`
 }
+func (t *CallHierarchyOutgoingCallsRequest) isMessage() {}
+func (t *CallHierarchyOutgoingCallsRequest) isRequest() {}
 func (t *CallHierarchyOutgoingCallsRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13253,6 +13269,8 @@ type RegistrationRequest struct {
 	Method RequestMethod `json:"method"`
 	Params RegistrationParams `json:"params"`
 }
+func (t *RegistrationRequest) isMessage() {}
+func (t *RegistrationRequest) isRequest() {}
 func (t *RegistrationRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13285,6 +13303,8 @@ type UnregistrationRequest struct {
 	Method RequestMethod `json:"method"`
 	Params UnregistrationParams `json:"params"`
 }
+func (t *UnregistrationRequest) isMessage() {}
+func (t *UnregistrationRequest) isRequest() {}
 func (t *UnregistrationRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13318,6 +13338,8 @@ type CodeActionResolveRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CodeAction `json:"params"`
 }
+func (t *CodeActionResolveRequest) isMessage() {}
+func (t *CodeActionResolveRequest) isRequest() {}
 func (t *CodeActionResolveRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13349,6 +13371,8 @@ type CodeLensResolveRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CodeLens `json:"params"`
 }
+func (t *CodeLensResolveRequest) isMessage() {}
+func (t *CodeLensResolveRequest) isRequest() {}
 func (t *CodeLensResolveRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13382,6 +13406,8 @@ type CompletionResolveRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CompletionItem `json:"params"`
 }
+func (t *CompletionResolveRequest) isMessage() {}
+func (t *CompletionResolveRequest) isRequest() {}
 func (t *CompletionResolveRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13415,6 +13441,8 @@ type DocumentLinkResolveRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DocumentLink `json:"params"`
 }
+func (t *DocumentLinkResolveRequest) isMessage() {}
+func (t *DocumentLinkResolveRequest) isRequest() {}
 func (t *DocumentLinkResolveRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13450,6 +13478,8 @@ type InitializeRequest struct {
 	Method RequestMethod `json:"method"`
 	Params InitializeParams `json:"params"`
 }
+func (t *InitializeRequest) isMessage() {}
+func (t *InitializeRequest) isRequest() {}
 func (t *InitializeRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13485,6 +13515,8 @@ type InlayHintResolveRequest struct {
 	Method RequestMethod `json:"method"`
 	Params InlayHint `json:"params"`
 }
+func (t *InlayHintResolveRequest) isMessage() {}
+func (t *InlayHintResolveRequest) isRequest() {}
 func (t *InlayHintResolveRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13519,6 +13551,8 @@ type ShutdownRequest struct {
 	Method RequestMethod `json:"method"`
 	Params any `json:"params"`
 }
+func (t *ShutdownRequest) isMessage() {}
+func (t *ShutdownRequest) isRequest() {}
 func (t *ShutdownRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13550,6 +13584,8 @@ type CodeActionRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CodeActionParams `json:"params"`
 }
+func (t *CodeActionRequest) isMessage() {}
+func (t *CodeActionRequest) isRequest() {}
 func (t *CodeActionRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13581,6 +13617,8 @@ type CodeLensRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CodeLensParams `json:"params"`
 }
+func (t *CodeLensRequest) isMessage() {}
+func (t *CodeLensRequest) isRequest() {}
 func (t *CodeLensRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13615,6 +13653,8 @@ type ColorPresentationRequest struct {
 	Method RequestMethod `json:"method"`
 	Params ColorPresentationParams `json:"params"`
 }
+func (t *ColorPresentationRequest) isMessage() {}
+func (t *ColorPresentationRequest) isRequest() {}
 func (t *ColorPresentationRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13654,6 +13694,8 @@ type CompletionRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CompletionParams `json:"params"`
 }
+func (t *CompletionRequest) isMessage() {}
+func (t *CompletionRequest) isRequest() {}
 func (t *CompletionRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13688,6 +13730,8 @@ type DeclarationRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DeclarationParams `json:"params"`
 }
+func (t *DeclarationRequest) isMessage() {}
+func (t *DeclarationRequest) isRequest() {}
 func (t *DeclarationRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13722,6 +13766,8 @@ type DefinitionRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DefinitionParams `json:"params"`
 }
+func (t *DefinitionRequest) isMessage() {}
+func (t *DefinitionRequest) isRequest() {}
 func (t *DefinitionRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13755,6 +13801,8 @@ type DocumentDiagnosticRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DocumentDiagnosticParams `json:"params"`
 }
+func (t *DocumentDiagnosticRequest) isMessage() {}
+func (t *DocumentDiagnosticRequest) isRequest() {}
 func (t *DocumentDiagnosticRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13789,6 +13837,8 @@ type DocumentColorRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DocumentColorParams `json:"params"`
 }
+func (t *DocumentColorRequest) isMessage() {}
+func (t *DocumentColorRequest) isRequest() {}
 func (t *DocumentColorRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13823,6 +13873,8 @@ type DocumentHighlightRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DocumentHighlightParams `json:"params"`
 }
+func (t *DocumentHighlightRequest) isMessage() {}
+func (t *DocumentHighlightRequest) isRequest() {}
 func (t *DocumentHighlightRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13854,6 +13906,8 @@ type DocumentLinkRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DocumentLinkParams `json:"params"`
 }
+func (t *DocumentLinkRequest) isMessage() {}
+func (t *DocumentLinkRequest) isRequest() {}
 func (t *DocumentLinkRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13888,6 +13942,8 @@ type DocumentSymbolRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DocumentSymbolParams `json:"params"`
 }
+func (t *DocumentSymbolRequest) isMessage() {}
+func (t *DocumentSymbolRequest) isRequest() {}
 func (t *DocumentSymbolRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13922,6 +13978,8 @@ type FoldingRangeRequest struct {
 	Method RequestMethod `json:"method"`
 	Params FoldingRangeParams `json:"params"`
 }
+func (t *FoldingRangeRequest) isMessage() {}
+func (t *FoldingRangeRequest) isRequest() {}
 func (t *FoldingRangeRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13953,6 +14011,8 @@ type DocumentFormattingRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DocumentFormattingParams `json:"params"`
 }
+func (t *DocumentFormattingRequest) isMessage() {}
+func (t *DocumentFormattingRequest) isRequest() {}
 func (t *DocumentFormattingRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -13986,6 +14046,8 @@ type HoverRequest struct {
 	Method RequestMethod `json:"method"`
 	Params HoverParams `json:"params"`
 }
+func (t *HoverRequest) isMessage() {}
+func (t *HoverRequest) isRequest() {}
 func (t *HoverRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14019,6 +14081,8 @@ type ImplementationRequest struct {
 	Method RequestMethod `json:"method"`
 	Params ImplementationParams `json:"params"`
 }
+func (t *ImplementationRequest) isMessage() {}
+func (t *ImplementationRequest) isRequest() {}
 func (t *ImplementationRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14054,6 +14118,8 @@ type InlayHintRequest struct {
 	Method RequestMethod `json:"method"`
 	Params InlayHintParams `json:"params"`
 }
+func (t *InlayHintRequest) isMessage() {}
+func (t *InlayHintRequest) isRequest() {}
 func (t *InlayHintRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14090,6 +14156,8 @@ type InlineCompletionRequest struct {
 	Method RequestMethod `json:"method"`
 	Params InlineCompletionParams `json:"params"`
 }
+func (t *InlineCompletionRequest) isMessage() {}
+func (t *InlineCompletionRequest) isRequest() {}
 func (t *InlineCompletionRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14125,6 +14193,8 @@ type InlineValueRequest struct {
 	Method RequestMethod `json:"method"`
 	Params InlineValueParams `json:"params"`
 }
+func (t *InlineValueRequest) isMessage() {}
+func (t *InlineValueRequest) isRequest() {}
 func (t *InlineValueRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14158,6 +14228,8 @@ type LinkedEditingRangeRequest struct {
 	Method RequestMethod `json:"method"`
 	Params LinkedEditingRangeParams `json:"params"`
 }
+func (t *LinkedEditingRangeRequest) isMessage() {}
+func (t *LinkedEditingRangeRequest) isRequest() {}
 func (t *LinkedEditingRangeRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14191,6 +14263,8 @@ type MonikerRequest struct {
 	Method RequestMethod `json:"method"`
 	Params MonikerParams `json:"params"`
 }
+func (t *MonikerRequest) isMessage() {}
+func (t *MonikerRequest) isRequest() {}
 func (t *MonikerRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14222,6 +14296,8 @@ type DocumentOnTypeFormattingRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DocumentOnTypeFormattingParams `json:"params"`
 }
+func (t *DocumentOnTypeFormattingRequest) isMessage() {}
+func (t *DocumentOnTypeFormattingRequest) isRequest() {}
 func (t *DocumentOnTypeFormattingRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14256,6 +14332,8 @@ type CallHierarchyPrepareRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CallHierarchyPrepareParams `json:"params"`
 }
+func (t *CallHierarchyPrepareRequest) isMessage() {}
+func (t *CallHierarchyPrepareRequest) isRequest() {}
 func (t *CallHierarchyPrepareRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14289,6 +14367,8 @@ type PrepareRenameRequest struct {
 	Method RequestMethod `json:"method"`
 	Params PrepareRenameParams `json:"params"`
 }
+func (t *PrepareRenameRequest) isMessage() {}
+func (t *PrepareRenameRequest) isRequest() {}
 func (t *PrepareRenameRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14323,6 +14403,8 @@ type TypeHierarchyPrepareRequest struct {
 	Method RequestMethod `json:"method"`
 	Params TypeHierarchyPrepareParams `json:"params"`
 }
+func (t *TypeHierarchyPrepareRequest) isMessage() {}
+func (t *TypeHierarchyPrepareRequest) isRequest() {}
 func (t *TypeHierarchyPrepareRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14354,6 +14436,8 @@ type DocumentRangeFormattingRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DocumentRangeFormattingParams `json:"params"`
 }
+func (t *DocumentRangeFormattingRequest) isMessage() {}
+func (t *DocumentRangeFormattingRequest) isRequest() {}
 func (t *DocumentRangeFormattingRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14388,6 +14472,8 @@ type DocumentRangesFormattingRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DocumentRangesFormattingParams `json:"params"`
 }
+func (t *DocumentRangesFormattingRequest) isMessage() {}
+func (t *DocumentRangesFormattingRequest) isRequest() {}
 func (t *DocumentRangesFormattingRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14422,6 +14508,8 @@ type ReferencesRequest struct {
 	Method RequestMethod `json:"method"`
 	Params ReferenceParams `json:"params"`
 }
+func (t *ReferencesRequest) isMessage() {}
+func (t *ReferencesRequest) isRequest() {}
 func (t *ReferencesRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14453,6 +14541,8 @@ type RenameRequest struct {
 	Method RequestMethod `json:"method"`
 	Params RenameParams `json:"params"`
 }
+func (t *RenameRequest) isMessage() {}
+func (t *RenameRequest) isRequest() {}
 func (t *RenameRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14487,6 +14577,8 @@ type SelectionRangeRequest struct {
 	Method RequestMethod `json:"method"`
 	Params SelectionRangeParams `json:"params"`
 }
+func (t *SelectionRangeRequest) isMessage() {}
+func (t *SelectionRangeRequest) isRequest() {}
 func (t *SelectionRangeRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14518,6 +14610,8 @@ type SemanticTokensRequest struct {
 	Method RequestMethod `json:"method"`
 	Params SemanticTokensParams `json:"params"`
 }
+func (t *SemanticTokensRequest) isMessage() {}
+func (t *SemanticTokensRequest) isRequest() {}
 func (t *SemanticTokensRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14549,6 +14643,8 @@ type SemanticTokensDeltaRequest struct {
 	Method RequestMethod `json:"method"`
 	Params SemanticTokensDeltaParams `json:"params"`
 }
+func (t *SemanticTokensDeltaRequest) isMessage() {}
+func (t *SemanticTokensDeltaRequest) isRequest() {}
 func (t *SemanticTokensDeltaRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14580,6 +14676,8 @@ type SemanticTokensRangeRequest struct {
 	Method RequestMethod `json:"method"`
 	Params SemanticTokensRangeParams `json:"params"`
 }
+func (t *SemanticTokensRangeRequest) isMessage() {}
+func (t *SemanticTokensRangeRequest) isRequest() {}
 func (t *SemanticTokensRangeRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14611,6 +14709,8 @@ type SignatureHelpRequest struct {
 	Method RequestMethod `json:"method"`
 	Params SignatureHelpParams `json:"params"`
 }
+func (t *SignatureHelpRequest) isMessage() {}
+func (t *SignatureHelpRequest) isRequest() {}
 func (t *SignatureHelpRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14644,6 +14744,8 @@ type TypeDefinitionRequest struct {
 	Method RequestMethod `json:"method"`
 	Params TypeDefinitionParams `json:"params"`
 }
+func (t *TypeDefinitionRequest) isMessage() {}
+func (t *TypeDefinitionRequest) isRequest() {}
 func (t *TypeDefinitionRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14680,6 +14782,8 @@ type WillSaveTextDocumentWaitUntilRequest struct {
 	Method RequestMethod `json:"method"`
 	Params WillSaveTextDocumentParams `json:"params"`
 }
+func (t *WillSaveTextDocumentWaitUntilRequest) isMessage() {}
+func (t *WillSaveTextDocumentWaitUntilRequest) isRequest() {}
 func (t *WillSaveTextDocumentWaitUntilRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14713,6 +14817,8 @@ type TypeHierarchySubtypesRequest struct {
 	Method RequestMethod `json:"method"`
 	Params TypeHierarchySubtypesParams `json:"params"`
 }
+func (t *TypeHierarchySubtypesRequest) isMessage() {}
+func (t *TypeHierarchySubtypesRequest) isRequest() {}
 func (t *TypeHierarchySubtypesRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14746,6 +14852,8 @@ type TypeHierarchySupertypesRequest struct {
 	Method RequestMethod `json:"method"`
 	Params TypeHierarchySupertypesParams `json:"params"`
 }
+func (t *TypeHierarchySupertypesRequest) isMessage() {}
+func (t *TypeHierarchySupertypesRequest) isRequest() {}
 func (t *TypeHierarchySupertypesRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14782,6 +14890,8 @@ type ShowDocumentRequest struct {
 	Method RequestMethod `json:"method"`
 	Params ShowDocumentParams `json:"params"`
 }
+func (t *ShowDocumentRequest) isMessage() {}
+func (t *ShowDocumentRequest) isRequest() {}
 func (t *ShowDocumentRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14814,6 +14924,8 @@ type ShowMessageRequest struct {
 	Method RequestMethod `json:"method"`
 	Params ShowMessageRequestParams `json:"params"`
 }
+func (t *ShowMessageRequest) isMessage() {}
+func (t *ShowMessageRequest) isRequest() {}
 func (t *ShowMessageRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14846,6 +14958,8 @@ type WorkDoneProgressCreateRequest struct {
 	Method RequestMethod `json:"method"`
 	Params WorkDoneProgressCreateParams `json:"params"`
 }
+func (t *WorkDoneProgressCreateRequest) isMessage() {}
+func (t *WorkDoneProgressCreateRequest) isRequest() {}
 func (t *WorkDoneProgressCreateRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14877,6 +14991,8 @@ type ApplyWorkspaceEditRequest struct {
 	Method RequestMethod `json:"method"`
 	Params ApplyWorkspaceEditParams `json:"params"`
 }
+func (t *ApplyWorkspaceEditRequest) isMessage() {}
+func (t *ApplyWorkspaceEditRequest) isRequest() {}
 func (t *ApplyWorkspaceEditRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14910,6 +15026,8 @@ type CodeLensRefreshRequest struct {
 	Method RequestMethod `json:"method"`
 	Params any `json:"params"`
 }
+func (t *CodeLensRefreshRequest) isMessage() {}
+func (t *CodeLensRefreshRequest) isRequest() {}
 func (t *CodeLensRefreshRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14947,6 +15065,8 @@ type ConfigurationRequest struct {
 	Method RequestMethod `json:"method"`
 	Params ConfigurationParams `json:"params"`
 }
+func (t *ConfigurationRequest) isMessage() {}
+func (t *ConfigurationRequest) isRequest() {}
 func (t *ConfigurationRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -14980,6 +15100,8 @@ type WorkspaceDiagnosticRequest struct {
 	Method RequestMethod `json:"method"`
 	Params WorkspaceDiagnosticParams `json:"params"`
 }
+func (t *WorkspaceDiagnosticRequest) isMessage() {}
+func (t *WorkspaceDiagnosticRequest) isRequest() {}
 func (t *WorkspaceDiagnosticRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -15013,6 +15135,8 @@ type DiagnosticRefreshRequest struct {
 	Method RequestMethod `json:"method"`
 	Params any `json:"params"`
 }
+func (t *DiagnosticRefreshRequest) isMessage() {}
+func (t *DiagnosticRefreshRequest) isRequest() {}
 func (t *DiagnosticRefreshRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -15045,6 +15169,8 @@ type ExecuteCommandRequest struct {
 	Method RequestMethod `json:"method"`
 	Params ExecuteCommandParams `json:"params"`
 }
+func (t *ExecuteCommandRequest) isMessage() {}
+func (t *ExecuteCommandRequest) isRequest() {}
 func (t *ExecuteCommandRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -15077,6 +15203,8 @@ type FoldingRangeRefreshRequest struct {
 	Method RequestMethod `json:"method"`
 	Params any `json:"params"`
 }
+func (t *FoldingRangeRefreshRequest) isMessage() {}
+func (t *FoldingRangeRefreshRequest) isRequest() {}
 func (t *FoldingRangeRefreshRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -15108,6 +15236,8 @@ type InlayHintRefreshRequest struct {
 	Method RequestMethod `json:"method"`
 	Params any `json:"params"`
 }
+func (t *InlayHintRefreshRequest) isMessage() {}
+func (t *InlayHintRefreshRequest) isRequest() {}
 func (t *InlayHintRefreshRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -15139,6 +15269,8 @@ type InlineValueRefreshRequest struct {
 	Method RequestMethod `json:"method"`
 	Params any `json:"params"`
 }
+func (t *InlineValueRefreshRequest) isMessage() {}
+func (t *InlineValueRefreshRequest) isRequest() {}
 func (t *InlineValueRefreshRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -15170,6 +15302,8 @@ type SemanticTokensRefreshRequest struct {
 	Method RequestMethod `json:"method"`
 	Params any `json:"params"`
 }
+func (t *SemanticTokensRefreshRequest) isMessage() {}
+func (t *SemanticTokensRefreshRequest) isRequest() {}
 func (t *SemanticTokensRefreshRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -15208,6 +15342,8 @@ type WorkspaceSymbolRequest struct {
 	Method RequestMethod `json:"method"`
 	Params WorkspaceSymbolParams `json:"params"`
 }
+func (t *WorkspaceSymbolRequest) isMessage() {}
+func (t *WorkspaceSymbolRequest) isRequest() {}
 func (t *WorkspaceSymbolRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -15243,6 +15379,8 @@ type TextDocumentContentRequest struct {
 	Method RequestMethod `json:"method"`
 	Params TextDocumentContentParams `json:"params"`
 }
+func (t *TextDocumentContentRequest) isMessage() {}
+func (t *TextDocumentContentRequest) isRequest() {}
 func (t *TextDocumentContentRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -15278,6 +15416,8 @@ type TextDocumentContentRefreshRequest struct {
 	Method RequestMethod `json:"method"`
 	Params TextDocumentContentRefreshParams `json:"params"`
 }
+func (t *TextDocumentContentRefreshRequest) isMessage() {}
+func (t *TextDocumentContentRefreshRequest) isRequest() {}
 func (t *TextDocumentContentRefreshRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -15316,6 +15456,8 @@ type WillCreateFilesRequest struct {
 	Method RequestMethod `json:"method"`
 	Params CreateFilesParams `json:"params"`
 }
+func (t *WillCreateFilesRequest) isMessage() {}
+func (t *WillCreateFilesRequest) isRequest() {}
 func (t *WillCreateFilesRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -15350,6 +15492,8 @@ type WillDeleteFilesRequest struct {
 	Method RequestMethod `json:"method"`
 	Params DeleteFilesParams `json:"params"`
 }
+func (t *WillDeleteFilesRequest) isMessage() {}
+func (t *WillDeleteFilesRequest) isRequest() {}
 func (t *WillDeleteFilesRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -15384,6 +15528,8 @@ type WillRenameFilesRequest struct {
 	Method RequestMethod `json:"method"`
 	Params RenameFilesParams `json:"params"`
 }
+func (t *WillRenameFilesRequest) isMessage() {}
+func (t *WillRenameFilesRequest) isRequest() {}
 func (t *WillRenameFilesRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -15415,6 +15561,8 @@ type WorkspaceFoldersRequest struct {
 	Method RequestMethod `json:"method"`
 	Params any `json:"params"`
 }
+func (t *WorkspaceFoldersRequest) isMessage() {}
+func (t *WorkspaceFoldersRequest) isRequest() {}
 func (t *WorkspaceFoldersRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -15449,6 +15597,8 @@ type WorkspaceSymbolResolveRequest struct {
 	Method RequestMethod `json:"method"`
 	Params WorkspaceSymbol `json:"params"`
 }
+func (t *WorkspaceSymbolResolveRequest) isMessage() {}
+func (t *WorkspaceSymbolResolveRequest) isRequest() {}
 func (t *WorkspaceSymbolResolveRequest) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -15497,6 +15647,8 @@ func (t *CallHierarchyIncomingCallsResponse) UnmarshalJSON(x []byte) error {
   *t = CallHierarchyIncomingCallsResponse(temp)
    return nil
 }
+func (t *CallHierarchyIncomingCallsResponse) isMessage() {}
+func (t *CallHierarchyIncomingCallsResponse) isResponse() {}
 type CallHierarchyOutgoingCallsResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15521,6 +15673,8 @@ func (t *CallHierarchyOutgoingCallsResponse) UnmarshalJSON(x []byte) error {
   *t = CallHierarchyOutgoingCallsResponse(temp)
    return nil
 }
+func (t *CallHierarchyOutgoingCallsResponse) isMessage() {}
+func (t *CallHierarchyOutgoingCallsResponse) isResponse() {}
 type RegistrationResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15545,6 +15699,8 @@ func (t *RegistrationResponse) UnmarshalJSON(x []byte) error {
   *t = RegistrationResponse(temp)
    return nil
 }
+func (t *RegistrationResponse) isMessage() {}
+func (t *RegistrationResponse) isResponse() {}
 type UnregistrationResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15569,6 +15725,8 @@ func (t *UnregistrationResponse) UnmarshalJSON(x []byte) error {
   *t = UnregistrationResponse(temp)
    return nil
 }
+func (t *UnregistrationResponse) isMessage() {}
+func (t *UnregistrationResponse) isResponse() {}
 type CodeActionResolveResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15593,6 +15751,8 @@ func (t *CodeActionResolveResponse) UnmarshalJSON(x []byte) error {
   *t = CodeActionResolveResponse(temp)
    return nil
 }
+func (t *CodeActionResolveResponse) isMessage() {}
+func (t *CodeActionResolveResponse) isResponse() {}
 type CodeLensResolveResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15617,6 +15777,8 @@ func (t *CodeLensResolveResponse) UnmarshalJSON(x []byte) error {
   *t = CodeLensResolveResponse(temp)
    return nil
 }
+func (t *CodeLensResolveResponse) isMessage() {}
+func (t *CodeLensResolveResponse) isResponse() {}
 type CompletionResolveResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15641,6 +15803,8 @@ func (t *CompletionResolveResponse) UnmarshalJSON(x []byte) error {
   *t = CompletionResolveResponse(temp)
    return nil
 }
+func (t *CompletionResolveResponse) isMessage() {}
+func (t *CompletionResolveResponse) isResponse() {}
 type DocumentLinkResolveResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15665,6 +15829,8 @@ func (t *DocumentLinkResolveResponse) UnmarshalJSON(x []byte) error {
   *t = DocumentLinkResolveResponse(temp)
    return nil
 }
+func (t *DocumentLinkResolveResponse) isMessage() {}
+func (t *DocumentLinkResolveResponse) isResponse() {}
 type InitializeResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15689,6 +15855,8 @@ func (t *InitializeResponse) UnmarshalJSON(x []byte) error {
   *t = InitializeResponse(temp)
    return nil
 }
+func (t *InitializeResponse) isMessage() {}
+func (t *InitializeResponse) isResponse() {}
 type InlayHintResolveResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15713,6 +15881,8 @@ func (t *InlayHintResolveResponse) UnmarshalJSON(x []byte) error {
   *t = InlayHintResolveResponse(temp)
    return nil
 }
+func (t *InlayHintResolveResponse) isMessage() {}
+func (t *InlayHintResolveResponse) isResponse() {}
 type ShutdownResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15737,6 +15907,8 @@ func (t *ShutdownResponse) UnmarshalJSON(x []byte) error {
   *t = ShutdownResponse(temp)
    return nil
 }
+func (t *ShutdownResponse) isMessage() {}
+func (t *ShutdownResponse) isResponse() {}
 type CodeActionResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15761,6 +15933,8 @@ func (t *CodeActionResponse) UnmarshalJSON(x []byte) error {
   *t = CodeActionResponse(temp)
    return nil
 }
+func (t *CodeActionResponse) isMessage() {}
+func (t *CodeActionResponse) isResponse() {}
 type CodeLensResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15785,6 +15959,8 @@ func (t *CodeLensResponse) UnmarshalJSON(x []byte) error {
   *t = CodeLensResponse(temp)
    return nil
 }
+func (t *CodeLensResponse) isMessage() {}
+func (t *CodeLensResponse) isResponse() {}
 type ColorPresentationResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15809,6 +15985,8 @@ func (t *ColorPresentationResponse) UnmarshalJSON(x []byte) error {
   *t = ColorPresentationResponse(temp)
    return nil
 }
+func (t *ColorPresentationResponse) isMessage() {}
+func (t *ColorPresentationResponse) isResponse() {}
 type CompletionResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15833,6 +16011,8 @@ func (t *CompletionResponse) UnmarshalJSON(x []byte) error {
   *t = CompletionResponse(temp)
    return nil
 }
+func (t *CompletionResponse) isMessage() {}
+func (t *CompletionResponse) isResponse() {}
 type DeclarationResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15857,6 +16037,8 @@ func (t *DeclarationResponse) UnmarshalJSON(x []byte) error {
   *t = DeclarationResponse(temp)
    return nil
 }
+func (t *DeclarationResponse) isMessage() {}
+func (t *DeclarationResponse) isResponse() {}
 type DefinitionResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15881,6 +16063,8 @@ func (t *DefinitionResponse) UnmarshalJSON(x []byte) error {
   *t = DefinitionResponse(temp)
    return nil
 }
+func (t *DefinitionResponse) isMessage() {}
+func (t *DefinitionResponse) isResponse() {}
 type DocumentDiagnosticResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15905,6 +16089,8 @@ func (t *DocumentDiagnosticResponse) UnmarshalJSON(x []byte) error {
   *t = DocumentDiagnosticResponse(temp)
    return nil
 }
+func (t *DocumentDiagnosticResponse) isMessage() {}
+func (t *DocumentDiagnosticResponse) isResponse() {}
 type DocumentColorResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15929,6 +16115,8 @@ func (t *DocumentColorResponse) UnmarshalJSON(x []byte) error {
   *t = DocumentColorResponse(temp)
    return nil
 }
+func (t *DocumentColorResponse) isMessage() {}
+func (t *DocumentColorResponse) isResponse() {}
 type DocumentHighlightResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15953,6 +16141,8 @@ func (t *DocumentHighlightResponse) UnmarshalJSON(x []byte) error {
   *t = DocumentHighlightResponse(temp)
    return nil
 }
+func (t *DocumentHighlightResponse) isMessage() {}
+func (t *DocumentHighlightResponse) isResponse() {}
 type DocumentLinkResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -15977,6 +16167,8 @@ func (t *DocumentLinkResponse) UnmarshalJSON(x []byte) error {
   *t = DocumentLinkResponse(temp)
    return nil
 }
+func (t *DocumentLinkResponse) isMessage() {}
+func (t *DocumentLinkResponse) isResponse() {}
 type DocumentSymbolResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16001,6 +16193,8 @@ func (t *DocumentSymbolResponse) UnmarshalJSON(x []byte) error {
   *t = DocumentSymbolResponse(temp)
    return nil
 }
+func (t *DocumentSymbolResponse) isMessage() {}
+func (t *DocumentSymbolResponse) isResponse() {}
 type FoldingRangeResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16025,6 +16219,8 @@ func (t *FoldingRangeResponse) UnmarshalJSON(x []byte) error {
   *t = FoldingRangeResponse(temp)
    return nil
 }
+func (t *FoldingRangeResponse) isMessage() {}
+func (t *FoldingRangeResponse) isResponse() {}
 type DocumentFormattingResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16049,6 +16245,8 @@ func (t *DocumentFormattingResponse) UnmarshalJSON(x []byte) error {
   *t = DocumentFormattingResponse(temp)
    return nil
 }
+func (t *DocumentFormattingResponse) isMessage() {}
+func (t *DocumentFormattingResponse) isResponse() {}
 type HoverResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16073,6 +16271,8 @@ func (t *HoverResponse) UnmarshalJSON(x []byte) error {
   *t = HoverResponse(temp)
    return nil
 }
+func (t *HoverResponse) isMessage() {}
+func (t *HoverResponse) isResponse() {}
 type ImplementationResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16097,6 +16297,8 @@ func (t *ImplementationResponse) UnmarshalJSON(x []byte) error {
   *t = ImplementationResponse(temp)
    return nil
 }
+func (t *ImplementationResponse) isMessage() {}
+func (t *ImplementationResponse) isResponse() {}
 type InlayHintResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16121,6 +16323,8 @@ func (t *InlayHintResponse) UnmarshalJSON(x []byte) error {
   *t = InlayHintResponse(temp)
    return nil
 }
+func (t *InlayHintResponse) isMessage() {}
+func (t *InlayHintResponse) isResponse() {}
 type InlineCompletionResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16145,6 +16349,8 @@ func (t *InlineCompletionResponse) UnmarshalJSON(x []byte) error {
   *t = InlineCompletionResponse(temp)
    return nil
 }
+func (t *InlineCompletionResponse) isMessage() {}
+func (t *InlineCompletionResponse) isResponse() {}
 type InlineValueResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16169,6 +16375,8 @@ func (t *InlineValueResponse) UnmarshalJSON(x []byte) error {
   *t = InlineValueResponse(temp)
    return nil
 }
+func (t *InlineValueResponse) isMessage() {}
+func (t *InlineValueResponse) isResponse() {}
 type LinkedEditingRangeResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16193,6 +16401,8 @@ func (t *LinkedEditingRangeResponse) UnmarshalJSON(x []byte) error {
   *t = LinkedEditingRangeResponse(temp)
    return nil
 }
+func (t *LinkedEditingRangeResponse) isMessage() {}
+func (t *LinkedEditingRangeResponse) isResponse() {}
 type MonikerResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16217,6 +16427,8 @@ func (t *MonikerResponse) UnmarshalJSON(x []byte) error {
   *t = MonikerResponse(temp)
    return nil
 }
+func (t *MonikerResponse) isMessage() {}
+func (t *MonikerResponse) isResponse() {}
 type DocumentOnTypeFormattingResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16241,6 +16453,8 @@ func (t *DocumentOnTypeFormattingResponse) UnmarshalJSON(x []byte) error {
   *t = DocumentOnTypeFormattingResponse(temp)
    return nil
 }
+func (t *DocumentOnTypeFormattingResponse) isMessage() {}
+func (t *DocumentOnTypeFormattingResponse) isResponse() {}
 type CallHierarchyPrepareResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16265,6 +16479,8 @@ func (t *CallHierarchyPrepareResponse) UnmarshalJSON(x []byte) error {
   *t = CallHierarchyPrepareResponse(temp)
    return nil
 }
+func (t *CallHierarchyPrepareResponse) isMessage() {}
+func (t *CallHierarchyPrepareResponse) isResponse() {}
 type PrepareRenameResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16289,6 +16505,8 @@ func (t *PrepareRenameResponse) UnmarshalJSON(x []byte) error {
   *t = PrepareRenameResponse(temp)
    return nil
 }
+func (t *PrepareRenameResponse) isMessage() {}
+func (t *PrepareRenameResponse) isResponse() {}
 type TypeHierarchyPrepareResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16313,6 +16531,8 @@ func (t *TypeHierarchyPrepareResponse) UnmarshalJSON(x []byte) error {
   *t = TypeHierarchyPrepareResponse(temp)
    return nil
 }
+func (t *TypeHierarchyPrepareResponse) isMessage() {}
+func (t *TypeHierarchyPrepareResponse) isResponse() {}
 type DocumentRangeFormattingResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16337,6 +16557,8 @@ func (t *DocumentRangeFormattingResponse) UnmarshalJSON(x []byte) error {
   *t = DocumentRangeFormattingResponse(temp)
    return nil
 }
+func (t *DocumentRangeFormattingResponse) isMessage() {}
+func (t *DocumentRangeFormattingResponse) isResponse() {}
 type DocumentRangesFormattingResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16361,6 +16583,8 @@ func (t *DocumentRangesFormattingResponse) UnmarshalJSON(x []byte) error {
   *t = DocumentRangesFormattingResponse(temp)
    return nil
 }
+func (t *DocumentRangesFormattingResponse) isMessage() {}
+func (t *DocumentRangesFormattingResponse) isResponse() {}
 type ReferencesResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16385,6 +16609,8 @@ func (t *ReferencesResponse) UnmarshalJSON(x []byte) error {
   *t = ReferencesResponse(temp)
    return nil
 }
+func (t *ReferencesResponse) isMessage() {}
+func (t *ReferencesResponse) isResponse() {}
 type RenameResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16409,6 +16635,8 @@ func (t *RenameResponse) UnmarshalJSON(x []byte) error {
   *t = RenameResponse(temp)
    return nil
 }
+func (t *RenameResponse) isMessage() {}
+func (t *RenameResponse) isResponse() {}
 type SelectionRangeResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16433,6 +16661,8 @@ func (t *SelectionRangeResponse) UnmarshalJSON(x []byte) error {
   *t = SelectionRangeResponse(temp)
    return nil
 }
+func (t *SelectionRangeResponse) isMessage() {}
+func (t *SelectionRangeResponse) isResponse() {}
 type SemanticTokensResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16457,6 +16687,8 @@ func (t *SemanticTokensResponse) UnmarshalJSON(x []byte) error {
   *t = SemanticTokensResponse(temp)
    return nil
 }
+func (t *SemanticTokensResponse) isMessage() {}
+func (t *SemanticTokensResponse) isResponse() {}
 type SemanticTokensDeltaResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16481,6 +16713,8 @@ func (t *SemanticTokensDeltaResponse) UnmarshalJSON(x []byte) error {
   *t = SemanticTokensDeltaResponse(temp)
    return nil
 }
+func (t *SemanticTokensDeltaResponse) isMessage() {}
+func (t *SemanticTokensDeltaResponse) isResponse() {}
 type SemanticTokensRangeResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16505,6 +16739,8 @@ func (t *SemanticTokensRangeResponse) UnmarshalJSON(x []byte) error {
   *t = SemanticTokensRangeResponse(temp)
    return nil
 }
+func (t *SemanticTokensRangeResponse) isMessage() {}
+func (t *SemanticTokensRangeResponse) isResponse() {}
 type SignatureHelpResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16529,6 +16765,8 @@ func (t *SignatureHelpResponse) UnmarshalJSON(x []byte) error {
   *t = SignatureHelpResponse(temp)
    return nil
 }
+func (t *SignatureHelpResponse) isMessage() {}
+func (t *SignatureHelpResponse) isResponse() {}
 type TypeDefinitionResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16553,6 +16791,8 @@ func (t *TypeDefinitionResponse) UnmarshalJSON(x []byte) error {
   *t = TypeDefinitionResponse(temp)
    return nil
 }
+func (t *TypeDefinitionResponse) isMessage() {}
+func (t *TypeDefinitionResponse) isResponse() {}
 type WillSaveTextDocumentWaitUntilResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16577,6 +16817,8 @@ func (t *WillSaveTextDocumentWaitUntilResponse) UnmarshalJSON(x []byte) error {
   *t = WillSaveTextDocumentWaitUntilResponse(temp)
    return nil
 }
+func (t *WillSaveTextDocumentWaitUntilResponse) isMessage() {}
+func (t *WillSaveTextDocumentWaitUntilResponse) isResponse() {}
 type TypeHierarchySubtypesResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16601,6 +16843,8 @@ func (t *TypeHierarchySubtypesResponse) UnmarshalJSON(x []byte) error {
   *t = TypeHierarchySubtypesResponse(temp)
    return nil
 }
+func (t *TypeHierarchySubtypesResponse) isMessage() {}
+func (t *TypeHierarchySubtypesResponse) isResponse() {}
 type TypeHierarchySupertypesResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16625,6 +16869,8 @@ func (t *TypeHierarchySupertypesResponse) UnmarshalJSON(x []byte) error {
   *t = TypeHierarchySupertypesResponse(temp)
    return nil
 }
+func (t *TypeHierarchySupertypesResponse) isMessage() {}
+func (t *TypeHierarchySupertypesResponse) isResponse() {}
 type ShowDocumentResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16649,6 +16895,8 @@ func (t *ShowDocumentResponse) UnmarshalJSON(x []byte) error {
   *t = ShowDocumentResponse(temp)
    return nil
 }
+func (t *ShowDocumentResponse) isMessage() {}
+func (t *ShowDocumentResponse) isResponse() {}
 type ShowMessageResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16673,6 +16921,8 @@ func (t *ShowMessageResponse) UnmarshalJSON(x []byte) error {
   *t = ShowMessageResponse(temp)
    return nil
 }
+func (t *ShowMessageResponse) isMessage() {}
+func (t *ShowMessageResponse) isResponse() {}
 type WorkDoneProgressCreateResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16697,6 +16947,8 @@ func (t *WorkDoneProgressCreateResponse) UnmarshalJSON(x []byte) error {
   *t = WorkDoneProgressCreateResponse(temp)
    return nil
 }
+func (t *WorkDoneProgressCreateResponse) isMessage() {}
+func (t *WorkDoneProgressCreateResponse) isResponse() {}
 type ApplyWorkspaceEditResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16721,6 +16973,8 @@ func (t *ApplyWorkspaceEditResponse) UnmarshalJSON(x []byte) error {
   *t = ApplyWorkspaceEditResponse(temp)
    return nil
 }
+func (t *ApplyWorkspaceEditResponse) isMessage() {}
+func (t *ApplyWorkspaceEditResponse) isResponse() {}
 type CodeLensRefreshResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16745,6 +16999,8 @@ func (t *CodeLensRefreshResponse) UnmarshalJSON(x []byte) error {
   *t = CodeLensRefreshResponse(temp)
    return nil
 }
+func (t *CodeLensRefreshResponse) isMessage() {}
+func (t *CodeLensRefreshResponse) isResponse() {}
 type ConfigurationResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16769,6 +17025,8 @@ func (t *ConfigurationResponse) UnmarshalJSON(x []byte) error {
   *t = ConfigurationResponse(temp)
    return nil
 }
+func (t *ConfigurationResponse) isMessage() {}
+func (t *ConfigurationResponse) isResponse() {}
 type WorkspaceDiagnosticResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16793,6 +17051,8 @@ func (t *WorkspaceDiagnosticResponse) UnmarshalJSON(x []byte) error {
   *t = WorkspaceDiagnosticResponse(temp)
    return nil
 }
+func (t *WorkspaceDiagnosticResponse) isMessage() {}
+func (t *WorkspaceDiagnosticResponse) isResponse() {}
 type DiagnosticRefreshResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16817,6 +17077,8 @@ func (t *DiagnosticRefreshResponse) UnmarshalJSON(x []byte) error {
   *t = DiagnosticRefreshResponse(temp)
    return nil
 }
+func (t *DiagnosticRefreshResponse) isMessage() {}
+func (t *DiagnosticRefreshResponse) isResponse() {}
 type ExecuteCommandResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16841,6 +17103,8 @@ func (t *ExecuteCommandResponse) UnmarshalJSON(x []byte) error {
   *t = ExecuteCommandResponse(temp)
    return nil
 }
+func (t *ExecuteCommandResponse) isMessage() {}
+func (t *ExecuteCommandResponse) isResponse() {}
 type FoldingRangeRefreshResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16865,6 +17129,8 @@ func (t *FoldingRangeRefreshResponse) UnmarshalJSON(x []byte) error {
   *t = FoldingRangeRefreshResponse(temp)
    return nil
 }
+func (t *FoldingRangeRefreshResponse) isMessage() {}
+func (t *FoldingRangeRefreshResponse) isResponse() {}
 type InlayHintRefreshResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16889,6 +17155,8 @@ func (t *InlayHintRefreshResponse) UnmarshalJSON(x []byte) error {
   *t = InlayHintRefreshResponse(temp)
    return nil
 }
+func (t *InlayHintRefreshResponse) isMessage() {}
+func (t *InlayHintRefreshResponse) isResponse() {}
 type InlineValueRefreshResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16913,6 +17181,8 @@ func (t *InlineValueRefreshResponse) UnmarshalJSON(x []byte) error {
   *t = InlineValueRefreshResponse(temp)
    return nil
 }
+func (t *InlineValueRefreshResponse) isMessage() {}
+func (t *InlineValueRefreshResponse) isResponse() {}
 type SemanticTokensRefreshResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16937,6 +17207,8 @@ func (t *SemanticTokensRefreshResponse) UnmarshalJSON(x []byte) error {
   *t = SemanticTokensRefreshResponse(temp)
    return nil
 }
+func (t *SemanticTokensRefreshResponse) isMessage() {}
+func (t *SemanticTokensRefreshResponse) isResponse() {}
 type WorkspaceSymbolResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16961,6 +17233,8 @@ func (t *WorkspaceSymbolResponse) UnmarshalJSON(x []byte) error {
   *t = WorkspaceSymbolResponse(temp)
    return nil
 }
+func (t *WorkspaceSymbolResponse) isMessage() {}
+func (t *WorkspaceSymbolResponse) isResponse() {}
 type TextDocumentContentResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -16985,6 +17259,8 @@ func (t *TextDocumentContentResponse) UnmarshalJSON(x []byte) error {
   *t = TextDocumentContentResponse(temp)
    return nil
 }
+func (t *TextDocumentContentResponse) isMessage() {}
+func (t *TextDocumentContentResponse) isResponse() {}
 type TextDocumentContentRefreshResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -17009,6 +17285,8 @@ func (t *TextDocumentContentRefreshResponse) UnmarshalJSON(x []byte) error {
   *t = TextDocumentContentRefreshResponse(temp)
    return nil
 }
+func (t *TextDocumentContentRefreshResponse) isMessage() {}
+func (t *TextDocumentContentRefreshResponse) isResponse() {}
 type WillCreateFilesResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -17033,6 +17311,8 @@ func (t *WillCreateFilesResponse) UnmarshalJSON(x []byte) error {
   *t = WillCreateFilesResponse(temp)
    return nil
 }
+func (t *WillCreateFilesResponse) isMessage() {}
+func (t *WillCreateFilesResponse) isResponse() {}
 type WillDeleteFilesResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -17057,6 +17337,8 @@ func (t *WillDeleteFilesResponse) UnmarshalJSON(x []byte) error {
   *t = WillDeleteFilesResponse(temp)
    return nil
 }
+func (t *WillDeleteFilesResponse) isMessage() {}
+func (t *WillDeleteFilesResponse) isResponse() {}
 type WillRenameFilesResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -17081,6 +17363,8 @@ func (t *WillRenameFilesResponse) UnmarshalJSON(x []byte) error {
   *t = WillRenameFilesResponse(temp)
    return nil
 }
+func (t *WillRenameFilesResponse) isMessage() {}
+func (t *WillRenameFilesResponse) isResponse() {}
 type WorkspaceFoldersResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -17105,6 +17389,8 @@ func (t *WorkspaceFoldersResponse) UnmarshalJSON(x []byte) error {
   *t = WorkspaceFoldersResponse(temp)
    return nil
 }
+func (t *WorkspaceFoldersResponse) isMessage() {}
+func (t *WorkspaceFoldersResponse) isResponse() {}
 type WorkspaceSymbolResolveResponse struct {
 	JsonRPC string `json:"jsonrpc"`
 	Id Or2[int32, string] `json:"id"`
@@ -17129,6 +17415,8 @@ func (t *WorkspaceSymbolResolveResponse) UnmarshalJSON(x []byte) error {
   *t = WorkspaceSymbolResolveResponse(temp)
    return nil
 }
+func (t *WorkspaceSymbolResolveResponse) isMessage() {}
+func (t *WorkspaceSymbolResolveResponse) isResponse() {}
 type NotificationMethod string
 
 const (
@@ -17196,6 +17484,8 @@ type CancelNotification struct {
 	Method string `json:"method"`
 	Params CancelParams `json:"params"`
 }
+func (t *CancelNotification) isMessage() {}
+func (t *CancelNotification) isNotification() {}
 func (t *CancelNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17223,6 +17513,8 @@ type LogTraceNotification struct {
 	Method string `json:"method"`
 	Params LogTraceParams `json:"params"`
 }
+func (t *LogTraceNotification) isMessage() {}
+func (t *LogTraceNotification) isNotification() {}
 func (t *LogTraceNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17250,6 +17542,8 @@ type ProgressNotification struct {
 	Method string `json:"method"`
 	Params ProgressParams `json:"params"`
 }
+func (t *ProgressNotification) isMessage() {}
+func (t *ProgressNotification) isNotification() {}
 func (t *ProgressNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17277,6 +17571,8 @@ type SetTraceNotification struct {
 	Method string `json:"method"`
 	Params SetTraceParams `json:"params"`
 }
+func (t *SetTraceNotification) isMessage() {}
+func (t *SetTraceNotification) isNotification() {}
 func (t *SetTraceNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17305,6 +17601,8 @@ type ExitNotification struct {
 	Method string `json:"method"`
 	Params any `json:"params"`
 }
+func (t *ExitNotification) isMessage() {}
+func (t *ExitNotification) isNotification() {}
 func (t *ExitNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17334,6 +17632,8 @@ type InitializedNotification struct {
 	Method string `json:"method"`
 	Params InitializedParams `json:"params"`
 }
+func (t *InitializedNotification) isMessage() {}
+func (t *InitializedNotification) isNotification() {}
 func (t *InitializedNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17361,6 +17661,8 @@ type DidChangeNotebookDocumentNotification struct {
 	Method string `json:"method"`
 	Params DidChangeNotebookDocumentParams `json:"params"`
 }
+func (t *DidChangeNotebookDocumentNotification) isMessage() {}
+func (t *DidChangeNotebookDocumentNotification) isNotification() {}
 func (t *DidChangeNotebookDocumentNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17390,6 +17692,8 @@ type DidCloseNotebookDocumentNotification struct {
 	Method string `json:"method"`
 	Params DidCloseNotebookDocumentParams `json:"params"`
 }
+func (t *DidCloseNotebookDocumentNotification) isMessage() {}
+func (t *DidCloseNotebookDocumentNotification) isNotification() {}
 func (t *DidCloseNotebookDocumentNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17419,6 +17723,8 @@ type DidOpenNotebookDocumentNotification struct {
 	Method string `json:"method"`
 	Params DidOpenNotebookDocumentParams `json:"params"`
 }
+func (t *DidOpenNotebookDocumentNotification) isMessage() {}
+func (t *DidOpenNotebookDocumentNotification) isNotification() {}
 func (t *DidOpenNotebookDocumentNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17448,6 +17754,8 @@ type DidSaveNotebookDocumentNotification struct {
 	Method string `json:"method"`
 	Params DidSaveNotebookDocumentParams `json:"params"`
 }
+func (t *DidSaveNotebookDocumentNotification) isMessage() {}
+func (t *DidSaveNotebookDocumentNotification) isNotification() {}
 func (t *DidSaveNotebookDocumentNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17476,6 +17784,8 @@ type TelemetryEventNotification struct {
 	Method string `json:"method"`
 	Params any `json:"params"`
 }
+func (t *TelemetryEventNotification) isMessage() {}
+func (t *TelemetryEventNotification) isNotification() {}
 func (t *TelemetryEventNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17504,6 +17814,8 @@ type DidChangeTextDocumentNotification struct {
 	Method string `json:"method"`
 	Params DidChangeTextDocumentParams `json:"params"`
 }
+func (t *DidChangeTextDocumentNotification) isMessage() {}
+func (t *DidChangeTextDocumentNotification) isNotification() {}
 func (t *DidChangeTextDocumentNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17537,6 +17849,8 @@ type DidCloseTextDocumentNotification struct {
 	Method string `json:"method"`
 	Params DidCloseTextDocumentParams `json:"params"`
 }
+func (t *DidCloseTextDocumentNotification) isMessage() {}
+func (t *DidCloseTextDocumentNotification) isNotification() {}
 func (t *DidCloseTextDocumentNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17571,6 +17885,8 @@ type DidOpenTextDocumentNotification struct {
 	Method string `json:"method"`
 	Params DidOpenTextDocumentParams `json:"params"`
 }
+func (t *DidOpenTextDocumentNotification) isMessage() {}
+func (t *DidOpenTextDocumentNotification) isNotification() {}
 func (t *DidOpenTextDocumentNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17599,6 +17915,8 @@ type DidSaveTextDocumentNotification struct {
 	Method string `json:"method"`
 	Params DidSaveTextDocumentParams `json:"params"`
 }
+func (t *DidSaveTextDocumentNotification) isMessage() {}
+func (t *DidSaveTextDocumentNotification) isNotification() {}
 func (t *DidSaveTextDocumentNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17627,6 +17945,8 @@ type PublishDiagnosticsNotification struct {
 	Method string `json:"method"`
 	Params PublishDiagnosticsParams `json:"params"`
 }
+func (t *PublishDiagnosticsNotification) isMessage() {}
+func (t *PublishDiagnosticsNotification) isNotification() {}
 func (t *PublishDiagnosticsNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17655,6 +17975,8 @@ type WillSaveTextDocumentNotification struct {
 	Method string `json:"method"`
 	Params WillSaveTextDocumentParams `json:"params"`
 }
+func (t *WillSaveTextDocumentNotification) isMessage() {}
+func (t *WillSaveTextDocumentNotification) isNotification() {}
 func (t *WillSaveTextDocumentNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17683,6 +18005,8 @@ type LogMessageNotification struct {
 	Method string `json:"method"`
 	Params LogMessageParams `json:"params"`
 }
+func (t *LogMessageNotification) isMessage() {}
+func (t *LogMessageNotification) isNotification() {}
 func (t *LogMessageNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17711,6 +18035,8 @@ type ShowMessageNotification struct {
 	Method string `json:"method"`
 	Params ShowMessageParams `json:"params"`
 }
+func (t *ShowMessageNotification) isMessage() {}
+func (t *ShowMessageNotification) isNotification() {}
 func (t *ShowMessageNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17739,6 +18065,8 @@ type WorkDoneProgressCancelNotification struct {
 	Method string `json:"method"`
 	Params WorkDoneProgressCancelParams `json:"params"`
 }
+func (t *WorkDoneProgressCancelNotification) isMessage() {}
+func (t *WorkDoneProgressCancelNotification) isNotification() {}
 func (t *WorkDoneProgressCancelNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17768,6 +18096,8 @@ type DidChangeConfigurationNotification struct {
 	Method string `json:"method"`
 	Params DidChangeConfigurationParams `json:"params"`
 }
+func (t *DidChangeConfigurationNotification) isMessage() {}
+func (t *DidChangeConfigurationNotification) isNotification() {}
 func (t *DidChangeConfigurationNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17796,6 +18126,8 @@ type DidChangeWatchedFilesNotification struct {
 	Method string `json:"method"`
 	Params DidChangeWatchedFilesParams `json:"params"`
 }
+func (t *DidChangeWatchedFilesNotification) isMessage() {}
+func (t *DidChangeWatchedFilesNotification) isNotification() {}
 func (t *DidChangeWatchedFilesNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17824,6 +18156,8 @@ type DidChangeWorkspaceFoldersNotification struct {
 	Method string `json:"method"`
 	Params DidChangeWorkspaceFoldersParams `json:"params"`
 }
+func (t *DidChangeWorkspaceFoldersNotification) isMessage() {}
+func (t *DidChangeWorkspaceFoldersNotification) isNotification() {}
 func (t *DidChangeWorkspaceFoldersNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17854,6 +18188,8 @@ type DidCreateFilesNotification struct {
 	Method string `json:"method"`
 	Params CreateFilesParams `json:"params"`
 }
+func (t *DidCreateFilesNotification) isMessage() {}
+func (t *DidCreateFilesNotification) isNotification() {}
 func (t *DidCreateFilesNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17884,6 +18220,8 @@ type DidDeleteFilesNotification struct {
 	Method string `json:"method"`
 	Params DeleteFilesParams `json:"params"`
 }
+func (t *DidDeleteFilesNotification) isMessage() {}
+func (t *DidDeleteFilesNotification) isNotification() {}
 func (t *DidDeleteFilesNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17914,6 +18252,8 @@ type DidRenameFilesNotification struct {
 	Method string `json:"method"`
 	Params RenameFilesParams `json:"params"`
 }
+func (t *DidRenameFilesNotification) isMessage() {}
+func (t *DidRenameFilesNotification) isNotification() {}
 func (t *DidRenameFilesNotification) UnmarshalJSON(x []byte) error {
    var m map[string]any
    if err := json.Unmarshal(x, &m); err != nil {
@@ -17948,7 +18288,7 @@ const (
 )
 func (t ApplyKind) validate() error {
 	switch t {
-	case 2,1:
+	case 1,2:
 	return nil
 	}
 	return fmt.Errorf("invalid ApplyKind: %v", t)
@@ -18033,7 +18373,7 @@ const (
 )
 func (t CodeActionTriggerKind) validate() error {
 	switch t {
-	case 2,1:
+	case 1,2:
 	return nil
 	}
 	return fmt.Errorf("invalid CodeActionTriggerKind: %v", t)
@@ -18089,7 +18429,7 @@ const (
 )
 func (t CompletionItemKind) validate() error {
 	switch t {
-	case 22,14,17,21,11,18,5,7,24,4,8,13,1,25,9,6,19,3,16,23,10,12,20,2,15:
+	case 21,15,6,19,22,10,16,17,12,11,7,14,13,20,8,4,2,18,1,5,25,23,9,3,24:
 	return nil
 	}
 	return fmt.Errorf("invalid CompletionItemKind: %v", t)
@@ -18158,7 +18498,7 @@ const (
 )
 func (t CompletionTriggerKind) validate() error {
 	switch t {
-	case 2,1,3:
+	case 1,2,3:
 	return nil
 	}
 	return fmt.Errorf("invalid CompletionTriggerKind: %v", t)
@@ -18193,7 +18533,7 @@ const (
 )
 func (t DiagnosticSeverity) validate() error {
 	switch t {
-	case 2,1,4,3:
+	case 1,2,4,3:
 	return nil
 	}
 	return fmt.Errorf("invalid DiagnosticSeverity: %v", t)
@@ -18228,7 +18568,7 @@ const (
 )
 func (t DiagnosticTag) validate() error {
 	switch t {
-	case 2,1:
+	case 1,2:
 	return nil
 	}
 	return fmt.Errorf("invalid DiagnosticTag: %v", t)
@@ -18297,7 +18637,7 @@ const (
 )
 func (t DocumentHighlightKind) validate() error {
 	switch t {
-	case 2,1,3:
+	case 1,2,3:
 	return nil
 	}
 	return fmt.Errorf("invalid DocumentHighlightKind: %v", t)
@@ -18343,7 +18683,7 @@ const (
 )
 func (t FailureHandlingKind) validate() error {
 	switch t {
-	case "abort","undo","transactional","textOnlyTransactional":
+	case "textOnlyTransactional","undo","transactional","abort":
 	return nil
 	}
 	return fmt.Errorf("invalid FailureHandlingKind: %v", t)
@@ -18377,7 +18717,7 @@ const (
 )
 func (t FileChangeType) validate() error {
 	switch t {
-	case 2,1,3:
+	case 1,2,3:
 	return nil
 	}
 	return fmt.Errorf("invalid FileChangeType: %v", t)
@@ -18413,7 +18753,7 @@ const (
 )
 func (t FileOperationPatternKind) validate() error {
 	switch t {
-	case "file","folder":
+	case "folder","file":
 	return nil
 	}
 	return fmt.Errorf("invalid FileOperationPatternKind: %v", t)
@@ -18456,7 +18796,7 @@ const (
 )
 func (t InlayHintKind) validate() error {
 	switch t {
-	case 2,1:
+	case 1,2:
 	return nil
 	}
 	return fmt.Errorf("invalid InlayHintKind: %v", t)
@@ -18492,7 +18832,7 @@ const (
 )
 func (t InlineCompletionTriggerKind) validate() error {
 	switch t {
-	case 2,1:
+	case 1,2:
 	return nil
 	}
 	return fmt.Errorf("invalid InlineCompletionTriggerKind: %v", t)
@@ -18526,7 +18866,7 @@ const (
 )
 func (t InsertTextFormat) validate() error {
 	switch t {
-	case 2,1:
+	case 1,2:
 	return nil
 	}
 	return fmt.Errorf("invalid InsertTextFormat: %v", t)
@@ -18562,7 +18902,7 @@ const (
 )
 func (t InsertTextMode) validate() error {
 	switch t {
-	case 2,1:
+	case 1,2:
 	return nil
 	}
 	return fmt.Errorf("invalid InsertTextMode: %v", t)
@@ -18710,7 +19050,7 @@ const (
 )
 func (t MessageType) validate() error {
 	switch t {
-	case 3,5,1,2,4:
+	case 1,5,4,3,2:
 	return nil
 	}
 	return fmt.Errorf("invalid MessageType: %v", t)
@@ -18746,7 +19086,7 @@ const (
 )
 func (t MonikerKind) validate() error {
 	switch t {
-	case "export","import","local":
+	case "local","import","export":
 	return nil
 	}
 	return fmt.Errorf("invalid MonikerKind: %v", t)
@@ -18781,7 +19121,7 @@ const (
 )
 func (t NotebookCellKind) validate() error {
 	switch t {
-	case 2,1:
+	case 1,2:
 	return nil
 	}
 	return fmt.Errorf("invalid NotebookCellKind: %v", t)
@@ -18855,7 +19195,7 @@ const (
 )
 func (t ResourceOperationKind) validate() error {
 	switch t {
-	case "rename","delete","create":
+	case "create","rename","delete":
 	return nil
 	}
 	return fmt.Errorf("invalid ResourceOperationKind: %v", t)
@@ -18943,7 +19283,7 @@ const (
 )
 func (t SignatureHelpTriggerKind) validate() error {
 	switch t {
-	case 2,1,3:
+	case 1,2,3:
 	return nil
 	}
 	return fmt.Errorf("invalid SignatureHelpTriggerKind: %v", t)
@@ -19000,7 +19340,7 @@ const (
 )
 func (t SymbolKind) validate() error {
 	switch t {
-	case 22,14,17,21,11,18,5,7,24,4,8,13,1,25,9,6,19,3,16,23,10,12,20,2,15,26:
+	case 21,15,6,19,22,10,16,17,12,11,7,14,26,13,20,8,4,2,18,1,5,25,23,9,3,24:
 	return nil
 	}
 	return fmt.Errorf("invalid SymbolKind: %v", t)
@@ -19068,7 +19408,7 @@ const (
 )
 func (t TextDocumentSaveReason) validate() error {
 	switch t {
-	case 2,1,3:
+	case 1,2,3:
 	return nil
 	}
 	return fmt.Errorf("invalid TextDocumentSaveReason: %v", t)
@@ -19103,7 +19443,7 @@ const (
 )
 func (t TextDocumentSyncKind) validate() error {
 	switch t {
-	case 2,0,1:
+	case 0,1,2:
 	return nil
 	}
 	return fmt.Errorf("invalid TextDocumentSyncKind: %v", t)
@@ -19205,7 +19545,7 @@ const (
 )
 func (t UniquenessLevel) validate() error {
 	switch t {
-	case "project","document","global","scheme","group":
+	case "document","global","scheme","project","group":
 	return nil
 	}
 	return fmt.Errorf("invalid UniquenessLevel: %v", t)

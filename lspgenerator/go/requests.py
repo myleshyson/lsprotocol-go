@@ -50,6 +50,8 @@ def generate_requests(
 		]
 
 		struct.append("}")
+		struct.append(f"func (t *{request.typeName}) isMessage() {{}}")
+		struct.append(f"func (t *{request.typeName}) isRequest() {{}}")
 		struct += [
 			f"func (t *{request.typeName}) UnmarshalJSON(x []byte) error {{",
 			"   var m map[string]any",
@@ -117,5 +119,7 @@ def generate_requests(
 			"   return nil",
 			"}",
 		]
+		struct.append(f"func (t *{response_name}) isMessage() {{}}")
+		struct.append(f"func (t *{response_name}) isResponse() {{}}")
 		result.append(join(struct))
 	return result

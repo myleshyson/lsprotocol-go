@@ -110,12 +110,30 @@ def generate_base_types(
 		),
 	)
 	result.append(
-		"\n".join(
+		join(
 			[
 				"type ResponseError struct {",
 				'\tCode int32 `json:"code"`',
 				'\tMessage string `json:"message"`',
 				'\tData any `json:"data,omitempty"`',
+				"}",
+			],
+		),
+	)
+	result.append(
+		join(
+			[
+				"type Message interface {",
+				"	isMessage()",
+				"}",
+				"type Request interface {",
+				"	isRequest()",
+				"}",
+				"type Notification interface {",
+				"	isNotification()",
+				"}",
+				"type Response interface {",
+				"	isResponse()",
 				"}",
 			],
 		),
