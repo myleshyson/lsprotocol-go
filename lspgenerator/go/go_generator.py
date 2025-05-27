@@ -8,6 +8,7 @@ from .base_types import generate_base_types
 from .enums import generate_enums
 from .notifications import generate_notifications
 from .or_types import generate_or_types
+from .registry import generate_registry
 from .requests import generate_requests
 from .structs import generate_structs
 from .tests import generate_tests
@@ -40,6 +41,7 @@ def generate_from_spec(
 			+ or_types,
 		),
 		"types_test.go": generate_tests(spec),
+		"registry.go": generate_registry(spec),
 	}
 	output_path = pathlib.Path(output_dir)
 	test_path = pathlib.Path(test_dir)
