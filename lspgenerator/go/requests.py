@@ -14,21 +14,19 @@ def generate_requests(
 ) -> list[str]:
 	requests = sorted(spec.requests, key=lambda x: x.method)
 
-	result = [
-		"type RequestMethod string\n",
-	]
+	result = []
 	constants = "const (\n"
-	constants += '\tUnknownRequestMethod RequestMethod = ""\n'
+	constants += '\tUnknownRequestMethod MethodKind = ""\n'
 
 	for request in requests:
 		camel_case_method = method_to_camel_case(request.method)
 		constants += (
-			f'\t{camel_case_method}Method RequestMethod = "{request.method}"\n'
+			f'\t{camel_case_method}Method MethodKind = "{request.method}"\n'
 		)
 	constants += ")\n"
 	result.append(constants)
 
-	result.append("var RequestMethodMap = map[string]RequestMethod{")
+	result.append("var RequestMethodMap = map[string]MethodKind{")
 	for request in requests:
 		camel_case_method = method_to_camel_case(request.method)
 		result.append(
@@ -45,13 +43,19 @@ def generate_requests(
 			f"type {request.typeName} struct {{",
 			'\tJsonRPC string `json:"jsonrpc"`',
 			'\tID Or2[string, int32] `json:"id"`',
-			'\tMethod RequestMethod `json:"method"`',
+			'\tMethod MethodKind `json:"method"`',
 			f'\tParams {param_type} `json:"params"`',
 		]
 
 		struct.append("}")
 		struct.append(f"func (t {request.typeName}) isMessage() {{}}")
 		struct.append(f"func (t {request.typeName}) isRequest() {{}}")
+		struct.append(
+			f"func (t {request.typeName}) GetMethod() MethodKind {{ return t.Method }}",
+		)
+		struct.append(
+			f"func (t {request.typeName}) GetParams() {param_type} {{ return t.Params }}",
+		)
 		struct += [
 			f"func (t *{request.typeName}) UnmarshalJSON(x []byte) error {{",
 			"   var m map[string]any",
