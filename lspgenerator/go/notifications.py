@@ -46,6 +46,10 @@ def generate_notifications(
 			f'\tParams {param_type} `json:"params"`',
 		]
 		struct.append("}")
+		struct.append(f"func (t *{notification.typeName}) isMessage() {{}}")
+		struct.append(
+			f"func (t *{notification.typeName}) isNotification() {{}}"
+		)
 		struct += [
 			f"func (t *{notification.typeName}) UnmarshalJSON(x []byte) error {{",
 			"   var m map[string]any",
