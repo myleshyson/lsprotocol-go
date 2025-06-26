@@ -56,7 +56,7 @@ def generate_enums(
 					"	if err := t.validate(); err != nil {",
 					"		return nil, err",
 					"	}",
-					"	return json.Marshal(t)",
+					"	return json.Marshal(string(*t))",
 					"}",
 				],
 			)
