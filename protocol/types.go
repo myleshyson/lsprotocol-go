@@ -19688,7 +19688,7 @@ func (t *TokenFormat) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(string(*t))
 }
 type TraceValue string
 const (
