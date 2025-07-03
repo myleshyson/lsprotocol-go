@@ -6173,7 +6173,7 @@ type InitializeParams struct {
 	// if no folder is open.
 	// 
 	// @deprecated in favour of rootUri.
-	RootPath **string `json:"rootPath,omitzero"`
+	RootPath *string `json:"rootPath,omitzero"`
 	// The rootUri of the workspace. Is null if no
 	// folder is open. If both `rootPath` and `rootUri` are set
 	// `rootUri` wins.
@@ -10274,7 +10274,7 @@ type SignatureHelp struct {
 	// In future version of the protocol this property might become
 	// mandatory (but still nullable) to better express the active parameter if
 	// the active signature does have any.
-	ActiveParameter **uint32 `json:"activeParameter,omitzero"`
+	ActiveParameter *uint32 `json:"activeParameter,omitzero"`
 	// The active signature. If omitted or the value lies outside the
 	// range of `signatures` the value defaults to zero or is ignored if
 	// the `SignatureHelp` has no signatures.
@@ -10500,7 +10500,7 @@ type SignatureInformation struct {
 	// `SignatureHelp.activeParameter`.
 	// 
 	// @since 3.16.0
-	ActiveParameter **uint32 `json:"activeParameter,omitzero"`
+	ActiveParameter *uint32 `json:"activeParameter,omitzero"`
 	// The human-readable doc-comment of this signature. Will be shown
 	// in the UI but can be omitted.
 	Documentation *Or2[string, MarkupContent] `json:"documentation,omitzero"`
@@ -13012,7 +13012,7 @@ type _InitializeParams struct {
 	// if no folder is open.
 	// 
 	// @deprecated in favour of rootUri.
-	RootPath **string `json:"rootPath,omitzero"`
+	RootPath *string `json:"rootPath,omitzero"`
 	// The rootUri of the workspace. Is null if no
 	// folder is open. If both `rootPath` and `rootUri` are set
 	// `rootUri` wins.
@@ -18620,7 +18620,7 @@ const (
 )
 func (t CompletionItemKind) validate() error {
 	switch t {
-	case 11,12,18,2,17,24,7,8,3,10,1,5,4,15,14,25,13,9,22,21,20,19,16,23,6:
+	case 25,11,3,7,19,5,10,16,23,14,24,17,18,6,8,9,20,2,22,4,21,15,12,1,13:
 	return nil
 	}
 	return fmt.Errorf("invalid CompletionItemKind: %v", t)
@@ -18794,7 +18794,7 @@ const (
 )
 func (t DocumentDiagnosticReportKind) validate() error {
 	switch t {
-	case "full","unchanged":
+	case "unchanged","full":
 	return nil
 	}
 	return fmt.Errorf("invalid DocumentDiagnosticReportKind: %v", t)
@@ -18874,7 +18874,7 @@ const (
 )
 func (t FailureHandlingKind) validate() error {
 	switch t {
-	case "undo","abort","textOnlyTransactional","transactional":
+	case "abort","undo","transactional","textOnlyTransactional":
 	return nil
 	}
 	return fmt.Errorf("invalid FailureHandlingKind: %v", t)
@@ -19241,7 +19241,7 @@ const (
 )
 func (t MessageType) validate() error {
 	switch t {
-	case 3,2,1,5,4:
+	case 3,2,5,1,4:
 	return nil
 	}
 	return fmt.Errorf("invalid MessageType: %v", t)
@@ -19277,7 +19277,7 @@ const (
 )
 func (t MonikerKind) validate() error {
 	switch t {
-	case "import","export","local":
+	case "local","import","export":
 	return nil
 	}
 	return fmt.Errorf("invalid MonikerKind: %v", t)
@@ -19386,7 +19386,7 @@ const (
 )
 func (t ResourceOperationKind) validate() error {
 	switch t {
-	case "rename","delete","create":
+	case "delete","create","rename":
 	return nil
 	}
 	return fmt.Errorf("invalid ResourceOperationKind: %v", t)
@@ -19531,7 +19531,7 @@ const (
 )
 func (t SymbolKind) validate() error {
 	switch t {
-	case 11,12,18,2,26,17,24,7,8,3,10,1,5,4,25,14,15,13,9,22,21,20,19,16,23,6:
+	case 25,11,3,7,19,5,10,16,23,14,24,17,18,6,8,9,20,26,2,22,4,21,12,15,1,13:
 	return nil
 	}
 	return fmt.Errorf("invalid SymbolKind: %v", t)
@@ -19634,7 +19634,7 @@ const (
 )
 func (t TextDocumentSyncKind) validate() error {
 	switch t {
-	case 0,2,1:
+	case 2,0,1:
 	return nil
 	}
 	return fmt.Errorf("invalid TextDocumentSyncKind: %v", t)
@@ -19698,7 +19698,7 @@ const (
 )
 func (t TraceValue) validate() error {
 	switch t {
-	case "off","messages","verbose":
+	case "off","verbose","messages":
 	return nil
 	}
 	return fmt.Errorf("invalid TraceValue: %v", t)
@@ -19736,7 +19736,7 @@ const (
 )
 func (t UniquenessLevel) validate() error {
 	switch t {
-	case "scheme","group","global","project","document":
+	case "group","document","scheme","global","project":
 	return nil
 	}
 	return fmt.Errorf("invalid UniquenessLevel: %v", t)

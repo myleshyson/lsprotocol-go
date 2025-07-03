@@ -60,7 +60,11 @@ def generate_structs(
 				struct.name,
 			)
 
-			property_type = f"*{property_type}" if is_pointer else property_type
+			property_type = (
+				f"*{property_type}"
+				if is_pointer and "*" not in property_type
+				else property_type
+			)
 
 			json_mapping = type_resolver.json_mapping(
 				property_type,
