@@ -18502,7 +18502,7 @@ func (t *ApplyKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // A set of predefined code action kinds
 type CodeActionKind string
@@ -18552,7 +18552,7 @@ func (t *CodeActionTag) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // The reason why code actions were requested.
 // 
@@ -18587,7 +18587,7 @@ func (t *CodeActionTriggerKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // The kind of a completion entry.
 type CompletionItemKind uint32
@@ -18620,7 +18620,7 @@ const (
 )
 func (t CompletionItemKind) validate() error {
 	switch t {
-	case 5,10,23,13,24,22,14,18,25,1,3,7,17,11,12,20,21,16,4,6,19,2,8,15,9:
+	case 1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,3,4,5,6,7,8,9:
 	return nil
 	}
 	return fmt.Errorf("invalid CompletionItemKind: %v", t)
@@ -18643,7 +18643,7 @@ func (t *CompletionItemKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // Completion item tags are extra annotations that tweak the rendering of a completion
 // item.
@@ -18678,7 +18678,7 @@ func (t *CompletionItemTag) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // How a completion was triggered
 type CompletionTriggerKind uint32
@@ -18689,7 +18689,7 @@ const (
 )
 func (t CompletionTriggerKind) validate() error {
 	switch t {
-	case 1,3,2:
+	case 1,2,3:
 	return nil
 	}
 	return fmt.Errorf("invalid CompletionTriggerKind: %v", t)
@@ -18712,7 +18712,7 @@ func (t *CompletionTriggerKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // The diagnostic's severity.
 type DiagnosticSeverity uint32
@@ -18724,7 +18724,7 @@ const (
 )
 func (t DiagnosticSeverity) validate() error {
 	switch t {
-	case 4,1,3,2:
+	case 1,2,3,4:
 	return nil
 	}
 	return fmt.Errorf("invalid DiagnosticSeverity: %v", t)
@@ -18747,7 +18747,7 @@ func (t *DiagnosticSeverity) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // The diagnostic tags.
 // 
@@ -18782,7 +18782,7 @@ func (t *DiagnosticTag) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // The document diagnostic report kinds.
 // 
@@ -18794,7 +18794,7 @@ const (
 )
 func (t DocumentDiagnosticReportKind) validate() error {
 	switch t {
-	case "unchanged","full":
+	case "full","unchanged":
 	return nil
 	}
 	return fmt.Errorf("invalid DocumentDiagnosticReportKind: %v", t)
@@ -18817,7 +18817,7 @@ func (t *DocumentDiagnosticReportKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // A document highlight kind.
 type DocumentHighlightKind uint32
@@ -18851,7 +18851,7 @@ func (t *DocumentHighlightKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // Predefined error codes.
 type ErrorCodes int32
@@ -18874,7 +18874,7 @@ const (
 )
 func (t FailureHandlingKind) validate() error {
 	switch t {
-	case "undo","textOnlyTransactional","transactional","abort":
+	case "abort","textOnlyTransactional","transactional","undo":
 	return nil
 	}
 	return fmt.Errorf("invalid FailureHandlingKind: %v", t)
@@ -18897,7 +18897,7 @@ func (t *FailureHandlingKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // The file event type
 type FileChangeType uint32
@@ -18931,7 +18931,7 @@ func (t *FileChangeType) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // A pattern kind describing if a glob pattern matches a file a folder or
 // both.
@@ -18967,7 +18967,7 @@ func (t *FileOperationPatternKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // A set of predefined range kinds.
 type FoldingRangeKind string
@@ -19010,7 +19010,7 @@ func (t *InlayHintKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // Describes how an {@link InlineCompletionItemProvider inline completion provider} was triggered.
 // 
@@ -19046,7 +19046,7 @@ func (t *InlineCompletionTriggerKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // Defines whether the insert text in a completion item should be interpreted as
 // plain text or a snippet.
@@ -19080,7 +19080,7 @@ func (t *InsertTextFormat) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // How whitespace and indentation is handled during completion
 // item insertion.
@@ -19116,7 +19116,7 @@ func (t *InsertTextMode) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 type LSPErrorCodes int32
 const (
@@ -19205,7 +19205,7 @@ const (
 )
 func (t MarkupKind) validate() error {
 	switch t {
-	case "plaintext","markdown":
+	case "markdown","plaintext":
 	return nil
 	}
 	return fmt.Errorf("invalid MarkupKind: %v", t)
@@ -19228,7 +19228,7 @@ func (t *MarkupKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // The message type
 type MessageType uint32
@@ -19241,7 +19241,7 @@ const (
 )
 func (t MessageType) validate() error {
 	switch t {
-	case 2,5,1,3,4:
+	case 1,2,3,4,5:
 	return nil
 	}
 	return fmt.Errorf("invalid MessageType: %v", t)
@@ -19264,7 +19264,7 @@ func (t *MessageType) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // The moniker kind.
 // 
@@ -19277,7 +19277,7 @@ const (
 )
 func (t MonikerKind) validate() error {
 	switch t {
-	case "import","local","export":
+	case "export","import","local":
 	return nil
 	}
 	return fmt.Errorf("invalid MonikerKind: %v", t)
@@ -19300,7 +19300,7 @@ func (t *MonikerKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // A notebook cell kind.
 // 
@@ -19335,7 +19335,7 @@ func (t *NotebookCellKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // A set of predefined position encoding kinds.
 // 
@@ -19376,7 +19376,7 @@ func (t *PrepareSupportDefaultBehavior) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 type ResourceOperationKind string
 const (
@@ -19386,7 +19386,7 @@ const (
 )
 func (t ResourceOperationKind) validate() error {
 	switch t {
-	case "delete","create","rename":
+	case "create","delete","rename":
 	return nil
 	}
 	return fmt.Errorf("invalid ResourceOperationKind: %v", t)
@@ -19409,7 +19409,7 @@ func (t *ResourceOperationKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // A set of predefined token modifiers. This set is not fixed
 // an clients can specify additional token types via the
@@ -19474,7 +19474,7 @@ const (
 )
 func (t SignatureHelpTriggerKind) validate() error {
 	switch t {
-	case 1,3,2:
+	case 1,2,3:
 	return nil
 	}
 	return fmt.Errorf("invalid SignatureHelpTriggerKind: %v", t)
@@ -19497,7 +19497,7 @@ func (t *SignatureHelpTriggerKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // A symbol kind.
 type SymbolKind uint32
@@ -19531,7 +19531,7 @@ const (
 )
 func (t SymbolKind) validate() error {
 	switch t {
-	case 5,10,15,23,13,24,22,14,18,26,1,12,17,3,11,7,20,21,16,4,6,19,2,8,25,9:
+	case 1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,26,3,4,5,6,7,8,9:
 	return nil
 	}
 	return fmt.Errorf("invalid SymbolKind: %v", t)
@@ -19554,7 +19554,7 @@ func (t *SymbolKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // Symbol tags are extra annotations that tweak the rendering of a symbol.
 // 
@@ -19588,7 +19588,7 @@ func (t *SymbolTag) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // Represents reasons why a text document is saved.
 type TextDocumentSaveReason uint32
@@ -19622,7 +19622,7 @@ func (t *TextDocumentSaveReason) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // Defines how the host (editor) should sync
 // document changes to the language server.
@@ -19657,7 +19657,7 @@ func (t *TextDocumentSyncKind) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 type TokenFormat string
 const (
@@ -19688,7 +19688,7 @@ func (t *TokenFormat) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 type TraceValue string
 const (
@@ -19698,7 +19698,7 @@ const (
 )
 func (t TraceValue) validate() error {
 	switch t {
-	case "verbose","messages","off":
+	case "messages","off","verbose":
 	return nil
 	}
 	return fmt.Errorf("invalid TraceValue: %v", t)
@@ -19721,7 +19721,7 @@ func (t *TraceValue) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 // Moniker uniqueness level to define scope of the moniker.
 // 
@@ -19736,7 +19736,7 @@ const (
 )
 func (t UniquenessLevel) validate() error {
 	switch t {
-	case "global","project","document","scheme","group":
+	case "document","global","group","project","scheme":
 	return nil
 	}
 	return fmt.Errorf("invalid UniquenessLevel: %v", t)
@@ -19759,7 +19759,7 @@ func (t *UniquenessLevel) MarshalJSON() ([]byte, error) {
 	if err := t.validate(); err != nil {
 		return nil, err
 	}
-	return json.Marshal(t)
+	return json.Marshal(*t)
 }
 type WatchKind uint32
 const (

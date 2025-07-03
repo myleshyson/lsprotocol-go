@@ -29,11 +29,14 @@ def generate_enums(
 			string += f"\t{enum.name}{capitalize(value.name)} {enum.name} = {raw_value}\n"
 		string += ")\n"
 		if not enum.supportsCustomValues:
+			enum_cases = list(set(raw_values))
+			enum_cases.sort()
+
 			string += join(
 				[
 					f"func (t {enum.name}) validate() error {{",
 					"	switch t {",
-					f"	case {join(list(set(raw_values)), ',')}:",
+					f"	case {join(enum_cases, ',')}:",
 					"	return nil",
 					"	}",
 					f'	return fmt.Errorf("invalid {enum.name}: %v", t)',
@@ -56,7 +59,7 @@ def generate_enums(
 					"	if err := t.validate(); err != nil {",
 					"		return nil, err",
 					"	}",
-					"	return json.Marshal(t)",
+					"	return json.Marshal(*t)",
 					"}",
 				],
 			)
