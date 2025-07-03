@@ -6173,7 +6173,7 @@ type InitializeParams struct {
 	// if no folder is open.
 	// 
 	// @deprecated in favour of rootUri.
-	RootPath **string `json:"rootPath,omitzero"`
+	RootPath *string `json:"rootPath,omitzero"`
 	// The rootUri of the workspace. Is null if no
 	// folder is open. If both `rootPath` and `rootUri` are set
 	// `rootUri` wins.
@@ -10274,7 +10274,7 @@ type SignatureHelp struct {
 	// In future version of the protocol this property might become
 	// mandatory (but still nullable) to better express the active parameter if
 	// the active signature does have any.
-	ActiveParameter **uint32 `json:"activeParameter,omitzero"`
+	ActiveParameter *uint32 `json:"activeParameter,omitzero"`
 	// The active signature. If omitted or the value lies outside the
 	// range of `signatures` the value defaults to zero or is ignored if
 	// the `SignatureHelp` has no signatures.
@@ -10500,7 +10500,7 @@ type SignatureInformation struct {
 	// `SignatureHelp.activeParameter`.
 	// 
 	// @since 3.16.0
-	ActiveParameter **uint32 `json:"activeParameter,omitzero"`
+	ActiveParameter *uint32 `json:"activeParameter,omitzero"`
 	// The human-readable doc-comment of this signature. Will be shown
 	// in the UI but can be omitted.
 	Documentation *Or2[string, MarkupContent] `json:"documentation,omitzero"`
@@ -13012,7 +13012,7 @@ type _InitializeParams struct {
 	// if no folder is open.
 	// 
 	// @deprecated in favour of rootUri.
-	RootPath **string `json:"rootPath,omitzero"`
+	RootPath *string `json:"rootPath,omitzero"`
 	// The rootUri of the workspace. Is null if no
 	// folder is open. If both `rootPath` and `rootUri` are set
 	// `rootUri` wins.
@@ -18620,7 +18620,7 @@ const (
 )
 func (t CompletionItemKind) validate() error {
 	switch t {
-	case 14,13,1,23,21,18,2,24,22,3,8,16,4,6,25,11,5,17,12,10,15,20,9,7,19:
+	case 1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,3,4,5,6,7,8,9:
 	return nil
 	}
 	return fmt.Errorf("invalid CompletionItemKind: %v", t)
@@ -18724,7 +18724,7 @@ const (
 )
 func (t DiagnosticSeverity) validate() error {
 	switch t {
-	case 1,2,4,3:
+	case 1,2,3,4:
 	return nil
 	}
 	return fmt.Errorf("invalid DiagnosticSeverity: %v", t)
@@ -18794,7 +18794,7 @@ const (
 )
 func (t DocumentDiagnosticReportKind) validate() error {
 	switch t {
-	case "unchanged","full":
+	case "full","unchanged":
 	return nil
 	}
 	return fmt.Errorf("invalid DocumentDiagnosticReportKind: %v", t)
@@ -18874,7 +18874,7 @@ const (
 )
 func (t FailureHandlingKind) validate() error {
 	switch t {
-	case "abort","transactional","textOnlyTransactional","undo":
+	case "abort","textOnlyTransactional","transactional","undo":
 	return nil
 	}
 	return fmt.Errorf("invalid FailureHandlingKind: %v", t)
@@ -18944,7 +18944,7 @@ const (
 )
 func (t FileOperationPatternKind) validate() error {
 	switch t {
-	case "folder","file":
+	case "file","folder":
 	return nil
 	}
 	return fmt.Errorf("invalid FileOperationPatternKind: %v", t)
@@ -19205,7 +19205,7 @@ const (
 )
 func (t MarkupKind) validate() error {
 	switch t {
-	case "plaintext","markdown":
+	case "markdown","plaintext":
 	return nil
 	}
 	return fmt.Errorf("invalid MarkupKind: %v", t)
@@ -19241,7 +19241,7 @@ const (
 )
 func (t MessageType) validate() error {
 	switch t {
-	case 4,3,1,5,2:
+	case 1,2,3,4,5:
 	return nil
 	}
 	return fmt.Errorf("invalid MessageType: %v", t)
@@ -19277,7 +19277,7 @@ const (
 )
 func (t MonikerKind) validate() error {
 	switch t {
-	case "local","import","export":
+	case "export","import","local":
 	return nil
 	}
 	return fmt.Errorf("invalid MonikerKind: %v", t)
@@ -19386,7 +19386,7 @@ const (
 )
 func (t ResourceOperationKind) validate() error {
 	switch t {
-	case "rename","create","delete":
+	case "create","delete","rename":
 	return nil
 	}
 	return fmt.Errorf("invalid ResourceOperationKind: %v", t)
@@ -19531,7 +19531,7 @@ const (
 )
 func (t SymbolKind) validate() error {
 	switch t {
-	case 14,13,1,23,21,2,18,24,22,3,8,16,4,6,25,11,5,17,12,10,15,26,20,9,7,19:
+	case 1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,26,3,4,5,6,7,8,9:
 	return nil
 	}
 	return fmt.Errorf("invalid SymbolKind: %v", t)
@@ -19634,7 +19634,7 @@ const (
 )
 func (t TextDocumentSyncKind) validate() error {
 	switch t {
-	case 1,2,0:
+	case 0,1,2:
 	return nil
 	}
 	return fmt.Errorf("invalid TextDocumentSyncKind: %v", t)
@@ -19698,7 +19698,7 @@ const (
 )
 func (t TraceValue) validate() error {
 	switch t {
-	case "verbose","off","messages":
+	case "messages","off","verbose":
 	return nil
 	}
 	return fmt.Errorf("invalid TraceValue: %v", t)
@@ -19736,7 +19736,7 @@ const (
 )
 func (t UniquenessLevel) validate() error {
 	switch t {
-	case "document","global","project","group","scheme":
+	case "document","global","group","project","scheme":
 	return nil
 	}
 	return fmt.Errorf("invalid UniquenessLevel: %v", t)
